@@ -1,0 +1,172 @@
+:root {
+      --primary-color: #4361ee;
+      --secondary-color: #3f37c9;
+      --success-color: #4cc9f0;
+      --info-color: #4895ef;
+      --warning-color: #f8961e;
+      --danger-color: #f72585;
+      --light-color: #f8f9fa;
+      --dark-color: #212529;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f5f7fa;
+      color: #333;
+    }
+    
+    .navbar {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .navbar-brand {
+      font-weight: 600;
+      font-size: 1.5rem;
+    }
+    
+    .nav-link {
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border-radius: 8px;
+      margin: 0 4px;
+    }
+    
+    .nav-link:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+    
+    .card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stat-card {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .stat-card .card-title {
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    
+    .stat-card .display-5 {
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+    
+    #okulNo {
+      height: 50px;
+      font-size: 1.1rem;
+      border-radius: 10px;
+      border: 2px solid #e9ecef;
+    }
+    
+    #okulNo:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      border: none;
+      height: 50px;
+      font-weight: 500;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--secondary-color);
+      transform: translateY(-2px);
+    }
+    
+    .btn-warning {
+      background-color: var(--warning-color);
+      color: white;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-warning:hover {
+      background-color: #e07d0e;
+      color: white;
+      transform: translateY(-2px);
+    }
+    
+    .table-responsive {
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    
+    table {
+      margin-bottom: 0;
+    }
+    
+    thead {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+    }
+    
+    th {
+      font-weight: 500;
+      padding: 15px !important;
+    }
+    
+    td {
+      padding: 12px 15px !important;
+      vertical-align: middle;
+    }
+    
+    tr:nth-child(even) {
+      background-color: rgba(67, 97, 238, 0.05);
+    }
+    
+    .modal-content {
+      border-radius: 12px;
+      border: none;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    .list-group-item {
+      border: none;
+      border-bottom: 1px solid #eee;
+      padding: 12px 20px;
+      transition: background-color 0.2s ease;
+    }
+    
+    .list-group-item:hover {
+      background-color: #f8f9fa;
+    }
+    
+    .toast {
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    }
+    
+    @media (max-width: 768px) {
+      .stat-card .display-5 {
+        font-size: 1.8rem;
+      }
+      
+      .navbar-brand {
+        font-size: 1.2rem;
+      }
+      
+      th, td {
+        padding: 10px 12px !important;
+        font-size: 0.9rem;
+      }
+    }
