@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kayıt Sayfası</title>
+
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <!-- FontAwesome CSS -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+
+  <link rel="stylesheet" href="css/register.css">
+
+</head>
+<body>
+  <div class="top-logo" aria-label="YemekHane Logo">
+    <i class="fa fa-utensils" aria-hidden="true"></i>
+    <span>YemekHane</span>
+  </div>
+
+  <div class="card shadow">
+    <h2>Kayıt Ol</h2>
+    <form id="registerForm" novalidate>
+      <!-- Profil Fotoğrafı -->
+      <div class="profile-photo-wrapper">
+        <label class="profile-photo-label" for="profilePhotoInput">Profil Fotoğrafı</label>
+        <div
+          class="avatar-preview"
+          id="avatarPreview"
+          title="Profil Fotoğrafı Yükle"
+          role="button"
+          tabindex="0"
+          aria-label="Profil Fotoğrafı Yükle"
+        ></div>
+        <input
+          type="file"
+          accept="image/*"
+          id="profilePhotoInput"
+          aria-describedby="profilePhotoHelp"
+          aria-label="Profil Fotoğrafı Yükleme"
+        />
+        <button
+          type="button"
+          class="upload-btn"
+          id="uploadButton"
+          aria-label="Profil Fotoğrafı Seç"
+        >
+          Fotoğraf Seç
+        </button>
+      </div>
+
+      <!-- Okul No -->
+      <div class="mb-3">
+        <label for="schoolNo">Okul No</label>
+        <input
+          type="text"
+          class="form-control"
+          id="schoolNo"
+          placeholder="Okul No"
+          pattern="^\d{4}$"
+          title="Lütfen 4 rakam giriniz"
+          maxlength="4"
+          required
+          inputmode="numeric"
+          autocomplete="off"
+          aria-describedby="schoolNoHelp"
+        />
+        <div id="schoolNoHelp" class="form-text"></div>
+      </div>
+
+      <!-- Öğrenci Ad Soyad -->
+      <div class="mb-3">
+        <label for="fullName">Öğrenci Ad Soyad</label>
+        <input
+          type="text"
+          class="form-control"
+          id="fullName"
+          placeholder="Ad Soyad"
+          required
+        />
+      </div>
+
+      <!-- Sınıf -->
+      <div class="mb-3">
+        <label for="studentClass">Sınıf</label>
+        <select class="form-select" id="studentClass" required>
+          <option value="" disabled selected>Sınıf Seçiniz</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
+      </div>
+
+      <!-- Şube -->
+      <div class="mb-3">
+        <label for="section">Şube</label>
+        <select class="form-select" id="section" required>
+          <option value="" disabled selected>Şube Seçiniz</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+          <option value="D">D</option>
+          <option value="E">E</option>
+          <option value="F">F</option>
+          <option value="G">G</option>
+        </select>
+      </div>
+
+      <!-- Veli Ad Soyad -->
+      <div class="mb-3">
+        <label for="parentName">Veli Ad Soyad</label>
+        <input
+          type="text"
+          class="form-control"
+          id="parentName"
+          placeholder="Veli Ad Soyad"
+          required
+        />
+      </div>
+
+      <!-- Veli İletişim -->
+      <div class="mb-3">
+        <label for="parentContact">Veli İletişim</label>
+        <input
+          type="tel"
+          class="form-control"
+          id="parentContact"
+          placeholder="Telefon Numarası"
+          required
+          pattern="^\+?\d{10,15}$"
+          title="Geçerli bir telefon numarası giriniz"
+        />
+      </div>
+
+      <!-- E-posta -->
+      <div class="mb-3">
+        <label for="email">E-posta</label>
+        <input
+          type="email"
+          class="form-control"
+          id="email"
+          placeholder="E-posta"
+          required
+        />
+      </div>
+
+      <!-- Şifre -->
+      <div class="mb-3">
+        <label for="password">Şifre</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          placeholder="Şifre"
+          required
+          minlength="6"
+        />
+      </div>
+
+      <!-- Şifre Tekrar -->
+      <div class="mb-4">
+        <label for="passwordConfirm">Şifre Tekrar</label>
+        <input
+          type="password"
+          class="form-control"
+          id="passwordConfirm"
+          placeholder="Şifre Tekrar"
+          required
+          minlength="6"
+        />
+      </div>
+     <button type="submit" class="btn btn-primary">Kayıt Ol</button>
+    </form>
+  </div>
+
+<!-- Toast Container -->
+<div id="toast-container" 
+     class="toast-container position-fixed top-0 start-50 translate-middle-x pt-3" 
+     style="z-index: 9999; pointer-events: none; width: auto; max-width: 350px;">
+</div>
+
+<script src="js/register.js"></script>
+ <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  
+  
+
+  
+</body>
+</html>

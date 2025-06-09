@@ -1,0 +1,26 @@
+ body {
+      background: #f8f9fa;
+    }
+    .payment-form {
+      max-width: 500px;
+      margin: 50px auto;
+      padding: 30px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+        /* Logo */
+    .top-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #28a745;
+      font-weight: 700;
+      font-size: 1.8rem;
+      margin-bottom: 30px;
+      user-select: none;
+    }
+    .top-logo i {
+      margin-right: 10px;
+      font-size: 2rem;
+    }

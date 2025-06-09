@@ -70,7 +70,6 @@ C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\zlnuhjlyux-g0i8
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\w0rsdaswxc-kuem5rgwdw.gz
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\woc4j200in-b8w0vzqy7h.gz
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\o222lpuwtd-xrty87ocu6.gz
-C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\0qrschjrkk-eozjvlhc9t.gz
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\18poyrl45s-20lg1lj1db.gz
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\gtifp5y3tn-lbikwc3rlt.gz
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\676l6wuubs-9p6qjivxvm.gz
@@ -95,3 +94,11 @@ C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\refint\X.dll
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\X.pdb
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\X.genruntimeconfig.cache
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\ref\X.dll
+C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\X.sourcelink.json
+C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\0qrschjrkk-e8o1h0sjlx.gz
+C:\Users\cemga\OneDrive\Masaüstü\X\bin\Debug\net9.0\out\web.config
+C:\Users\cemga\OneDrive\Masaüstü\X\bin\Debug\net9.0\out\appsettings.Development.json
+C:\Users\cemga\OneDrive\Masaüstü\X\bin\Debug\net9.0\out\appsettings.json
+C:\Users\cemga\OneDrive\Masaüstü\X\bin\Debug\net9.0\out\X.deps.json
+C:\Users\cemga\OneDrive\Masaüstü\X\bin\Debug\net9.0\out\X.runtimeconfig.json
+C:\Users\cemga\OneDrive\Masaüstü\X\bin\Debug\net9.0\out\X.staticwebassets.endpoints.json

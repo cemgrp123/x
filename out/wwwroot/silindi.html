@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hesabınız Silindi</title>
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --text-color: #333;
+            --light-color: #f8f9fa;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7ff;
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .deleted-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .icon {
+            font-size: 72px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 28px;
+        }
+        
+        p {
+            margin-bottom: 25px;
+            font-size: 16px;
+            color: #555;
+        }
+        
+        .details {
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin: 25px 0;
+            text-align: left;
+        }
+        
+        .details p {
+            margin-bottom: 10px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            margin-left: 10px;
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        @media (max-width: 600px) {
+            .deleted-container {
+                padding: 30px 20px;
+            }
+            
+            .btn-container {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .btn-outline {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="deleted-container">
+        <div class="icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
+                <line x1="18" y1="9" x2="12" y2="15"></line>
+                <line x1="12" y1="9" x2="18" y2="15"></line>
+            </svg>
+        </div>
+        <h1>Hesabınız Silindi</h1>
+        <p>Üzgünüz. Hesabınız ve tüm kişisel verileriniz sistemimizden başarıyla silindi.</p>
+        
+        <div class="details">
+            <p><strong>Dikkat:</strong> Hesabınızı silmeniz durumunda:</p>
+            <p>• Tüm kişisel verileriniz kalıcı olarak silinmiştir</p>
+            <p>• Abonelikleriniz iptal edilmiştir</p>
+            <p>• Erişim izinleriniz kaldırılmıştır</p>
+        </div>
+        
+        <p>Yeniden bize katılmak isterseniz her zaman yeni bir hesap oluşturabilirsiniz.</p>
+        
+        <div class="btn-container">
+            <a href="http://localhost:5128/register.html#" class="btn">Kayıt Ekranı</a>
+            
+        </div>
+    </div>
+    
+</body>
+</html>
