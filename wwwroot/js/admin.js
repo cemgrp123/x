@@ -21,7 +21,8 @@ function showStudentList(type) {
     'toplam': 'Tüm Öğrenciler',
     'gecis': 'Geçiş Yapan Öğrenciler',
     'kalan': 'Kalan Öğrenciler',
-    'raporlu': 'Raporlu Öğrenciler'
+    'raporlu': 'Raporlu Öğrenciler',
+    'raporbugun': 'Bugünkü Rapor İstekleri'
   };
 
   titleEl.innerHTML = `<i class="fas fa-users me-2"></i>${titleMap[type] || 'Öğrenci Listesi'}`;
@@ -76,6 +77,65 @@ function showStudentList(type) {
     return;
   }
 
+  // BUGÜNKÜ RAPOR İSTEKLERİ
+  if (type === 'raporbugun') {
+    titleEl.innerHTML = `<i class="fas fa-user-clock me-2"></i>${titleMap[type]}`;
+    listEl.innerHTML = `<li class="list-group-item text-center">Yükleniyor...</li>`;
+
+    fetch('/api/raporistekleri')
+      .then(res => res.json())
+      .then(data => {
+        if (!Array.isArray(data) || data.length === 0) {
+          listEl.innerHTML = `<li class="list-group-item text-center text-muted">Hiç rapor isteği yok</li>`;
+          return;
+        }
+
+        const today = new Date().toISOString().split('T')[0];
+        const bugunIstekler = data.filter(item => item.tarih?.startsWith(today));
+
+        if (bugunIstekler.length === 0) {
+          listEl.innerHTML = `<li class="list-group-item text-center text-muted">Bugün için rapor isteği bulunamadı</li>`;
+          return;
+        }
+
+        function renderList(list) {
+          if (list.length === 0) {
+            listEl.innerHTML = `<li class="list-group-item text-center text-muted">Aramaya uygun öğrenci bulunamadı</li>`;
+            return;
+          }
+
+          listEl.innerHTML = list.map(item => `
+            <li class="list-group-item">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <strong>${item.adSoyad}</strong> (${item.okulNo})<br>
+                  <small class="text-muted">${item.raporNedeni}</small>
+                </div>
+                <span class="badge bg-warning rounded-pill">${item.sinif}-${item.sube}</span>
+              </div>
+            </li>
+          `).join('');
+        }
+
+        renderList(bugunIstekler);
+
+        searchInput.oninput = () => {
+          const term = searchInput.value.toLowerCase();
+          const filtered = bugunIstekler.filter(item =>
+            `${item.adSoyad} ${item.okulNo} ${item.sinif} ${item.sube} ${item.raporNedeni}`.toLowerCase().includes(term)
+          );
+          renderList(filtered);
+        };
+
+        modal.show();
+      })
+      .catch(() => {
+        listEl.innerHTML = `<li class="list-group-item text-center text-danger">Veri alınırken hata oluştu</li>`;
+      });
+
+    return;
+  }
+
   // DİĞER TÜRLER API'DAN ÇEKİLİR
   fetch('/api/ogrenciler')
     .then(res => res.json())
@@ -96,8 +156,6 @@ function showStudentList(type) {
         });
 
         filteredData = data.filter(ogr => !gecenOkulNumaralari.has(String(ogr.schoolNo)));
-
-        // sayaç
         document.getElementById('cikisYapan').textContent = filteredData.length;
       } else if (type === 'raporlu') {
         filteredData = data.filter(ogr => ogr.status === 'raporlu');
@@ -140,8 +198,8 @@ function showStudentList(type) {
     .catch(() => {
       listEl.innerHTML = `<li class="list-group-item text-center text-danger">Veri alınırken hata oluştu</li>`;
     });
-
 }
+
 
 
 const form = document.getElementById('gecisForm');

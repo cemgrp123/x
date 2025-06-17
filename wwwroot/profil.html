@@ -10,6 +10,197 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="css/profil.css">
+  <style>
+    :root {
+      --primary-color: #4361ee;
+      --secondary-color: #3a0ca3;
+      --success-color: #2ec4b6;
+      --info-color: #4895ef;
+      --warning-color: #f77f00;
+      --light-bg: #f8f9ff;
+    }
+
+    body {
+      background-color: var(--light-bg);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      padding-top: 2rem;
+    }
+
+    .dashboard-title {
+      position: relative;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .dashboard-title h4 {
+      display: inline-block;
+      font-weight: 700;
+      color: var(--primary-color);
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .dashboard-title h4::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      border-radius: 2px;
+    }
+
+
+    .stat-card {
+      border: none;
+      border-radius: 15px;
+      padding: 1.75rem;
+      color: white;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      right: -20px;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      z-index: -1;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+    }
+
+    .stat-icon {
+      font-size: 2.5rem;
+      margin-right: 1.5rem;
+      opacity: 0.9;
+    }
+
+    .stat-content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-title {
+      font-size: 0.95rem;
+      font-weight: 500;
+      opacity: 0.9;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.5px;
+    }
+
+    .stat-desc {
+      font-size: 0.8rem;
+      opacity: 0.85;
+      line-height: 1.4;
+    }
+
+    .bg-gradient-primary {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    }
+
+    .bg-gradient-success {
+      background: linear-gradient(135deg, var(--success-color), #1b9aaa);
+    }
+
+    .bg-gradient-warning {
+      background: linear-gradient(135deg, var(--warning-color), #e63946);
+    }
+
+    @media (max-width: 768px) {
+      .stat-card {
+        margin-bottom: 1.5rem;
+      }
+
+      .stat-icon {
+        margin-right: 1rem;
+        font-size: 2rem;
+      }
+
+      .stat-value {
+        font-size: 1.75rem;
+      }
+    }
+
+    /* Yemekhane kartlarını saran row'lar arasına mesafe */
+    #yemekhaneListesi,
+    #yemekhaneListesiRapor {
+      margin-bottom: 1rem;
+    }
+
+    /* Kartlar daha modern görünsün */
+    .card.card-entry {
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 1rem;
+      transition: transform 0.2s ease;
+      background-color: #fff;
+    }
+
+    /* Hover efekt verelim */
+    .card.card-entry:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Icon kutusu yuvarlak ve boyut ayarı */
+    .icon-container {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-right: 1rem;
+    }
+
+    /* Yazılar için biraz daha boşluk */
+    .card-entry>.d-flex>div:last-child {
+      flex-grow: 1;
+    }
+
+    @media (max-width: 576px) {
+
+      #yemekhaneListesi,
+      #yemekhaneListesiRapor {
+        margin-bottom: 3rem;
+      }
+    }
+
+    .btn-check:checked+.btn {
+      background-color: #0d6efd;
+      color: white;
+      border-color: #0d6efd;
+    }
+     .disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  </style>
 </head>
 
 <body>
@@ -55,7 +246,7 @@
       </button>
       <button type="button" class="exit" data-bs-toggle="modal" data-bs-target="#menuModal">
         <i class="fa fa-utensils"></i>
-        <span>Yemek Menüsü</span>
+        <span>Menü</span>
       </button>
       <button type="button" id="exitBtn" aria-label="Çıkış" onclick="logout()">
         <i class="fa fa-right-from-bracket"></i>
@@ -65,7 +256,7 @@
     </div>
   </nav>
 
-
+  <hr>
   <!-- ÖDEME BÖLÜMÜ-->
   <div class="payment-wrapper">
     <div class="payment-card">
@@ -258,7 +449,60 @@
       </div>
     </div>
   </div>
+  <!-- Rapor Oluştur Modal -->
+  <!-- Açılış Mesajı -->
+  <div class="welcome-message">
+    <div>Rapor Talep Etmek İçin</div>
+    <div style="font-weight: bold; color: #6e8efb;">Butona Tıklayın</div>
+  </div>
 
+  <!-- Toast Mesajı -->
+  <div class="toast" id="toastMessage"></div>
+
+  <!-- Floating Action Button -->
+  <button class="floating-btn">
+    <i class="fas fa-plus"></i>
+  </button>
+
+  <!-- Modal -->
+  <div class="modal-overlay">
+    <div class="modal-container">
+      <div class="modal-header"
+        style="background-color: #007bff; color: white; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+        <h2 style="margin: 0; font-size: 1.25rem;">
+          <i class="fas fa-file-medical-alt" style="margin-right: 10px;"></i> Yeni Rapor Oluştur
+        </h2>
+        <button class="close-btn" onclick="closeModal()"
+          style="background: none; border: none; font-size: 1.5rem; color: white; cursor: pointer;">&times;</button>
+      </div>
+      <form id="reportForm">
+        <div class="form-group">
+          <label for="reportDate">Tarih</label>
+          <input type="date" id="reportDate" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label mb-2">Rapor Nedeni</label>
+          <div class="btn-group w-100" role="group" aria-label="Rapor Nedeni">
+            <input type="radio" class="btn-check" name="reportReason" id="studentIllness" value="Öğrenci Rahatsızlık"
+              autocomplete="off" checked>
+            <label class="btn btn-outline-primary w-50" for="studentIllness">👦 Öğrenci Rahatsızlık</label>
+
+            <input type="radio" class="btn-check" name="reportReason" id="teacherReport" value="Öğretmen Raporu"
+              autocomplete="off">
+            <label class="btn btn-outline-primary w-50" for="teacherReport">👩‍🏫 Öğretmen Raporu</label>
+          </div>
+        </div>
+
+
+        <button type="submit" id="submitBtn" class="submit-btn">Raporu Kaydet</button>
+        <!-- Bilgilendirme mesajı -->
+<div id="timeInfo" style="color: #d6336c; margin-top: 8px; font-weight: 600; display: none;">
+  Rapor talebi sadece 00:00 - 10:00 saatleri arasında yapılabilir.
+</div>
+      </form>
+    </div>
+  </div>
 
 
   <!-- MODAL (Profil Düzenle) -->
@@ -367,38 +611,70 @@
 
 
   <!-- GİRİŞ BİLGİLERİ -->
-  <section class="container my-5">
-    <h4 class="text-center mb-4 fw-bold">Yemekhane Takibi</h4>
+  <section class="container">
+    <div class="dashboard-title">
+      <h4>Yemekhane Takip Paneli</h4>
+    </div>
 
-    <!-- Aylık Hak, Giriş ve Rapor Sayıları -->
-    <div class="d-flex justify-content-between mb-4">
+    <!-- İstatistik Kartları -->
+    <div class="row g-4">
       <!-- Aylık Hak -->
-      <div class="stat-box">
-        <strong>Aylık Hak:</strong>
-        <div class="stat-number" id="aylikHak">0</div>
+      <div class="col-md-4">
+        <div class="stat-card bg-gradient-primary">
+          <div class="stat-icon">
+            <i class="fas fa-calendar-days"></i>
+          </div>
+          <div class="stat-content">
+            <span class="stat-title">AYLIK HAK</span>
+            <span class="stat-value" id="aylikHak">22</span>
+            <span class="stat-desc">Bu ay kullanabileceğiniz giriş hakkı</span>
+          </div>
+        </div>
       </div>
 
       <!-- Giriş Sayısı -->
-      <div class="stat-box">
-        <strong>Girişler:</strong>
-        <div class="stat-number" id="girisSayisi">0</div>
+      <div class="col-md-4">
+        <div class="stat-card bg-gradient-success">
+          <div class="stat-icon">
+            <i class="fas fa-utensils"></i>
+          </div>
+          <div class="stat-content">
+            <span class="stat-title">GİRİŞLER</span>
+            <span class="stat-value" id="girisSayisi">15</span>
+            <span class="stat-desc">Toplam yemekhane giriş sayınız</span>
+          </div>
+        </div>
       </div>
 
       <!-- Rapor Sayısı -->
-      <div class="stat-box">
-        <strong>Raporlar:</strong>
-        <div class="stat-number" id="raporSayisi">0</div>
+      <div class="col-md-4">
+        <div class="stat-card bg-gradient-warning">
+          <div class="stat-icon">
+            <i class="fas fa-file-lines"></i>
+          </div>
+          <div class="stat-content">
+            <span class="stat-title">RAPORLAR</span>
+            <span class="stat-value" id="raporSayisi">3</span>
+            <span class="stat-desc">Toplam oluşturulan rapor sayısı</span>
+          </div>
+        </div>
       </div>
     </div>
+    </div>
+    <hr>
+
 
     <!-- Arama Çubuğu -->
     <div class="mb-4 d-flex justify-content-center">
       <input type="text" id="aramaInput" class="form-control search-input" placeholder="Giriş veya rapor ara..."
         onkeyup="filtrele()">
     </div>
+    <hr>
+    <h5 class="text-primary mb-2">Girişler</h5>
 
+    <hr class="d-block d-md-none">
     <!-- Giriş ve Rapor Kartları -->
-    <div class="row g-4" id="yemekhaneListesi">
+    <div class="row g-2" id="yemekhaneListesi">
       <!-- GİRİŞ ÖRNEĞİ -->
       <div class="col-12 col-md-6 col-lg-4" data-type="giris">
         <div class="card card-entry">
@@ -413,26 +689,34 @@
           </div>
         </div>
       </div>
-      
-      <!-- Giriş ve Rapor Kartları -->
-      <div class="row g-4" id="yemekhaneListesiRapor">
-        <!-- RAPOR ÖRNEĞİ -->
-        <div class="col-12 col-md-6 col-lg-4" data-type="rapor">
-          <div class="card card-entry">
-            <div class="d-flex align-items-center">
-              <div class="icon-container bg-danger text-white">
-                <i class="bi bi-x-circle-fill"></i>
-              </div>
-              <div>
-                <div class="fw-semibold">Rapor - 04 Mayıs 2025</div>
-                <small class="text-muted">Tüm Gün</small>
-              </div>
+    </div>
+    <hr class="d-block d-md-none">
+    <h5 class="text-danger mb-2">Raporlar</h5>
+
+    <hr class="d-block d-md-none">
+
+    <!-- Giriş ve Rapor Kartları -->
+    <div class="row g-2" id="yemekhaneListesiRapor">
+      <!-- RAPOR ÖRNEĞİ -->
+      <div class="col-12 col-md-6 col-lg-4" data-type="rapor">
+        <div class="card card-entry">
+          <div class="d-flex align-items-center">
+            <div class="icon-container bg-danger text-white">
+              <i class="bi bi-x-circle-fill"></i>
+            </div>
+            <div>
+              <div class="fw-semibold">Rapor - 04 Mayıs 2025</div>
+              <small class="text-muted">Tüm Gün</small>
             </div>
           </div>
         </div>
       </div>
+    </div>
+    <hr class="d-block d-md-none">
   </section>
-  
+  <hr class="d-block d-md-none">
+
+
 
 
 
@@ -452,11 +736,42 @@
   <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <!-- jQuery (Gerekiyor) -->
   <script src="js/profil.js"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', yukleGecisVerileri);
-</script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const today = new Date().toISOString().split('T')[0];
+      const dateInput = document.getElementById("reportDate");
+      dateInput.value = today;
+      dateInput.min = today;
+      dateInput.max = today;
+    });
+  </script>
+  <script>
+    function checkButtonActiveTime() {
+    const now = new Date();
+    const hour = now.getHours();
+
+    const submitBtn = document.getElementById("submitBtn");
+    const timeInfo = document.getElementById("timeInfo");
+
+    if (hour >= 0 && hour < 10) {
+      submitBtn.disabled = false;
+      submitBtn.classList.remove("disabled");
+      timeInfo.style.display = "none";  // Mesaj gizle
+    } else {
+      submitBtn.disabled = true;
+      submitBtn.classList.add("disabled");
+      timeInfo.style.display = "block"; // Mesaj göster
+    }
+  }
+
+  window.addEventListener("load", checkButtonActiveTime);
+  setInterval(checkButtonActiveTime, 60000);
+  </script>
+
 
 </body>
 

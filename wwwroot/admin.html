@@ -99,14 +99,15 @@
         </div>
       </div>
       <div class="col-md-6 col-lg-3">
-        <div class="card stat-card bg-warning text-white" onclick="showStudentList('raporlu')">
-          <div class="card-body text-center">
-            <i class="fas fa-file-medical fa-2x mb-3"></i>
-            <h5 class="card-title">Raporlu</h5>
-            <p id="raporluOgrenci" class="display-5 mb-0">0</p>
-          </div>
-        </div>
-      </div>
+  <div class="card stat-card bg-warning text-white" onclick="showStudentList('raporbugun')">
+    <div class="card-body text-center">
+      <i class="fas fa-calendar-day fa-2x mb-3"></i>
+      <h5 class="card-title">Bugünkü Raporlar</h5>
+      <p id="bugunRapor" class="display-5 mb-0">0</p>
+    </div>
+  </div>
+</div>
+
     </div>
 
     <!-- Geçiş Sistemi -->
@@ -257,6 +258,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   </script>
+  <script>
+function istatistikYukle() {
+  fetch('/api/raporistekleri') // API yolunu kendi yapına göre ayarla
+    .then(res => res.json())
+    .then(data => {
+      if (!Array.isArray(data)) return;
+
+      const bugun = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+      const bugunRaporlar = data.filter(r => r.tarih && r.tarih.startsWith(bugun));
+
+      // Sayaca yaz
+      document.getElementById('bugunRapor').textContent = bugunRaporlar.length;
+    })
+    .catch(err => {
+      console.error('Rapor sayısı alınamadı:', err);
+      document.getElementById('bugunRapor').textContent = '0';
+    });
+}
+
+// Sayfa yüklendiğinde çalıştır
+window.addEventListener('DOMContentLoaded', istatistikYukle);
+</script>
+
 
 <!-- Bootstrap JS Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

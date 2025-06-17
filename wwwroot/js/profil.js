@@ -358,14 +358,14 @@ function showToast(message, type = "info") {
     toastElem.remove();
   });
 }
-window.alert = function(message) {
+window.alert = function (message) {
   showToast(message, "danger");
 };
 //////////////////////////////////////////////////////////////////////
 
-  // Modal açma fonksiyonu, schoolNo parametresi ile çağrılacak
-  
-  // URL'den schoolNo parametresini alır
+// Modal açma fonksiyonu, schoolNo parametresi ile çağrılacak
+
+// URL'den schoolNo parametresini alır
 function getSchoolNoFromUrl() {
   const params = new URLSearchParams(window.location.search);
   return params.get('schoolNo');
@@ -445,7 +445,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 /////////////////////////////////////////////////////////////////
 
-(function() {
+(function () {
   const schoolNo = new URLSearchParams(window.location.search).get("schoolNo");
   if (!schoolNo) return;
 
@@ -461,72 +461,342 @@ document.addEventListener('DOMContentLoaded', () => {
 //////////////////////////////////////////
 
 
-// URL'den schoolNo parametresini al
 
-function yukleGecisVerileri() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const schoolNo = urlParams.get('schoolNo');
+// DOM Elementleri
+// DOM Elementleri
+const floatingBtn = document.querySelector('.floating-btn');
+const welcomeMessage = document.querySelector('.welcome-message');
+const modalOverlay = document.querySelector('.modal-overlay');
+const closeBtn = document.querySelector('.close-btn');
+const reportForm = document.getElementById('reportForm');
+const toastMessage = document.getElementById('toastMessage');
+const studentIllnessRadio = document.getElementById('studentIllness');
+
+// Sayfa yüklendiğinde açılış mesajını göster
+document.addEventListener('DOMContentLoaded', () => {
+  // Mesajı göster
+  setTimeout(() => {
+    welcomeMessage.classList.add('show');
+
+    // 5 saniye sonra mesajı gizle
+    setTimeout(() => {
+      welcomeMessage.classList.remove('show');
+    }, 5000);
+  }, 500); // 0.5 saniye gecikmeyle göster
+});
+
+// Floating butona tıklandığında modalı aç
+floatingBtn.addEventListener('click', () => {
+  modalOverlay.classList.add('active');
+  // Bugünün tarihini varsayılan olarak ayarla
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('reportDate').value = today;
+
+  // Mesajı kapat
+  welcomeMessage.classList.remove('show');
+});
+
+// Kapat butonuna tıklandığında modalı kapat
+closeBtn.addEventListener('click', () => {
+  modalOverlay.classList.remove('active');
+});
+
+// Modal dışına tıklandığında kapat
+modalOverlay.addEventListener('click', (e) => {
+  if (e.target === modalOverlay) {
+    modalOverlay.classList.remove('active');
+  }
+});
+
+// Toast mesajı göster
+function showToast(message, type = 'success', duration = 3000) {
+  toastMessage.innerHTML = type === 'success'
+    ? `<i class="fas fa-check-circle"></i> ${message}`
+    : `<i class="fas fa-exclamation-circle"></i> ${message}`;
+
+  toastMessage.className = `toast ${type === 'success' ? '' : 'warning'}`;
+  toastMessage.classList.add('show');
+
+  setTimeout(() => {
+    toastMessage.classList.remove('show');
+  }, duration);
+}
+
+// Form gönderildiğinde
+reportForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  // Öğrenci Rahatsızlık seçildiyse "Geçmiş Olsun" mesajı göster
+  if (studentIllnessRadio.checked) {
+    showToast("Geçmiş Olsun! Sağlığınıza dikkat edin.", 'warning', 4000);
+
+    // 4 saniye sonra onay mesajını göster
+    setTimeout(() => {
+      showToast("Raporunuz onaya gönderilmiştir");
+    }, 4000);
+  } else {
+    showToast("Raporunuz onaya gönderilmiştir");
+  }
+
+  // Form verilerini topla
+  const formData = {
+    date: document.getElementById('reportDate').value,
+    reason: document.querySelector('input[name="reportReason"]:checked').value
+  };
+
+  // Burada form verilerini işleyebilirsiniz (API'ye gönderme vs.)
+  console.log('Form Gönderildi:', formData);
+
+  // Formu temizle ve modalı kapat
+  setTimeout(() => {
+    reportForm.reset();
+    modalOverlay.classList.remove('active');
+  }, 1000);
+});
+
+// Floating buton hover animasyonu
+floatingBtn.addEventListener('mouseenter', () => {
+  floatingBtn.style.transform = 'scale(1.1) rotate(90deg)';
+});
+
+floatingBtn.addEventListener('mouseleave', () => {
+  floatingBtn.style.transform = 'scale(1) rotate(0)';
+});
+/////////////////////////////////////////////////////////////////////////
+document.addEventListener('DOMContentLoaded', () => {
+  // URL'den schoolNo parametresini al
+  function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+  }
+
+  const schoolNo = getQueryParam('schoolNo');
 
   if (!schoolNo) {
-    alert('Okul numarası bulunamadı!');
+    alert('Okul numarası bulunamadı.');
     return;
   }
 
-  fetch(`/api/Gecis/GetGirisler?schoolNo=${schoolNo}`)
+  // Öğrenci bilgisini API'den çek
+  fetch(`http://localhost:5128/api/ogrenciler/${schoolNo}`)
     .then(res => {
-      if (!res.ok) throw new Error(`API hata: ${res.status}`);
+      if (!res.ok) throw new Error('Öğrenci bulunamadı');
       return res.json();
     })
-    .then(data => {
-      const container = document.getElementById('yemekhaneListesi');
-      if (!container) {
-        console.error('yemekhaneListesi id’li element bulunamadı!');
+    .then(student => {
+      // Global olarak sakla
+      window.studentInfo = student;
+
+      // İstersen öğrenci bilgilerini formda göstermek için buraya yazabilirsin
+      // Örnek:
+      // document.getElementById('inputFullName').value = student.adSoyad;
+      // document.getElementById('inputClass').value = student.sinif;
+      // document.getElementById('inputSection').value = student.sube;
+      // Ama senin formda sadece tarih ve rapor nedeni var, o yüzden gerek yok
+    })
+    .catch(err => alert('Öğrenci bilgisi alınamadı: ' + err.message));
+
+  // Form submit işlemi
+  document.getElementById('reportForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const tarihInput = document.getElementById('reportDate').value;
+    const raporNedeniInput = document.querySelector('input[name="reportReason"]:checked');
+
+    if (!tarihInput) {
+      alert('Lütfen tarih seçin.');
+      return;
+    }
+    if (!raporNedeniInput) {
+      alert('Lütfen rapor nedenini seçin.');
+      return;
+    }
+    if (!window.studentInfo) {
+      alert('Öğrenci bilgisi alınamadı. Sayfayı yenileyip tekrar deneyin.');
+      return;
+    }
+
+    const raporData = {
+      OkulNo: window.studentInfo.okulNo,
+      AdSoyad: window.studentInfo.adSoyad,
+      Sinif: Number(window.studentInfo.sinif),
+      Sube: window.studentInfo.sube,
+      Tarih: tarihInput,
+      RaporNedeni: raporNedeniInput.value
+    };
+
+    fetch('http://localhost:5128/api/RaporIstekleri', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(raporData)
+    })
+      .then(async res => {
+        if (!res.ok) {
+          const error = await res.json();
+          let msg = error.message || 'Bilinmeyen hata';
+          if (error.errors) {
+            msg += '\n' + error.errors.join('\n');
+          }
+          throw new Error(msg);
+        }
+        return res.json();
+      })
+      .then(data => alert(data.message))
+      .catch(err => alert('Hata: ' + err.message));
+  });
+});
+//////////////////////////////////////////////////////////
+
+ 
+ function getOkulNo() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("okulNo") || params.get("schoolNo");
+}
+
+function formatTarih(dateStr) {
+  if (!dateStr) return "-";
+  // "DD.MM.YYYY" formatında tarihi Türkçe olarak dön
+  const parts = dateStr.split(".");
+  if (parts.length !== 3) return "-";
+
+  const day = parts[0].padStart(2, "0");
+  const monthIndex = parseInt(parts[1], 10) - 1; // 0 bazlı ay
+  const year = parts[2];
+
+  const aylar = [
+    "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
+    "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"
+  ];
+
+  if (monthIndex < 0 || monthIndex > 11) return "-";
+
+  return `${day} ${aylar[monthIndex]} ${year}`;
+}
+
+function formatSaat(zamanStr) {
+  if (!zamanStr) return "-";
+  const parts = zamanStr.split(":");
+  if (parts.length >= 2) {
+    return `${parts[0]}:${parts[1]}`;
+  }
+  return zamanStr;
+}
+
+function loadGecisler() {
+  const okulNo = getOkulNo();
+  if (!okulNo) {
+    alert("Okul numarası URL'de belirtilmemiş!");
+    return;
+  }
+
+  fetch(`/api/OgrenciGecmis/${okulNo}/gecisler`)
+    .then(res => res.json())
+    .then(gecisler => {
+      const container = document.getElementById("yemekhaneListesi");
+      container.innerHTML = "";
+
+      if (gecisler.length === 0) {
+        container.innerHTML = `<p>Giriş bulunamadı.</p>`;
         return;
       }
 
-      container.innerHTML = '';
-
-      data.forEach(item => {
-        // Tarih formatı kontrolü
-        let tarihFormatted = 'Bilinmiyor';
-        if (item.tarih) {
-          const tarihObj = new Date(item.tarih);
-          if (!isNaN(tarihObj)) {
-            tarihFormatted = tarihObj.toLocaleDateString('tr-TR');
-          }
-        }
-
-        // Zaman formatını direkt göster
-        let zamanFormatted = 'Bilinmiyor';
-        if (item.zaman) {
-          // "19:20:59.0000000" → "19:20:59"
-          zamanFormatted = item.zaman.split('.')[0];
-        }
-
-        const html = `
-          <div class="col-12 col-md-6 col-lg-4" data-type="giris">
-            <div class="card card-entry">
-              <div class="d-flex align-items-center">
-                <div class="icon-container bg-success text-white">
-                  <i class="bi bi-check-circle-fill"></i>
-                </div>
-                <div>
-                  <div class="fw-semibold">Giriş - ${tarihFormatted}</div>
-                  <small class="text-muted">Saat: ${zamanFormatted}</small>
-                </div>
+      gecisler.forEach(g => {
+        container.innerHTML += `
+        <div class="col-12 col-md-6 col-lg-4" data-type="giris">
+          <div class="card card-entry">
+            <div class="d-flex align-items-center">
+              <div class="icon-container bg-success text-white">
+                <i class="bi bi-check-circle-fill"></i>
+              </div>
+              <div>
+                <div class="fw-semibold">Giriş - ${formatTarih(g.tarih)}</div>
+                <small class="text-muted">Saat: ${formatSaat(g.zaman)}</small>
               </div>
             </div>
           </div>
-        `;
-        container.insertAdjacentHTML('beforeend', html);
+        </div>`;
       });
-    })
-    .catch(err => {
-      console.error('API çağrısı başarısız:', err);
-      alert('Veriler yüklenirken hata oluştu!');
     });
 }
 
+
+
+
+function loadRaporlar() {
+  const okulNo = getOkulNo();
+  if (!okulNo) {
+    alert("Okul numarası URL'de belirtilmemiş!");
+    return;
+  }
+function formatTarih(dateStr) {
+  if (!dateStr) return "-";
+  const parts = dateStr.split("-");
+  if (parts.length !== 3) return "-";
+
+  const year = parts[0];
+  const monthIndex = parseInt(parts[1], 10) - 1;
+  const day = parts[2];
+
+  const aylar = [
+    "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
+    "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"
+  ];
+
+  if (monthIndex < 0 || monthIndex > 11) return "-";
+
+  return `${day.padStart(2, "0")} ${aylar[monthIndex]} ${year}`;
+}
+
+  console.log("Raporlar yükleniyor, okulNo:", okulNo);
+
+  fetch(`/api/OgrenciGecmis/${okulNo}/raporlar`)
+    .then(res => {
+      console.log("Raporlar API response status:", res.status);
+      if (!res.ok) throw new Error("Raporlar yüklenemedi");
+      return res.json();
+    })
+    .then(raporlar => {
+      console.log("Raporlar verisi:", raporlar);
+
+      const container = document.getElementById("yemekhaneListesiRapor");
+      if (!container) {
+        console.error("yemekhaneListesiRapor div bulunamadı!");
+        return;
+      }
+
+      container.innerHTML = "";
+
+      if (raporlar.length === 0) {
+        container.innerHTML = "<p>Rapor bulunamadı.</p>";
+        return;
+      }
+
+      raporlar.forEach(r => {
+        container.innerHTML += `
+          <div class="col-12 col-md-6 col-lg-4" data-type="rapor">
+            <div class="card card-entry">
+              <div class="d-flex align-items-center">
+                <div class="icon-container bg-danger text-white">
+                  <i class="bi bi-x-circle-fill"></i>
+                </div>
+                <div>
+                  <div class="fw-semibold">Rapor - ${formatTarih(r.Tarih || r.tarih)}</div>
+                  <small class="text-muted">Tüm Gün</small>
+                </div>
+              </div>
+            </div>
+          </div>`;
+      });
+    })
+    .catch(e => {
+      console.error("Raporlar yüklenirken hata:", e);
+    });
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  loadGecisler();
+  loadRaporlar();
+});
 
 
 

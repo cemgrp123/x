@@ -1,9 +1,13 @@
+#nullable enable
+
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using X.Data;
 using X.Models;
 using System;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
 
 
 namespace X.Controllers
@@ -115,6 +119,54 @@ namespace X.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
-    
+        [HttpGet("{schoolNo}")]
+        public IActionResult GetStudentBySchoolNo(int schoolNo)
+        {
+            var student = _context.Students
+                .Where(s => s.SchoolNo == schoolNo)  // Artık tipler uyuyor
+                .Select(s => new
+                {
+                    okulNo = s.SchoolNo,
+                    adSoyad = s.FullName,
+                    sinif = s.StudentClass,
+                    sube = s.Section
+                })
+                .FirstOrDefault();
+
+            if (student == null)
+                return NotFound();
+
+            return Ok(student);
+        }
+        [HttpGet("raporlu")]
+        public async Task<IActionResult> GetRaporluOgrenciler(string? date)
+        {
+            DateTime tarih;
+            if (!DateTime.TryParse(date, out tarih))
+            {
+                tarih = DateTime.Today;
+            }
+
+            var raporluOgrenciler = await _context.RaporIstekleri
+                .Where(r => r.Tarih.Date == tarih.Date && r.Durum == 1)  // Durum byte, bu yüzden 1 yazdık
+                .Select(r => new
+                {
+                    r.OkulNo,
+                    r.AdSoyad,
+                    r.Sinif,
+                    r.Sube,
+                })
+                .ToListAsync();
+
+            return Ok(raporluOgrenciler);
+        }
+
+
+
+
+
     }
+
+
 }
+

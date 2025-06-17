@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Yemek Menü ve Maliyet Takip</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+            /* Mobil için ek ayarlar */
+    @media (max-width: 576px) {
+        .btn {
+            font-size: 0.85rem;
+            padding: 0.4rem 0.5rem;
+        }
+        .bi {
+            font-size: 1rem;
+        }
+    }
+    /* Mobil Optimizasyon */
+  @media (max-width: 576px) {
+    .modal-dialog {
+      margin: 0.5rem auto;
+    }
+    .modal-content {
+      border-radius: 0.5rem !important;
+    }
+    .modal-body {
+      padding: 1rem;
+    }
+    .input-group-text {
+      padding: 0.5rem;
+    }
+    .btn {
+      padding: 0.5rem;
+      font-size: 0.9rem;
+    }
+  }
+  
+  /* Input Focus Efekti */
+  .form-control:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.1);
+  }
+  /* Mobil Optimizasyon */
+  @media (max-width: 576px) {
+    #kgCalcModal .modal-dialog {
+      margin: 0.5rem auto;
+      max-width: 95%;
+    }
+    #kgCalcModal .input-group-text {
+      padding: 0.5rem 0.75rem;
+    }
+    #kgCalcModal .btn {
+      font-size: 0.9rem;
+    }
+    #kgCalcModal .modal-body {
+      padding: 1.25rem;
+    }
+  }
+
+  /* Özel Stiller */
+  #kgCalcModal .alert-info {
+    background-color: #f0f9ff;
+    border-color: #b6e0fe;
+    color: #055160;
+  }
+  #kgCalcModal .btn-info {
+    background-color: #0dcaf0;
+    border-color: #0dcaf0;
+  }
+  #kgCalcModal .btn-info:hover {
+    background-color: #0da5d0;
+    border-color: #0da5d0;
+  }
+  /* Mobile Optimization */
+  @media (max-width: 576px) {
+    #kgPriceModal .modal-dialog {
+      margin: 0.5rem auto;
+      max-width: 95%;
+    }
+    #kgPriceModal .input-group-text {
+      padding: 0.5rem 0.75rem;
+    }
+    #kgPriceModal .btn {
+      font-size: 0.9rem;
+    }
+    #kgPriceModal .modal-body {
+      padding: 1.25rem;
+    }
+  }
+
+  /* Enhanced Styles */
+  #kgPriceModal .alert-primary {
+    background-color: #f0f7ff;
+    border-color: #c6e0ff;
+    color: #084298;
+  }
+  #kgPriceModal .form-control:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.1);
+  }
+  /* Mobile Optimization */
+  @media (max-width: 768px) {
+    #calcModal .modal-dialog {
+      margin: 0.5rem auto;
+    }
+    #calcModal .modal-content {
+      border-radius: 0.5rem;
+    }
+    #calcModal .modal-body {
+      padding: 1rem;
+    }
+    #calcModal .input-group-text {
+      padding: 0.5rem;
+    }
+  }
+
+  /* Custom Styles */
+  #perPersonList .list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+  }
+  #perPersonList .list-group-item span:last-child {
+    font-weight: 600;
+    color: #198754;
+  }
+  #productInputsContainer .product-input-row {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
+  }
+  /* Özel Stiller */
+    .accordion-button:not(.collapsed) {
+        background-color: rgba(25, 135, 84, 0.1);
+        color: #198754;
+    }
+    .accordion-button:focus {
+        box-shadow: none;
+        border-color: rgba(25, 135, 84, 0.25);
+    }
+    .accordion-item {
+        border-left: 0;
+        border-right: 0;
+    }
+    .accordion-item:first-child {
+        border-top: 0;
+    }
+    .accordion-item:last-child {
+        border-bottom: 0;
+    }
+    
+    /* Mobil Uyumluluk */
+    @media (max-width: 768px) {
+        .input-group-lg > .form-control {
+            padding: 0.75rem 1rem;
+        }
+        #addMenuBtn {
+            padding: 0.75rem;
+            font-size: 0.9rem;
+        }
+        .card-body {
+            padding: 1rem !important;
+        }
+    }
+    </style>
+
+</head>
+<body class="bg-light">
+
+  <div class="container py-4">
+    <h1 class="mb-4 text-center text-primary fw-bold fs-3 fs-md-2">Yemek Menü ve Maliyet Takip</h1>
+    
+    <!-- Buton Grubu - Mobil Uyumlu -->
+    <div class="row g-2 g-sm-3 justify-content-center mb-4">
+        <div class="col-6 col-sm-auto">
+            <button id="calcBtn" class="btn btn-primary w-100 py-2 shadow-sm">
+                <i class="bi bi-calculator me-1 me-md-2"></i>
+                <span class="d-none d-md-inline">Yemek Miktarları</span>
+                <span class="d-md-none">Miktar Hesapla</span>
+            </button>
+        </div>
+        <div class="col-6 col-sm-auto">
+            <button class="btn btn-warning w-100 py-2 shadow-sm" id="kgPriceBtn">
+                <i class="bi bi-currency-dollar me-1 me-md-2"></i>
+                <span class="d-none d-md-inline">KG Fiyatı</span>
+                <span class="d-md-none">Fiyat Hesapla</span>
+            </button>
+        </div>
+        <div class="col-6 col-sm-auto">
+            <button class="btn btn-outline-info w-100 py-2 shadow-sm" id="btnOpenKgCalcModal">
+                <i class="bi bi-scales me-1 me-md-2"></i>
+                <span class="d-none d-md-inline">Gram-Kg Hesapla</span>
+                <span class="d-md-none">Gram-Kg</span>
+            </button>
+        </div>
+        <div class="col-6 col-sm-auto">
+            <button class="btn btn-success w-100 py-2 shadow-sm" id="btnOpenProductModal">
+                <i class="bi bi-plus-circle me-1 me-md-2"></i>
+                <span class="d-none d-md-inline">Ürün Ekle</span>
+                <span class="d-md-none">Ekle</span>
+            </button>
+        </div>
+    </div>
+</div>
+<!-- Modal - Ürün Ekle Modal -->
+<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      
+      <!-- Header -->
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title fs-5 fw-bold" id="productModalLabel">
+          <i class="bi bi-plus-circle me-2"></i>Yeni Ürün Ekle
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body p-4">
+        <div class="mb-4">
+          <label for="productNameInput" class="form-label fw-semibold">Ürün Adı</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light">
+              <i class="bi bi-box-seam text-primary"></i>
+            </span>
+            <input type="text" class="form-control py-2" id="productNameInput" placeholder="Örn: Pirinç, Zeytinyağı..." />
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label for="productKgPriceInput" class="form-label fw-semibold">KG Fiyatı (TL)</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light">
+              <i class="bi bi-currency-dollar text-primary"></i>
+            </span>
+            <input type="number" class="form-control py-2" id="productKgPriceInput" placeholder="Örn: 62.50" min="0" step="0.01" />
+            <span class="input-group-text bg-light">TL/kg</span>
+          </div>
+        </div>
+
+        <div class="alert alert-success d-none align-items-center" id="productSuccessMsg" role="alert">
+          <i class="bi bi-check-circle-fill me-2"></i>
+          <span></span>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer bg-light px-4 py-3">
+        <button type="button" class="btn btn-outline-secondary flex-grow-1 py-2" data-bs-dismiss="modal">
+          <i class="bi bi-x-lg me-1"></i>İptal
+        </button>
+        <button type="button" id="btnSaveProduct" class="btn btn-primary flex-grow-1 py-2">
+          <i class="bi bi-save me-1"></i>Kaydet
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Gram-Kg Fiyat Hesaplama Modal - Mobil Uyumlu -->
+<div class="modal fade" id="kgCalcModal" tabindex="-1" aria-labelledby="kgCalcModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      
+      <!-- Header -->
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title fs-5 fw-bold" id="kgCalcModalLabel">
+          <i class="bi bi-calculator me-2"></i>Gram-Kg Fiyat Hesaplama
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body p-4">
+        <div class="mb-4">
+          <label for="kgGramInput" class="form-label fw-semibold">Toplam Miktar</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light">
+              <i class="bi bi-box text-info"></i>
+            </span>
+            <input type="number" class="form-control py-2" id="kgGramInput" placeholder="Örn: 800" min="1">
+            <span class="input-group-text bg-light">gram</span>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label for="kgPriceInput" class="form-label fw-semibold">Toplam Tutar</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light">
+              <i class="bi bi-cash-stack text-info"></i>
+            </span>
+            <input type="number" class="form-control py-2" id="kgPriceInput" placeholder="Örn: 50" min="0">
+            <span class="input-group-text bg-light">TL</span>
+          </div>
+        </div>
+
+        <div class="alert alert-info d-none align-items-center py-3" id="kgCalcResult" role="alert">
+          <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+          <div>
+            <h6 class="alert-heading mb-1">Sonuç</h6>
+            <span class="result-text"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer bg-light px-4 py-3 d-flex flex-nowrap">
+        <button type="button" class="btn btn-outline-secondary flex-grow-1 py-2" data-bs-dismiss="modal">
+          <i class="bi bi-x-lg me-1"></i>Kapat
+        </button>
+        <button type="button" id="btnCalculateKgPrice" class="btn btn-info text-white flex-grow-1 py-2">
+          <i class="bi bi-calculator me-1"></i>Hesapla
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- KG Fiyatı Hesapla Modal - Modern & Mobile Friendly -->
+<div class="modal fade" id="kgPriceModal" tabindex="-1" aria-labelledby="kgPriceModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      
+      <!-- Header -->
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title fs-5 fw-bold" id="kgPriceModalLabel">
+          <i class="bi bi-cash-stack me-2"></i>Kilogram Fiyatı Hesaplama
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body p-4">
+        <div class="mb-4">
+          <label for="totalGramInput" class="form-label fw-semibold">Toplam Miktar</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light">
+              <i class="bi bi-box-seam text-primary"></i>
+            </span>
+            <input type="number" id="totalGramInput" class="form-control py-2" placeholder="Örn: 8500" min="1">
+            <span class="input-group-text bg-light">gram</span>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label for="totalPriceInput" class="form-label fw-semibold">Toplam Tutar</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light">
+              <i class="bi bi-currency-dollar text-primary"></i>
+            </span>
+            <input type="number" id="totalPriceInput" class="form-control py-2" placeholder="Örn: 1000" min="0" step="0.01">
+            <span class="input-group-text bg-light">TL</span>
+          </div>
+        </div>
+
+        <div class="alert alert-primary d-none align-items-center py-3" id="kgPriceResult" role="alert">
+          <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+          <div>
+            <h6 class="alert-heading mb-1">Hesaplanan Kg Fiyatı</h6>
+            <span class="result-text fs-6"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer bg-light px-4 py-3 d-flex flex-nowrap gap-2">
+        <button type="button" class="btn btn-outline-secondary flex-grow-1 py-2" data-bs-dismiss="modal">
+          <i class="bi bi-x-lg me-1"></i>Kapat
+        </button>
+        <button id="calculateKgPriceBtn" class="btn btn-primary flex-grow-1 py-2">
+          <i class="bi bi-calculator me-1"></i>Hesapla
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- Yemek Miktar Modal - Modern & Responsive -->
+<div class="modal fade" id="calcModal" tabindex="-1" aria-labelledby="calcModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content border-0 shadow-lg">
+      
+      <!-- Header -->
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title fs-5 fw-bold" id="calcModalLabel">
+          <i class="bi bi-calculator-fill me-2"></i>Yemek Miktarları Hesaplama
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body p-4">
+        
+        <!-- Kişi Sayısı -->
+        <div class="mb-4 p-3 bg-light rounded">
+          <div class="row align-items-center g-3">
+            <div class="col-md-4">
+              <label for="modalPersonCount" class="form-label fw-semibold mb-md-0">
+                <i class="bi bi-people-fill me-2 text-success"></i>Kişi Sayısı
+              </label>
+            </div>
+            <div class="col-md-8">
+              <div class="input-group">
+                <input type="number" id="modalPersonCount" class="form-control py-2" min="1" value="50">
+                <span class="input-group-text bg-white">kişi</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ürün Girişleri -->
+        <div class="mb-3">
+          <h6 class="fw-semibold text-success mb-3">
+            <i class="bi bi-list-ul me-2"></i>Ürün Listesi
+          </h6>
+          <div id="productInputsContainer" class="row g-3"></div>
+        </div>
+
+        <button id="addProductBtn" class="btn btn-success w-100 py-2 mb-4">
+          <i class="bi bi-plus-circle me-2"></i>Yeni Ürün Ekle
+        </button>
+
+        <hr class="my-3">
+
+        <!-- Sonuçlar -->
+        <div class="mt-4">
+          <h6 class="fw-semibold text-success d-flex align-items-center">
+            <i class="bi bi-clipboard-data me-2"></i>Kişi Başına Düşen Miktarlar
+          </h6>
+          <ul id="perPersonList" class="list-group mt-3"></ul>
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer bg-light px-4 py-3">
+        <button type="button" class="btn btn-outline-secondary py-2" data-bs-dismiss="modal">
+          <i class="bi bi-x-lg me-1"></i>Kapat
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+   <div class="container py-4">
+    <!-- Arama Kutusu - Modern Tasarım -->
+    <div class="mb-4 shadow-sm rounded-3">
+        <div class="input-group input-group-lg bg-white p-1 rounded-3">
+            <span class="input-group-text bg-transparent border-0">
+                <i class="bi bi-search text-muted"></i>
+            </span>
+            <input type="text" id="searchInput" class="form-control border-0 py-3" 
+                   placeholder="Menü veya ürün ara..." aria-label="Arama">
+            <button class="btn btn-outline-secondary border-0" type="button">
+                <i class="bi bi-funnel"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Menü Ekleme - Kart Tasarımı -->
+    <div class="card mb-4 border-0 shadow-sm">
+        <div class="card-body p-4">
+            <h5 class="card-title text-primary mb-3">
+                <i class="bi bi-plus-square-fill me-2"></i>Yeni Menü Oluştur
+            </h5>
+            <div class="row g-2 align-items-center">
+                <div class="col-md-8">
+                    <div class="form-floating">
+                        <input type="text" id="menuName" class="form-control" 
+                               placeholder="Menü adı" style="height: calc(3.5rem + 2px)">
+                        <label for="menuName">Örneğin: Haftalık Menü</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <button id="addMenuBtn" class="btn btn-primary w-100 py-3">
+                        <i class="bi bi-plus-lg me-2"></i>Menü Ekle
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menü Listesi - Modern Accordion -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white">
+            <h5 class="mb-0 d-flex align-items-center">
+                <i class="bi bi-list-ul text-primary me-2"></i>Menülerim
+            </h5>
+        </div>
+        <div class="card-body p-0">
+            <div id="menuList" class="accordion accordion-flush"></div>
+        </div>
+    </div>
+</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const menus = [];
+    let openMenuId = null; // Şu anda açık olan menü id'si
+    let searchTerm = ''; // Arama terimi
+
+    const menuList = document.getElementById('menuList');
+    const addMenuBtn = document.getElementById('addMenuBtn');
+    const menuNameInput = document.getElementById('menuName');
+    const searchInput = document.getElementById('searchInput');
+
+    addMenuBtn.addEventListener('click', () => {
+      const name = menuNameInput.value.trim();
+      if (!name) return alert('Lütfen Menü Adı Girin.');
+
+      const newMenu = {
+        id: Date.now(),
+        name,
+        products: [],
+        personCount: 1
+      };
+      menus.push(newMenu);
+      openMenuId = newMenu.id; // Yeni eklenen menüyü aç
+      menuNameInput.value = '';
+      renderMenus();
+    });
+
+    searchInput.addEventListener('input', (e) => {
+      searchTerm = e.target.value.trim().toLowerCase();
+      renderMenus();
+    });
+
+    function renderMenus() {
+      menuList.innerHTML = '';
+
+      // Filtreli menüler
+      const filteredMenus = menus.filter(menu => {
+        if (!searchTerm) return true;
+
+        const menuNameMatch = menu.name.toLowerCase().includes(searchTerm);
+        const productMatch = menu.products.some(p => p.name.toLowerCase().includes(searchTerm));
+
+        return menuNameMatch || productMatch;
+      });
+
+      filteredMenus.forEach((menu) => {
+        const isOpen = menu.id === openMenuId;
+        
+        // Filtreli ürünler:
+        const filteredProducts = menu.products.filter(p => {
+          if (!searchTerm) return true;
+          return p.name.toLowerCase().includes(searchTerm);
+        });
+
+        // Ürün satırlarını oluştur
+        const productsRows = filteredProducts.map((p, i) => {
+          const totalQuantity = p.quantity * menu.personCount; // toplam miktar (g)
+          const totalCostItem = (totalQuantity / 1000) * p.unitPrice; // ₺
+
+          return `
+            <tr>
+              <td>${p.name}</td>
+              <td>
+                <div class="input-group input-group-sm">
+                  <input type="number" min="0" value="${p.quantity}" data-menu-id="${menu.id}" data-prod-idx="${menu.products.indexOf(p)}" class="form-control qty-input" />
+                  <span class="input-group-text">g (kişi başı)</span>
+                </div>
+                <small class="text-muted">Toplam: ${totalQuantity.toLocaleString('tr-TR')} g</small>
+              </td>
+              <td>
+                <input type="number" min="0" step="0.01" value="${p.unitPrice}" data-menu-id="${menu.id}" data-prod-idx="${menu.products.indexOf(p)}" class="form-control price-input" />
+              </td>
+              <td>${totalCostItem.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} ₺</td>
+            </tr>
+          `;
+        }).join('');
+
+        // Toplam maliyet tüm filtrelenmiş ürünlerin toplamı:
+        const totalCost = filteredProducts.reduce((acc, p) => {
+          const totalQty = p.quantity * menu.personCount;
+          return acc + (totalQty / 1000) * p.unitPrice;
+        }, 0);
+
+        // Kişi başı maliyet:
+        const costPerPerson = filteredProducts.reduce((acc, p) => acc + (p.quantity / 1000) * p.unitPrice, 0);
+
+        // Eğer filtreye takılmayan ürünler varsa (ürünler filtrelenince azalabilir), orijinal toplam maliyet vs gözükebilir. 
+        // Burada filtre sonrası hesap yaptık. Dilersen farklı yaparız.
+
+        menuList.innerHTML += `
+          <div class="accordion-item mb-3">
+            <h2 class="accordion-header" id="heading${menu.id}">
+              <button class="accordion-button ${isOpen ? '' : 'collapsed'}" type="button"
+                data-bs-toggle="collapse" data-bs-target="#collapse${menu.id}"
+                aria-expanded="${isOpen}" aria-controls="collapse${menu.id}"
+                data-menu-id="${menu.id}">
+                ${menu.name}
+              </button>
+            </h2>
+
+            <div id="collapse${menu.id}" class="accordion-collapse collapse ${isOpen ? 'show' : ''}" aria-labelledby="heading${menu.id}" data-bs-parent="#menuList">
+              <div class="accordion-body">
+
+                <div class="d-flex align-items-center justify-content-start mb-3 flex-wrap">
+                  <label for="personCountInput${menu.id}" class="mb-0 fw-semibold me-2">Kişi Sayısı:</label>
+                  <input id="personCountInput${menu.id}" type="number" min="1" value="${menu.personCount}" data-menu-id="${menu.id}" class="form-control form-control-sm w-auto person-count-input" />
+                </div>
+
+                <table class="table table-sm table-bordered align-middle mb-3">
+                  <thead>
+                    <tr>
+                      <th>Ürün Adı</th>
+                      <th>Miktar (g)</th>
+                      <th>Birim Fiyat (₺ / kg)</th>
+                      <th>Toplam (₺)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${productsRows || `<tr><td colspan="4" class="text-center">Ürün yok</td></tr>`}
+                  </tbody>
+                </table>
+
+                <div class="mb-3 d-flex align-items-center flex-wrap">
+                  <input type="text" placeholder="Ürün Adı" class="form-control form-control-sm me-2 mb-2" id="prodName${menu.id}" style="max-width: 50%;" />
+                  <input type="number" min="0" step="0.01" placeholder="Birim Fiyat (₺/kg)" class="form-control form-control-sm me-2 mb-2" id="prodPrice${menu.id}" style="max-width: 25%;" />
+                  <div class="input-group input-group-sm me-2 mb-2" style="max-width: 25%;">
+                    <input type="number" min="0" placeholder="Miktar (g)" class="form-control" id="prodQty${menu.id}" />
+                    <span class="input-group-text">g</span>
+                  </div>
+                  <button class="btn btn-sm btn-success mb-2" onclick="addProduct(${menu.id})">Ürün Ekle</button>
+                </div>
+
+                <div>
+                  <strong>Kişi Sayısı: </strong> ${menu.personCount.toLocaleString('tr-TR')} |
+                  <strong>Toplam Maliyet: </strong> ${totalCost.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} ₺ |
+                  <strong>Kişi Başı Maliyet: </strong> ${costPerPerson.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} ₺
+                </div>
+
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      // Event listenerları tekrar ekle (dinamik içerik)
+      document.querySelectorAll('.qty-input').forEach(input => {
+        input.onchange = (e) => {
+          const menuId = +e.target.dataset.menuId;
+          const prodIdx = +e.target.dataset.prodIdx;
+          const val = parseFloat(e.target.value) || 0;
+          const menu = menus.find(m => m.id === menuId);
+          if (menu) {
+            menu.products[prodIdx].quantity = val;
+            renderMenus();
+          }
+        };
+      });
+
+      document.querySelectorAll('.price-input').forEach(input => {
+        input.onchange = (e) => {
+          const menuId = +e.target.dataset.menuId;
+          const prodIdx = +e.target.dataset.prodIdx;
+          const val = parseFloat(e.target.value) || 0;
+          const menu = menus.find(m => m.id === menuId);
+          if (menu) {
+            menu.products[prodIdx].unitPrice = val;
+            renderMenus();
+          }
+        };
+      });
+
+      document.querySelectorAll('.person-count-input').forEach(input => {
+        input.onchange = (e) => {
+          const menuId = +e.target.dataset.menuId;
+          let val = parseInt(e.target.value);
+          if (val < 1) val = 1;
+          const menu = menus.find(m => m.id === menuId);
+          if (menu) {
+            menu.personCount = val;
+            renderMenus();
+          }
+        };
+      });
+
+      // Accordion açma-kapama durumunu yakala ve openMenuId güncelle
+      document.querySelectorAll('.accordion-button').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const clickedMenuId = +btn.dataset.menuId;
+          if (openMenuId === clickedMenuId) {
+            // Aynı menüye tıklandı, kapatılıyorsa openMenuId null olur
+            const collapseEl = document.getElementById(`collapse${clickedMenuId}`);
+            if (collapseEl.classList.contains('show')) {
+              openMenuId = clickedMenuId; // hâlâ açık
+            } else {
+              openMenuId = null; // kapandı
+            }
+          } else {
+            // Başka menü açıldıysa openMenuId güncelle
+            openMenuId = clickedMenuId;
+          }
+          // renderMenus(); // Burada render yapmak yok, bootstrap handle ediyor
+        });
+      });
+    }
+
+    function addProduct(menuId) {
+      const prodName = document.getElementById('prodName' + menuId);
+      const prodPrice = document.getElementById('prodPrice' + menuId);
+      const prodQty = document.getElementById('prodQty' + menuId);
+
+      const name = prodName.value.trim();
+      const price = parseFloat(prodPrice.value);
+      const qty = parseFloat(prodQty.value);
+
+      if (!name || isNaN(price) || isNaN(qty)) {
+        return alert('Lütfen tüm ürün bilgilerini doğru girin!');
+      }
+
+      const menu = menus.find(m => m.id === menuId);
+      if (menu) {
+        menu.products.push({ name, unitPrice: price, quantity: qty });
+        prodName.value = '';
+        prodPrice.value = '';
+        prodQty.value = '';
+        openMenuId = menuId; // ürün eklendiği menüyü açık bırak
+        renderMenus();
+      }
+    }
+
+    // Sayfa yüklendiğinde renderla
+    renderMenus();
+    ///////////////////////////////////
+ 
+  const calcBtn = document.getElementById('calcBtn');
+  const calcModal = new bootstrap.Modal(document.getElementById('calcModal'));
+  const modalPersonCountInput = document.getElementById('modalPersonCount');
+  const productInputsContainer = document.getElementById('productInputsContainer');
+  const perPersonList = document.getElementById('perPersonList');
+  const addProductBtn = document.getElementById('addProductBtn');
+
+  // Modal Açıldığında
+  calcBtn.addEventListener('click', () => {
+    modalPersonCountInput.value = 50;
+    productInputsContainer.innerHTML = '';
+    perPersonList.innerHTML = '';
+    addProductInput(); // En az 1 satır göster
+    calcModal.show();
+  });
+
+  // Kişi sayısı değiştiğinde
+  modalPersonCountInput.addEventListener('input', updatePerPersonAmounts);
+
+  // Yeni ürün ekle
+  addProductBtn.addEventListener('click', () => {
+    addProductInput();
+  });
+
+  // Ürün girişi satırı oluştur
+  function addProductInput(name = '', amount = '') {
+    const div = document.createElement('div');
+    div.className = 'input-group mb-2';
+
+    div.innerHTML = `
+      <input type="text" class="form-control product-name" placeholder="Ürün Adı" value="${name}" />
+      <input type="number" min="0" step="1" class="form-control product-amount" placeholder="Miktar (gram)" value="${amount}" />
+      <button type="button" class="btn btn-danger btn-sm remove-product-btn">X</button>
+    `;
+
+    productInputsContainer.appendChild(div);
+
+    div.querySelector('.remove-product-btn').addEventListener('click', () => {
+      div.remove();
+      updatePerPersonAmounts();
+    });
+
+    div.querySelector('.product-name').addEventListener('input', updatePerPersonAmounts);
+    div.querySelector('.product-amount').addEventListener('input', updatePerPersonAmounts);
+  }
+
+  // Hesaplama ve liste güncelleme
+  function updatePerPersonAmounts() {
+    const personCount = parseInt(modalPersonCountInput.value);
+    if (isNaN(personCount) || personCount < 1) return;
+
+    perPersonList.innerHTML = '';
+
+    const products = [...productInputsContainer.querySelectorAll('.input-group')].map(div => {
+      const name = div.querySelector('.product-name').value.trim();
+      const amount = parseFloat(div.querySelector('.product-amount').value);
+      return { name, amount };
+    }).filter(p => p.name !== '' && !isNaN(p.amount) && p.amount > 0);
+
+    products.forEach(p => {
+      const perPersonAmount = p.amount / personCount;
+      const li = document.createElement('li');
+      li.className = 'list-group-item d-flex justify-content-between align-items-center';
+      li.innerHTML = `
+        <span>${p.name}</span>
+        <span>${perPersonAmount.toLocaleString('tr-TR')} g / kişi</span>
+      `;
+      perPersonList.appendChild(li);
+    });
+  }
+
+
+/////////////////////////////////////////
+const kgPriceBtn = document.getElementById("kgPriceBtn");
+  const kgPriceModal = new bootstrap.Modal(document.getElementById("kgPriceModal"));
+  const totalGramInput = document.getElementById("totalGramInput");
+  const totalPriceInput = document.getElementById("totalPriceInput");
+  const kgPriceResult = document.getElementById("kgPriceResult");
+  const calculateKgPriceBtn = document.getElementById("calculateKgPriceBtn");
+
+  kgPriceBtn.addEventListener("click", () => {
+    totalGramInput.value = "";
+    totalPriceInput.value = "";
+    kgPriceResult.classList.add("d-none");
+    kgPriceModal.show();
+  });
+
+  calculateKgPriceBtn.addEventListener("click", () => {
+    const gram = parseFloat(totalGramInput.value);
+    const price = parseFloat(totalPriceInput.value);
+
+    if (isNaN(gram) || gram <= 0 || isNaN(price) || price < 0) {
+      kgPriceResult.classList.remove("alert-info");
+      kgPriceResult.classList.add("alert-danger");
+      kgPriceResult.textContent = "Lütfen geçerli bir gram ve fiyat girin!";
+      kgPriceResult.classList.remove("d-none");
+      return;
+    }
+
+    const kgPrice = (price / gram) * 1000;
+    kgPriceResult.classList.remove("alert-danger");
+    kgPriceResult.classList.add("alert-info");
+    kgPriceResult.innerHTML = `<strong>1 kg Fiyatı:</strong> ${kgPrice.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL`;
+    kgPriceResult.classList.remove("d-none");
+  });
+  ////////////////////////////////////////////////////////////
+  
+  const kgModal = new bootstrap.Modal(document.getElementById('kgCalcModal'));
+  const btnOpenKgCalcModal = document.getElementById('btnOpenKgCalcModal');
+  const btnCalculateKgPrice = document.getElementById('btnCalculateKgPrice');
+  const kgGramInput = document.getElementById('kgGramInput');
+  const kgPriceInput = document.getElementById('kgPriceInput');
+  const kgCalcResult = document.getElementById('kgCalcResult');
+
+  btnOpenKgCalcModal.addEventListener('click', () => {
+    kgGramInput.value = '';
+    kgPriceInput.value = '';
+    kgCalcResult.classList.add('d-none');
+    kgModal.show();
+  });
+
+  btnCalculateKgPrice.addEventListener('click', () => {
+    const gram = parseFloat(kgGramInput.value);
+    const totalPrice = parseFloat(kgPriceInput.value);
+
+    if (isNaN(gram) || gram <= 0 || isNaN(totalPrice) || totalPrice < 0) {
+      kgCalcResult.textContent = 'Lütfen geçerli bir miktar ve tutar giriniz!';
+      kgCalcResult.classList.remove('d-none', 'alert-info');
+      kgCalcResult.classList.add('alert-danger');
+      return;
+    }
+
+    const perKgPrice = (totalPrice / gram) * 1000;
+    kgCalcResult.innerHTML = `<strong>1 KG Fiyatı:</strong> ${perKgPrice.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL`;
+    kgCalcResult.classList.remove('d-none', 'alert-danger');
+    kgCalcResult.classList.add('alert-info');
+  });
+
+  const productModal = new bootstrap.Modal(document.getElementById('productModal'));
+  const btnOpenProductModal = document.getElementById('btnOpenProductModal');
+  const btnSaveProduct = document.getElementById('btnSaveProduct');
+
+  const productNameInput = document.getElementById('productNameInput');
+  const productKgPriceInput = document.getElementById('productKgPriceInput');
+  const productSuccessMsg = document.getElementById('productSuccessMsg');
+
+  btnOpenProductModal.addEventListener('click', () => {
+    productNameInput.value = '';
+    productKgPriceInput.value = '';
+    productSuccessMsg.classList.add('d-none');
+    productModal.show();
+  });
+
+  btnSaveProduct.addEventListener('click', () => {
+    const name = productNameInput.value.trim();
+    const kgPrice = parseFloat(productKgPriceInput.value);
+
+    if (!name || isNaN(kgPrice) || kgPrice <= 0) {
+      productSuccessMsg.textContent = "Geçerli bir ürün adı ve fiyat girin!";
+      productSuccessMsg.className = "alert alert-danger";
+      productSuccessMsg.classList.remove('d-none');
+      return;
+    }
+
+    // Şimdilik konsola yaz, sonra API ile SQL'e gönderilecek
+    console.log("Ürün adı:", name, "KG fiyatı:", kgPrice);
+
+    // Başarı mesajı
+    productSuccessMsg.textContent = `"${name}" başarıyla eklendi!`;
+    productSuccessMsg.className = "alert alert-success";
+    productSuccessMsg.classList.remove('d-none');
+  });
+
+
+
+  </script>
+
+</body>
+</html>

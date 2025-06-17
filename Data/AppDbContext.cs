@@ -12,9 +12,8 @@ namespace X.Data
         public DbSet<KantinDurumlari> KantinDurumlari { get; set; }
         public DbSet<KantinHarcamasi> KantinHarcamalari { get; set; }
         public DbSet<Gecis> Gecisler { get; set; }
-        public DbSet<GecisNew> GecislerNew { get; set; }
-         
-
+        
+        public DbSet<RaporIstekleri> RaporIstekleri { get; set; }
 
         public DbSet<GunlukGelir> GunlukGelirler { get; set; }
         public DbSet<GunlukGider> GunlukGiderler { get; set; }
