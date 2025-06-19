@@ -169,7 +169,9 @@
     </style>
 
 </head>
+
 <body class="bg-light">
+  
 
   <div class="container py-4">
     <h1 class="mb-4 text-center text-primary fw-bold fs-3 fs-md-2">Yemek Menü ve Maliyet Takip</h1>
@@ -460,7 +462,7 @@
                 <i class="bi bi-search text-muted"></i>
             </span>
             <input type="text" id="searchInput" class="form-control border-0 py-3" 
-                   placeholder="Menü veya ürün ara..." aria-label="Arama">
+                   placeholder="Yemek Ara..." aria-label="Arama">
             <button class="btn btn-outline-secondary border-0" type="button">
                 <i class="bi bi-funnel"></i>
             </button>
@@ -471,19 +473,19 @@
     <div class="card mb-4 border-0 shadow-sm">
         <div class="card-body p-4">
             <h5 class="card-title text-primary mb-3">
-                <i class="bi bi-plus-square-fill me-2"></i>Yeni Menü Oluştur
+                <i class="bi bi-plus-square-fill me-2"></i>Yeni Yemek Ekle
             </h5>
             <div class="row g-2 align-items-center">
                 <div class="col-md-8">
                     <div class="form-floating">
                         <input type="text" id="menuName" class="form-control" 
                                placeholder="Menü adı" style="height: calc(3.5rem + 2px)">
-                        <label for="menuName">Örneğin: Haftalık Menü</label>
+                        <label for="menuName">Yemek Ad...</label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <button id="addMenuBtn" class="btn btn-primary w-100 py-3">
-                        <i class="bi bi-plus-lg me-2"></i>Menü Ekle
+                        <i class="bi bi-plus-lg me-2"></i>Yemek Ekle
                     </button>
                 </div>
             </div>
@@ -494,7 +496,7 @@
     <div class="card border-0 shadow-sm">
         <div class="card-header bg-white">
             <h5 class="mb-0 d-flex align-items-center">
-                <i class="bi bi-list-ul text-primary me-2"></i>Menülerim
+                <i class="bi bi-list-ul text-primary me-2"></i>Yemekler
             </h5>
         </div>
         <div class="card-body p-0">
@@ -505,235 +507,343 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    const menus = [];
-    let openMenuId = null; // Şu anda açık olan menü id'si
-    let searchTerm = ''; // Arama terimi
+  let openMenuId = null;
+let searchTerm = '';
+const menus = [];
 
-    const menuList = document.getElementById('menuList');
-    const addMenuBtn = document.getElementById('addMenuBtn');
-    const menuNameInput = document.getElementById('menuName');
-    const searchInput = document.getElementById('searchInput');
+const menuList = document.getElementById('menuList');
+const addMenuBtn = document.getElementById('addMenuBtn');
+const menuNameInput = document.getElementById('menuName');
+const searchInput = document.getElementById('searchInput');
 
-    addMenuBtn.addEventListener('click', () => {
-      const name = menuNameInput.value.trim();
-      if (!name) return alert('Lütfen Menü Adı Girin.');
+function loadMenusFromApi() {
+  fetch('/api/yemekmenuleri')
+    .then(async res => {
+      if (!res.ok) throw new Error('Menüler yüklenemedi');
+      return res.json();
+    })
+    .then(data => {
+      const menuArray = data.$values || []; // Menüleri al
 
-      const newMenu = {
-        id: Date.now(),
-        name,
-        products: [],
-        personCount: 1
-      };
-      menus.push(newMenu);
-      openMenuId = newMenu.id; // Yeni eklenen menüyü aç
+      menus.length = 0; // Diziyi sıfırla
+      menuArray.forEach(menu => {
+        const productsArray = (menu.urunler && menu.urunler.$values) || []; // Ürünleri al
+        menus.push({
+          id: menu.id,
+          name: menu.menuAdi,
+          personCount: menu.kisiSayisi,
+          products: productsArray.map(p => ({
+            id: p.id,
+            name: p.urunAdi,
+            quantity: p.miktarGram,
+            unitPrice: p.birimFiyat
+          }))
+        });
+      });
+
+      renderMenus();
+    })
+    .catch(err => console.error('Menüler yüklenirken hata:', err.message));
+}
+
+
+
+
+window.onload = () => {
+  loadMenusFromApi();
+};
+
+// Yeni Menü Ekle
+addMenuBtn.addEventListener('click', () => {
+  const name = menuNameInput.value.trim();
+  if (!name) return alert('Lütfen Menü Adı Girin.');
+
+  const newMenu = {
+    menuAdi: name,
+    kisiSayisi: 1,
+    urunler: []
+  };
+
+  fetch('/api/yemekmenuleri/ekle', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(newMenu)
+  })
+    .then(async res => {
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(`Hata: ${res.status} - ${text}`);
+      }
+      return res.json();
+    })
+    .then(savedMenu => {
+      menus.push({
+        id: savedMenu.id,
+        name: savedMenu.menuAdi,
+        personCount: savedMenu.kisiSayisi,
+        products: []
+      });
+      openMenuId = savedMenu.id;
       menuNameInput.value = '';
       renderMenus();
+    })
+    .catch(err => alert('Menü eklenirken hata: ' + err.message));
+});
+
+// Arama
+searchInput.addEventListener('input', (e) => {
+  searchTerm = e.target.value.trim().toLowerCase();
+  renderMenus();
+});
+
+// Menüleri çiz
+function renderMenus() {
+  menuList.innerHTML = '';
+
+  const filteredMenus = menus.filter(menu => {
+    if (!searchTerm) return true;
+    const menuMatch = menu.name.toLowerCase().includes(searchTerm);
+    const productMatch = menu.products.some(p => p.name.toLowerCase().includes(searchTerm));
+    return menuMatch || productMatch;
+  });
+
+  filteredMenus.forEach(menu => {
+    const isOpen = menu.id === openMenuId;
+    const filteredProducts = menu.products.filter(p => {
+      if (!searchTerm) return true;
+      return p.name.toLowerCase().includes(searchTerm);
     });
 
-    searchInput.addEventListener('input', (e) => {
-      searchTerm = e.target.value.trim().toLowerCase();
-      renderMenus();
-    });
+    const productsRows = filteredProducts.map(p => {
+      const totalQuantity = p.quantity * menu.personCount;
+      const totalCostItem = (totalQuantity / 1000) * p.unitPrice;
 
-    function renderMenus() {
-      menuList.innerHTML = '';
+      return `
+        <tr>
+          <td>${p.name}</td>
+          <td>
+            <div class="input-group input-group-sm">
+              <input type="number" min="0" value="${p.quantity}" data-menu-id="${menu.id}" data-prod-id="${p.id}" class="form-control qty-input" />
+              <span class="input-group-text">g (kişi başı)</span>
+            </div>
+            <small class="text-muted">Toplam: ${totalQuantity.toLocaleString('tr-TR')} g</small>
+          </td>
+          <td>
+            <input type="number" min="0" step="0.01" value="${p.unitPrice}" data-menu-id="${menu.id}" data-prod-id="${p.id}" class="form-control price-input" />
+          </td>
+          <td>${totalCostItem.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ₺</td>
+        </tr>
+      `;
+    }).join('');
 
-      // Filtreli menüler
-      const filteredMenus = menus.filter(menu => {
-        if (!searchTerm) return true;
+    const totalCost = filteredProducts.reduce((acc, p) => acc + ((p.quantity * menu.personCount) / 1000) * p.unitPrice, 0);
+    const costPerPerson = filteredProducts.reduce((acc, p) => acc + (p.quantity / 1000) * p.unitPrice, 0);
 
-        const menuNameMatch = menu.name.toLowerCase().includes(searchTerm);
-        const productMatch = menu.products.some(p => p.name.toLowerCase().includes(searchTerm));
+    menuList.innerHTML += `
+      <div class="accordion-item mb-3">
+        <h2 class="accordion-header" id="heading${menu.id}">
+          <button class="accordion-button ${isOpen ? '' : 'collapsed'}" type="button"
+            data-bs-toggle="collapse" data-bs-target="#collapse${menu.id}"
+            aria-expanded="${isOpen}" aria-controls="collapse${menu.id}"
+            data-menu-id="${menu.id}">
+            ${menu.name}
+          </button>
+        </h2>
 
-        return menuNameMatch || productMatch;
-      });
+        <div id="collapse${menu.id}" class="accordion-collapse collapse ${isOpen ? 'show' : ''}" aria-labelledby="heading${menu.id}" data-bs-parent="#menuList">
+          <div class="accordion-body">
+            <div class="d-flex align-items-center justify-content-start mb-3 flex-wrap">
+              <label for="personCountInput${menu.id}" class="mb-0 fw-semibold me-2">Kişi Sayısı:</label>
+              <input id="personCountInput${menu.id}" type="number" min="1" value="${menu.personCount}" data-menu-id="${menu.id}" class="form-control form-control-sm w-auto person-count-input" />
+            </div>
 
-      filteredMenus.forEach((menu) => {
-        const isOpen = menu.id === openMenuId;
-        
-        // Filtreli ürünler:
-        const filteredProducts = menu.products.filter(p => {
-          if (!searchTerm) return true;
-          return p.name.toLowerCase().includes(searchTerm);
-        });
+            <table class="table table-sm table-bordered align-middle mb-3">
+              <thead>
+                <tr>
+                  <th>Ürün Adı</th>
+                  <th>Miktar (g)</th>
+                  <th>Birim Fiyat (₺ / kg)</th>
+                  <th>Toplam (₺)</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${productsRows || `<tr><td colspan="4" class="text-center">Ürün yok</td></tr>`}
+              </tbody>
+            </table>
 
-        // Ürün satırlarını oluştur
-        const productsRows = filteredProducts.map((p, i) => {
-          const totalQuantity = p.quantity * menu.personCount; // toplam miktar (g)
-          const totalCostItem = (totalQuantity / 1000) * p.unitPrice; // ₺
-
-          return `
-            <tr>
-              <td>${p.name}</td>
-              <td>
-                <div class="input-group input-group-sm">
-                  <input type="number" min="0" value="${p.quantity}" data-menu-id="${menu.id}" data-prod-idx="${menu.products.indexOf(p)}" class="form-control qty-input" />
-                  <span class="input-group-text">g (kişi başı)</span>
-                </div>
-                <small class="text-muted">Toplam: ${totalQuantity.toLocaleString('tr-TR')} g</small>
-              </td>
-              <td>
-                <input type="number" min="0" step="0.01" value="${p.unitPrice}" data-menu-id="${menu.id}" data-prod-idx="${menu.products.indexOf(p)}" class="form-control price-input" />
-              </td>
-              <td>${totalCostItem.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} ₺</td>
-            </tr>
-          `;
-        }).join('');
-
-        // Toplam maliyet tüm filtrelenmiş ürünlerin toplamı:
-        const totalCost = filteredProducts.reduce((acc, p) => {
-          const totalQty = p.quantity * menu.personCount;
-          return acc + (totalQty / 1000) * p.unitPrice;
-        }, 0);
-
-        // Kişi başı maliyet:
-        const costPerPerson = filteredProducts.reduce((acc, p) => acc + (p.quantity / 1000) * p.unitPrice, 0);
-
-        // Eğer filtreye takılmayan ürünler varsa (ürünler filtrelenince azalabilir), orijinal toplam maliyet vs gözükebilir. 
-        // Burada filtre sonrası hesap yaptık. Dilersen farklı yaparız.
-
-        menuList.innerHTML += `
-          <div class="accordion-item mb-3">
-            <h2 class="accordion-header" id="heading${menu.id}">
-              <button class="accordion-button ${isOpen ? '' : 'collapsed'}" type="button"
-                data-bs-toggle="collapse" data-bs-target="#collapse${menu.id}"
-                aria-expanded="${isOpen}" aria-controls="collapse${menu.id}"
-                data-menu-id="${menu.id}">
-                ${menu.name}
-              </button>
-            </h2>
-
-            <div id="collapse${menu.id}" class="accordion-collapse collapse ${isOpen ? 'show' : ''}" aria-labelledby="heading${menu.id}" data-bs-parent="#menuList">
-              <div class="accordion-body">
-
-                <div class="d-flex align-items-center justify-content-start mb-3 flex-wrap">
-                  <label for="personCountInput${menu.id}" class="mb-0 fw-semibold me-2">Kişi Sayısı:</label>
-                  <input id="personCountInput${menu.id}" type="number" min="1" value="${menu.personCount}" data-menu-id="${menu.id}" class="form-control form-control-sm w-auto person-count-input" />
-                </div>
-
-                <table class="table table-sm table-bordered align-middle mb-3">
-                  <thead>
-                    <tr>
-                      <th>Ürün Adı</th>
-                      <th>Miktar (g)</th>
-                      <th>Birim Fiyat (₺ / kg)</th>
-                      <th>Toplam (₺)</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    ${productsRows || `<tr><td colspan="4" class="text-center">Ürün yok</td></tr>`}
-                  </tbody>
-                </table>
-
-                <div class="mb-3 d-flex align-items-center flex-wrap">
-                  <input type="text" placeholder="Ürün Adı" class="form-control form-control-sm me-2 mb-2" id="prodName${menu.id}" style="max-width: 50%;" />
-                  <input type="number" min="0" step="0.01" placeholder="Birim Fiyat (₺/kg)" class="form-control form-control-sm me-2 mb-2" id="prodPrice${menu.id}" style="max-width: 25%;" />
-                  <div class="input-group input-group-sm me-2 mb-2" style="max-width: 25%;">
-                    <input type="number" min="0" placeholder="Miktar (g)" class="form-control" id="prodQty${menu.id}" />
-                    <span class="input-group-text">g</span>
-                  </div>
-                  <button class="btn btn-sm btn-success mb-2" onclick="addProduct(${menu.id})">Ürün Ekle</button>
-                </div>
-
-                <div>
-                  <strong>Kişi Sayısı: </strong> ${menu.personCount.toLocaleString('tr-TR')} |
-                  <strong>Toplam Maliyet: </strong> ${totalCost.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} ₺ |
-                  <strong>Kişi Başı Maliyet: </strong> ${costPerPerson.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} ₺
-                </div>
-
+            <div class="mb-3 d-flex align-items-center flex-wrap">
+              <input type="text" placeholder="Ürün Adı" class="form-control form-control-sm me-2 mb-2" id="prodName${menu.id}" style="max-width: 50%;" />
+              <input type="number" min="0" step="0.01" placeholder="Birim Fiyat (₺/kg)" class="form-control form-control-sm me-2 mb-2" id="prodPrice${menu.id}" style="max-width: 25%;" />
+              <div class="input-group input-group-sm me-2 mb-2" style="max-width: 25%;">
+                <input type="number" min="0" placeholder="Miktar (g)" class="form-control" id="prodQty${menu.id}" />
+                <span class="input-group-text">g</span>
               </div>
+              <button class="btn btn-sm btn-success mb-2" onclick="addProduct(${menu.id})">Ürün Ekle</button>
+            </div>
+
+            <div>
+              <strong>Kişi Sayısı:</strong> ${menu.personCount.toLocaleString('tr-TR')} |
+              <strong>Toplam Maliyet:</strong> ${totalCost.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ₺ |
+              <strong>Kişi Başı Maliyet:</strong> ${costPerPerson.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ₺
             </div>
           </div>
-        `;
-      });
+        </div>
+      </div>
+    `;
+  });
 
-      // Event listenerları tekrar ekle (dinamik içerik)
-      document.querySelectorAll('.qty-input').forEach(input => {
-        input.onchange = (e) => {
-          const menuId = +e.target.dataset.menuId;
-          const prodIdx = +e.target.dataset.prodIdx;
-          const val = parseFloat(e.target.value) || 0;
-          const menu = menus.find(m => m.id === menuId);
-          if (menu) {
-            menu.products[prodIdx].quantity = val;
-            renderMenus();
-          }
-        };
-      });
-
-      document.querySelectorAll('.price-input').forEach(input => {
-        input.onchange = (e) => {
-          const menuId = +e.target.dataset.menuId;
-          const prodIdx = +e.target.dataset.prodIdx;
-          const val = parseFloat(e.target.value) || 0;
-          const menu = menus.find(m => m.id === menuId);
-          if (menu) {
-            menu.products[prodIdx].unitPrice = val;
-            renderMenus();
-          }
-        };
-      });
-
-      document.querySelectorAll('.person-count-input').forEach(input => {
-        input.onchange = (e) => {
-          const menuId = +e.target.dataset.menuId;
-          let val = parseInt(e.target.value);
-          if (val < 1) val = 1;
-          const menu = menus.find(m => m.id === menuId);
-          if (menu) {
-            menu.personCount = val;
-            renderMenus();
-          }
-        };
-      });
-
-      // Accordion açma-kapama durumunu yakala ve openMenuId güncelle
-      document.querySelectorAll('.accordion-button').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const clickedMenuId = +btn.dataset.menuId;
-          if (openMenuId === clickedMenuId) {
-            // Aynı menüye tıklandı, kapatılıyorsa openMenuId null olur
-            const collapseEl = document.getElementById(`collapse${clickedMenuId}`);
-            if (collapseEl.classList.contains('show')) {
-              openMenuId = clickedMenuId; // hâlâ açık
-            } else {
-              openMenuId = null; // kapandı
-            }
-          } else {
-            // Başka menü açıldıysa openMenuId güncelle
-            openMenuId = clickedMenuId;
-          }
-          // renderMenus(); // Burada render yapmak yok, bootstrap handle ediyor
-        });
-      });
-    }
-
-    function addProduct(menuId) {
-      const prodName = document.getElementById('prodName' + menuId);
-      const prodPrice = document.getElementById('prodPrice' + menuId);
-      const prodQty = document.getElementById('prodQty' + menuId);
-
-      const name = prodName.value.trim();
-      const price = parseFloat(prodPrice.value);
-      const qty = parseFloat(prodQty.value);
-
-      if (!name || isNaN(price) || isNaN(qty)) {
-        return alert('Lütfen tüm ürün bilgilerini doğru girin!');
-      }
-
+  // Event handler'ları yeniden bağla
+  document.querySelectorAll('.qty-input').forEach(input => {
+    input.onchange = (e) => {
+      const menuId = +e.target.dataset.menuId;
+      const prodId = +e.target.dataset.prodId;
+      const val = parseFloat(e.target.value) || 0;
       const menu = menus.find(m => m.id === menuId);
       if (menu) {
-        menu.products.push({ name, unitPrice: price, quantity: qty });
+        const product = menu.products.find(p => p.id === prodId);
+        if (product) {
+          product.quantity = val;
+          updateProduct(menuId, product);
+        }
+      }
+    };
+  });
+
+  document.querySelectorAll('.price-input').forEach(input => {
+    input.onchange = (e) => {
+      const menuId = +e.target.dataset.menuId;
+      const prodId = +e.target.dataset.prodId;
+      const val = parseFloat(e.target.value) || 0;
+      const menu = menus.find(m => m.id === menuId);
+      if (menu) {
+        const product = menu.products.find(p => p.id === prodId);
+        if (product) {
+          product.unitPrice = val;
+          updateProduct(menuId, product);
+        }
+      }
+    };
+  });
+
+  document.querySelectorAll('.person-count-input').forEach(input => {
+    input.onchange = (e) => {
+      const menuId = +e.target.dataset.menuId;
+      let val = parseInt(e.target.value);
+      if (val < 1) val = 1;
+      const menu = menus.find(m => m.id === menuId);
+      if (menu) {
+        menu.personCount = val;
+        updateMenu(menu);
+      }
+    };
+  });
+
+  document.querySelectorAll('.accordion-button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const clickedMenuId = +btn.dataset.menuId;
+      if (openMenuId === clickedMenuId) {
+        const collapseEl = document.getElementById(`collapse${clickedMenuId}`);
+        openMenuId = collapseEl.classList.contains('show') ? clickedMenuId : null;
+      } else {
+        openMenuId = clickedMenuId;
+      }
+    });
+  });
+}
+
+// Yeni ürün ekle
+function addProduct(menuId) {
+  const prodName = document.getElementById('prodName' + menuId);
+  const prodPrice = document.getElementById('prodPrice' + menuId);
+  const prodQty = document.getElementById('prodQty' + menuId);
+
+  const name = prodName.value.trim();
+  const price = parseFloat(prodPrice.value);
+  const qty = parseFloat(prodQty.value);
+
+  if (!name || isNaN(price) || isNaN(qty)) {
+    return alert('Lütfen tüm ürün bilgilerini doğru girin!');
+  }
+
+  const newProduct = {
+    urunAdi: name,
+    birimFiyat: price,
+    miktarGram: qty,
+    menuId: menuId
+  };
+
+  fetch(`/api/yemekmenuleri/${menuId}/urunler/ekle`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(newProduct)
+  })
+    .then(async res => {
+      if (!res.ok) throw new Error('Ürün eklenemedi');
+      return res.json();
+    })
+    .then(savedProduct => {
+      const menu = menus.find(m => m.id === menuId);
+      if (menu) {
+        menu.products.push({
+          id: savedProduct.id,
+          name: savedProduct.urunAdi,
+          unitPrice: savedProduct.birimFiyat,
+          quantity: savedProduct.miktarGram
+        });
         prodName.value = '';
         prodPrice.value = '';
         prodQty.value = '';
-        openMenuId = menuId; // ürün eklendiği menüyü açık bırak
+        openMenuId = menuId;
         renderMenus();
       }
-    }
+    })
+    .catch(err => alert('Ürün eklenirken hata: ' + err.message));
+}
 
-    // Sayfa yüklendiğinde renderla
-    renderMenus();
+// Ürün güncelle
+function updateProduct(menuId, product) {
+  const updatedProduct = {
+    id: product.id,
+    urunAdi: product.name,
+    birimFiyat: product.unitPrice,
+    miktarGram: product.quantity,
+    menuId: menuId
+  };
+
+  fetch(`/api/yemekmenuleri/${menuId}/urunler/${product.id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(updatedProduct)
+  })
+    .then(res => {
+      if (!res.ok) throw new Error('Ürün güncellenemedi');
+      renderMenus();
+    })
+    .catch(err => alert(err.message));
+}
+
+// Menü güncelle
+function updateMenu(menu) {
+  const updatedMenu = {
+    id: menu.id,
+    menuAdi: menu.name,
+    kisiSayisi: menu.personCount
+  };
+
+  fetch(`/api/yemekmenuleri/${menu.id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(updatedMenu)
+  })
+    .then(res => {
+      if (!res.ok) throw new Error('Menü güncellenemedi');
+      renderMenus();
+    })
+    .catch(err => alert(err.message));
+}
+
+
+
     ///////////////////////////////////
  
   const calcBtn = document.getElementById('calcBtn');
@@ -908,7 +1018,7 @@ const kgPriceBtn = document.getElementById("kgPriceBtn");
     productSuccessMsg.className = "alert alert-success";
     productSuccessMsg.classList.remove('d-none');
   });
-
+///////////////////////////////////////////////////////////////////////////////////// VeriTabanı Kodları Başlıyor... -->
 
 
   </script>

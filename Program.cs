@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.Text.Json.Serialization;
 using X.Data;
 using X.Models;
 
@@ -24,7 +25,12 @@ builder.Services.AddCors(options =>
 });
 
 // API ve Swagger
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+        options.JsonSerializerOptions.WriteIndented = true; // isteğe bağlı, okunabilir JSON için
+    });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -40,8 +46,6 @@ if (app.Environment.IsDevelopment())
 // CORS'u etkinleştir
 app.UseCors("AllowAllOrigins");
 app.UseStaticFiles();
-
-
 
 app.UseHttpsRedirection();
 

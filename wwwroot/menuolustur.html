@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Menü Planlayıcı</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color: #4cc9f0;
+            --danger-color: #f72585;
+            --warning-color: #f8961e;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .food-list {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            height: 100%;
+        }
+
+        .food-item {
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            border: 1px solid #e9ecef;
+        }
+
+        .food-item:hover {
+            background-color: #f1f9ff;
+            transform: translateX(5px);
+            border-color: var(--primary-color);
+        }
+
+        .food-item i {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+
+        .calendar {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .day-cell {
+            min-height: 120px;
+            border: 1px solid #e9ecef;
+            padding: 10px;
+            border-radius: 10px;
+            background: white;
+            position: relative;
+            transition: all 0.2s;
+            margin-bottom: 15px;
+        }
+
+        .day-cell:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .day-cell.active {
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed #dee2e6;
+        }
+
+        .day-number {
+            font-weight: bold;
+            color: var(--dark-color);
+            font-size: 1.1rem;
+        }
+
+        .day-name {
+            color: var(--primary-color);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+
+        .meal-item {
+            background: #f8f9fa;
+            padding: 6px 10px;
+            border-radius: 6px;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .meal-item:hover {
+            background: #e9ecef;
+        }
+
+        .delete-meal {
+            cursor: pointer;
+            color: var(--danger-color);
+            margin-left: 8px;
+            font-size: 1rem;
+            opacity: 0.7;
+            transition: all 0.2s;
+        }
+
+        .delete-meal:hover {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        .add-food-form {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px dashed #dee2e6;
+        }
+
+        .empty-state {
+            color: #6c757d;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .week-separator {
+            text-align: center;
+            margin: 15px 0;
+            color: #6c757d;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .week-separator:before,
+        .week-separator:after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px dashed #dee2e6;
+            margin: auto;
+        }
+
+        .week-separator:before {
+            margin-right: 10px;
+        }
+
+        .week-separator:after {
+            margin-left: 10px;
+        }
+
+        .meal-count {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 20px;
+            font-size: 0.7rem;
+            margin-left: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .day-cell {
+                min-height: 100px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .meal-item {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #b8c2cc;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a0aec0;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <div class="header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1><i class="bi bi-calendar2-week"></i> Menü Planlayıcı</h1>
+                    <p class="mb-0">Haftalık yemek programınızı kolayca oluşturun</p>
+                </div>
+                <select id="monthSelect" class="form-select form-select-sm w-auto d-inline-block ms-2">
+                    <option value="0">Ocak</option>
+                    <option value="1">Şubat</option>
+                    <option value="2">Mart</option>
+                    <option value="3">Nisan</option>
+                    <option value="4" selected>Mayıs</option>
+                    <option value="5">Haziran</option>
+                    <option value="6">Temmuz</option>
+                    <option value="7">Ağustos</option>
+                    <option value="8">Eylül</option>
+                    <option value="9">Ekim</option>
+                    <option value="10">Kasım</option>
+                    <option value="11">Aralık</option>
+                </select>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Yemek Listesi -->
+            <div class="col-lg-3 mb-4">
+                <div class="food-list">
+                    <h5><i class="bi bi-list-ul"></i> Yemek Listesi</h5>
+                    <p class="text-muted small">Yemekleri eklemek için listeden seçin</p>
+
+                    <div id="foodList">
+                        <div class="food-item">
+                            <i class="bi bi-egg-fried"></i> Mercimek Çorbası
+                        </div>
+                        <div class="food-item">
+                            <i class="bi bi-egg"></i> Karnıyarık
+                        </div>
+                        <div class="food-item">
+                            <i class="bi bi-basket"></i> Pilav
+                        </div>
+                        <div class="food-item">
+                            <i class="bi bi-nut"></i> Makarna
+                        </div>
+                        <div class="food-item">
+                            <i class="bi bi-cup-straw"></i> Yoğurt
+                        </div>
+                        <div class="food-item">
+                            <i class="bi bi-apple"></i> Meyve
+                        </div>
+                    </div>
+
+
+                    <div class="add-food-form">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="newFoodInput" placeholder="Yeni yemek ekle...">
+                            <button class="btn btn-primary" id="addFoodBtn"><i class="bi bi-plus-lg"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Takvim -->
+            <div class="col-lg-9">
+                <div class="calendar">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="mb-0"><i class="bi bi-calendar2-date"></i> Haftalık Menü</h5>
+                        <div>
+                            <button class="btn btn-sm btn-outline-primary me-2" id="printBtn">
+                                <i class="bi bi-printer"></i> Yazdır
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary me-2" id="saveBtn">
+                                <i class="bi bi-save"></i> Kaydet
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary me-2" id="autoFillBtn">
+                                <i class="bi bi-calendar2-plus"></i> Otomatik Oluştur
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary me-2" id="clearMenuBtn">
+                                <i class="bi bi-trash"></i> Temizle
+                            </button>
+                            
+
+                        </div>
+                    </div>
+
+                    <div id="calendarContainer">
+                        <!-- Takvim burada dinamik olarak oluşturulacak -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Mesajları -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="successToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg-success text-white">
+                <strong class="me-auto">Başarılı</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                Menü başarıyla kaydedildi!
+            </div>
+        </div>
+
+        <div id="errorToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg-danger text-white">
+                <strong class="me-auto">Hata</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                Bir hata oluştu. Lütfen tekrar deneyin.
+            </div>
+        </div>
+    </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+// Ay ve yıl bilgisi
+let currentMonth = 5; // Haziran (0-11 arası)
+let currentYear = 2025;
+
+let menuData = JSON.parse(localStorage.getItem('menuData')) || {};
+let activeCell = null;
+const toastSuccess = new bootstrap.Toast(document.getElementById('successToast'));
+const toastError = new bootstrap.Toast(document.getElementById('errorToast'));
+
+// Uygulama başladığında takvimi oluştur
+document.addEventListener('DOMContentLoaded', function () {
+  createCalendar();
+  setupEventListeners();
+  loadFoodList();
+});
+
+// Takvim oluşturma fonksiyonu
+function createCalendar() {
+  const container = document.getElementById("calendarContainer");
+  container.innerHTML = "";
+
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  const workDays = [];
+
+  // Hafta içi günlerini filtrele (Pazartesi-Cuma)
+  for (let day = 1; day <= daysInMonth; day++) {
+    const date = new Date(currentYear, currentMonth, day);
+    const dayName = date.toLocaleDateString('tr-TR', { weekday: 'short' });
+    if (dayName !== 'Cmt' && dayName !== 'Paz') {
+      workDays.push({
+        day,
+        dayName,
+        fullDate: formatDate(date)
+      });
+    }
+  }
+
+  // Haftalara böl ve göster
+  for (let i = 0; i < workDays.length; i += 5) {
+    const week = workDays.slice(i, i + 5);
+
+    if (i > 0) {
+      const weekSeparator = document.createElement('div');
+      weekSeparator.className = "week-separator d-flex align-items-center";
+      weekSeparator.textContent = `${i / 5 + 1}. Hafta`;
+      container.appendChild(weekSeparator);
+    }
+
+    const row = document.createElement('div');
+    row.className = "row";
+
+    week.forEach(({ day, dayName, fullDate }) => {
+      const col = document.createElement('div');
+      col.className = "col-md-15 col-sm-4";
+
+      const cell = document.createElement('div');
+      cell.className = "day-cell";
+      cell.dataset.date = fullDate;
+
+      const dayHeader = document.createElement('div');
+      dayHeader.className = "day-header";
+      dayHeader.innerHTML = `
+          <span class="day-number">${day}</span>
+          <span class="day-name">${dayName}</span>
+        `;
+      cell.appendChild(dayHeader);
+
+      const meals = menuData[fullDate] || [];
+      const mealsContainer = document.createElement('div');
+      mealsContainer.className = "meals-container";
+
+      if (meals.length === 0) {
+        const emptyState = document.createElement('div');
+        emptyState.className = "empty-state";
+        emptyState.textContent = "Yemek eklemek için tıklayın";
+        mealsContainer.appendChild(emptyState);
+      } else {
+        meals.forEach((meal, index) => {
+          const mealItem = document.createElement('div');
+          mealItem.className = "meal-item";
+          mealItem.innerHTML = `
+              ${meal}
+              <span class="delete-meal" onclick="deleteMeal('${fullDate}', ${index}, event)">
+                <i class="bi bi-trash"></i>
+              </span>
+            `;
+          mealsContainer.appendChild(mealItem);
+        });
+      }
+
+      cell.appendChild(mealsContainer);
+
+      // Hücre tıklama olayı (aktif hücre seçimi)
+      cell.addEventListener('click', function () {
+        document.querySelectorAll('.day-cell').forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+        activeCell = this;
+      });
+
+      col.appendChild(cell);
+      row.appendChild(col);
+    });
+
+    container.appendChild(row);
+  }
+}
+
+// Setup event listeners
+function setupEventListeners() {
+  // Yemek listesi elemanlarına tıklayınca yemek ekle (sırayla günlere)
+  document.querySelectorAll('.food-item').forEach(item => {
+    item.addEventListener('click', function () {
+      const mealName = this.textContent.trim();
+
+      if (!addMealToNextAvailableDay(mealName)) {
+        // hata mesajı fonksiyon içinde zaten gösteriliyor
+      }
+    });
+  });
+
+  // Yeni yemek ekleme butonu
+  document.getElementById('addFoodBtn').addEventListener('click', function () {
+    const input = document.getElementById('newFoodInput');
+    const mealName = input.value.trim();
+
+    if (mealName === '') {
+      showToast('error', 'Lütfen bir yemek adı girin');
+      return;
+    }
+
+    const foodList = document.getElementById('foodList');
+    const newFoodItem = document.createElement('div');
+    newFoodItem.className = "food-item";
+    newFoodItem.innerHTML = `<i class="bi bi-plus-circle"></i> ${mealName}`;
+    foodList.appendChild(newFoodItem);
+
+    // Yeni eklenen yemeğe tıklanabilirlik ekle
+    newFoodItem.addEventListener('click', function () {
+      const mealNameNew = this.textContent.trim();
+
+      if (!addMealToNextAvailableDay(mealNameNew)) {
+        // hata gösteriliyor
+      }
+    });
+
+    // Kaydet food listesine
+    saveFoodList(mealName);
+
+    input.value = '';
+    showToast('success', 'Yemek listeye eklendi');
+  });
+
+  // Kaydet butonu - menuData'yı localStorage kaydet
+  document.getElementById('saveBtn').addEventListener('click', function () {
+    localStorage.setItem('menuData', JSON.stringify(menuData));
+    showToast('success', 'Menü başarıyla kaydedildi');
+  });
+
+  // Yazdır butonu - sadece menüyü yazdır
+  document.getElementById('printBtn').addEventListener('click', function () {
+    printMenuOnly();
+  });
+
+  // Menüyü temizle butonu - tüm menüyü sıfırlar
+  document.getElementById('clearMenuBtn').addEventListener('click', function () {
+    if (confirm('Menüyü tamamen temizlemek istediğinize emin misiniz?')) {
+      menuData = {};
+      localStorage.removeItem('menuData');
+      createCalendar();
+      showToast('success', 'Menü tamamen temizlendi');
+    }
+  });
+
+  // Ay seçimi dropdown veya inputu varsa, değişince takvimi güncelle
+  const monthSelect = document.getElementById('monthSelect');
+  if (monthSelect) {
+    monthSelect.value = currentMonth;
+    monthSelect.addEventListener('change', function () {
+      currentMonth = parseInt(this.value, 10);
+      createCalendar();
+    });
+  }
+
+  // Yıl inputu varsa
+  const yearInput = document.getElementById('yearInput');
+  if (yearInput) {
+    yearInput.value = currentYear;
+    yearInput.addEventListener('change', function () {
+      currentYear = parseInt(this.value, 10);
+      createCalendar();
+    });
+  }
+}
+
+// Silinen yemekler geri gelmesin
+window.deleteMeal = function (date, index, event) {
+  event.stopPropagation();
+
+  if (!menuData[date]) return;
+
+  menuData[date].splice(index, 1);
+
+  if (menuData[date].length === 0) {
+    delete menuData[date]; // tamamen sil (geri gelmesin)
+  }
+
+  updateCalendarCell(date);
+  showToast('success', 'Yemek başarıyla silindi');
+};
+
+// Güncelleme fonksiyonu
+function updateCalendarCell(date) {
+  const cell = document.querySelector(`.day-cell[data-date="${date}"]`);
+  if (!cell) return;
+
+  const mealsContainer = cell.querySelector('.meals-container');
+  mealsContainer.innerHTML = '';
+
+  const meals = menuData[date] || [];
+
+  if (meals.length === 0) {
+    const emptyState = document.createElement('div');
+    emptyState.className = "empty-state";
+    emptyState.textContent = "Yemek eklemek için tıklayın";
+    mealsContainer.appendChild(emptyState);
+  } else {
+    meals.forEach((meal, index) => {
+      const mealItem = document.createElement('div');
+      mealItem.className = "meal-item";
+      mealItem.innerHTML = `
+          ${meal}
+          <span class="delete-meal" onclick="deleteMeal('${date}', ${index}, event)">
+            <i class="bi bi-trash"></i>
+          </span>
+        `;
+      mealsContainer.appendChild(mealItem);
+    });
+  }
+}
+
+// Tarih formatlama
+function formatDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+// Toast gösterme fonksiyonu
+function showToast(type, message) {
+  const toast = type === 'success' ? toastSuccess : toastError;
+  const toastBody = document.querySelector(`#${type}Toast .toast-body`);
+  toastBody.textContent = message;
+  toast.show();
+}
+
+// Yemek listesini yükle
+function loadFoodList() {
+  const savedFoods = JSON.parse(localStorage.getItem('foodList')) || [
+    'Mercimek Çorbası', 'Karnıyarık', 'Pilav', 'Makarna', 'Yoğurt', 'Meyve'
+  ];
+
+  const foodList = document.getElementById('foodList');
+  foodList.innerHTML = '';
+
+  const icons = [
+    'bi-egg-fried', 'bi-egg', 'bi-basket', 'bi-nut',
+    'bi-cup-straw', 'bi-apple', 'bi-bread-slice', 'bi-cup-hot',
+    'bi-droplet', 'bi-egg-fill'
+  ];
+
+  savedFoods.forEach((food, index) => {
+    const foodItem = document.createElement('div');
+    foodItem.className = "food-item";
+    const iconIndex = index < icons.length ? index : Math.floor(Math.random() * icons.length);
+    foodItem.innerHTML = `<i class="bi ${icons[iconIndex]}"></i> ${food}`;
+    foodList.appendChild(foodItem);
+
+    // Tıklama olayını bağla
+    foodItem.addEventListener('click', function () {
+      const mealName = food;
+      if (!addMealToNextAvailableDay(mealName)) {
+        // hata mesajı fonksiyonda gösteriliyor
+      }
+    });
+  });
+}
+
+// Yeni eklenen yemekleri foodList'e kaydet
+function saveFoodList(newFood) {
+  let foodList = JSON.parse(localStorage.getItem('foodList')) || [];
+  if (!foodList.includes(newFood)) {
+    foodList.push(newFood);
+    localStorage.setItem('foodList', JSON.stringify(foodList));
+  }
+}
+
+// Yemekleri sırayla günlere ekle, max 3 yemek/gün
+function addMealToNextAvailableDay(mealName) {
+  // Tüm gün hücrelerini al
+  const dayCells = Array.from(document.querySelectorAll('.day-cell'));
+  if (dayCells.length === 0) {
+    showToast('error', 'Takvimde gün bulunamadı!');
+    return false;
+  }
+
+  // Tarihleri sıralı al
+  const sortedDays = dayCells
+    .map(cell => cell.dataset.date)
+    .sort();
+
+  for (const date of sortedDays) {
+    menuData[date] = menuData[date] || [];
+
+    if (menuData[date].length < 3 && !menuData[date].includes(mealName)) {
+      menuData[date].push(mealName);
+      updateCalendarCell(date);
+      showToast('success', `${mealName} ${date} tarihine eklendi.`);
+      return true;
+    }
+  }
+
+  showToast('error', 'Tüm günlerde yemek eklemek için yeterli alan yok veya yemek zaten eklenmiş.');
+  return false;
+}
+
+// Sadece menüyü yazdırmak için özel fonksiyon
+function printMenuOnly() {
+  const menuContainer = document.getElementById('calendarContainer');
+  if (!menuContainer) return;
+
+  const printWindow = window.open('', '', 'width=800,height=600');
+  printWindow.document.write('<html><head><title>Menü Yazdır</title>');
+
+  // Bootstrap CSS veya kendi stil dosyan varsa ekle
+  printWindow.document.write(`
+    <style>
+      body { font-family: Arial, sans-serif; padding: 10px; }
+      .day-cell { border: 1px solid #ccc; padding: 10px; margin-bottom: 5px; }
+      .day-header { font-weight: bold; margin-bottom: 5px; }
+      .meal-item { display: flex; justify-content: space-between; padding: 2px 0; }
+      .week-separator { font-weight: bold; margin-top: 15px; }
+    </style>
+  `);
+
+  printWindow.document.write('</head><body>');
+  printWindow.document.write(menuContainer.innerHTML);
+  printWindow.document.write('</body></html>');
+  printWindow.document.close();
+  printWindow.focus();
+
+  printWindow.print();
+  printWindow.close();
+}
+
+
+</script>
+
+</body>
+
+</html>

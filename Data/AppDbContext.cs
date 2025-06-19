@@ -12,7 +12,10 @@ namespace X.Data
         public DbSet<KantinDurumlari> KantinDurumlari { get; set; }
         public DbSet<KantinHarcamasi> KantinHarcamalari { get; set; }
         public DbSet<Gecis> Gecisler { get; set; }
-        
+        public DbSet<YemekMenusu> YemekMenuleri { get; set; }
+        public DbSet<YemekMenusuUrun> YemekMenusuUrunler { get; set; }
+
+
         public DbSet<RaporIstekleri> RaporIstekleri { get; set; }
 
         public DbSet<GunlukGelir> GunlukGelirler { get; set; }
@@ -21,6 +24,8 @@ namespace X.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<YemekMenusu>().ToTable("YemekMenuleri");
+            modelBuilder.Entity<YemekMenusuUrun>().ToTable("YemekMenusuUrunleri"); // Tablo adını burada eşle
             // Gecis tablosu adı
             modelBuilder.Entity<Gecis>().ToTable("Gecisler");
 
