@@ -14,13 +14,28 @@ namespace X.Data
         public DbSet<Gecis> Gecisler { get; set; }
         public DbSet<YemekMenusu> YemekMenuleri { get; set; }
         public DbSet<YemekMenusuUrun> YemekMenusuUrunler { get; set; }
-
-
         public DbSet<RaporIstekleri> RaporIstekleri { get; set; }
-
         public DbSet<GunlukGelir> GunlukGelirler { get; set; }
         public DbSet<GunlukGider> GunlukGiderler { get; set; }
         public DbSet<AylikTutarlar> AylikTutarlar { get; set; }
+
+
+
+
+        public DbSet<YemekMenusu_Ocak> YemekMenusu_Ocak { get; set; }
+        public DbSet<YemekMenusu_Subat> YemekMenusu_Subat { get; set; }
+        public DbSet<YemekMenusu_Mart> YemekMenusu_Mart { get; set; }
+        public DbSet<YemekMenusu_Nisan> YemekMenusu_Nisan { get; set; }
+        public DbSet<YemekMenusu_Mayis> YemekMenusu_Mayis { get; set; }
+        public DbSet<YemekMenusu_Haziran> YemekMenusu_Haziran { get; set; }
+        public DbSet<YemekMenusu_Temmuz> YemekMenusu_Temmuz { get; set; }
+        public DbSet<YemekMenusu_Agustos> YemekMenusu_Agustos { get; set; }
+        public DbSet<YemekMenusu_Eylul> YemekMenusu_Eylul { get; set; }
+        public DbSet<YemekMenusu_Ekim> YemekMenusu_Ekim { get; set; }
+        public DbSet<YemekMenusu_Kasim> YemekMenusu_Kasim { get; set; }
+        public DbSet<YemekMenusu_Aralik> YemekMenusu_Aralik { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

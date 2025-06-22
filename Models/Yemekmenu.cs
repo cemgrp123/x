@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;  // <-- Bunu ekle
 
 public class YemekMenusu
 {
@@ -19,5 +20,6 @@ public class YemekMenusuUrun
     public int MiktarGram { get; set; }
     public decimal BirimFiyat { get; set; }
 
+    [JsonIgnore]  // <-- Burada döngüyü kırıyoruz
     public YemekMenusu Menu { get; set; }
 }

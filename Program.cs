@@ -28,12 +28,13 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+        // ReferenceHandler.Preserve kaldırıldı, böylece JSON sade dizi olarak döner
+        options.JsonSerializerOptions.ReferenceHandler = null;
         options.JsonSerializerOptions.WriteIndented = true; // isteğe bağlı, okunabilir JSON için
     });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 
 var app = builder.Build();
 

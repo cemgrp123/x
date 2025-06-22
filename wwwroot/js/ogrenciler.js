@@ -437,8 +437,31 @@ window.alert = function(message) {
 // Sayfadaki tüm backdrop elementlerini seç ve kaldır
 document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
 
-////////////////////////////////////////////////
 
+ document.addEventListener('DOMContentLoaded', function() {
+            const navbar = document.querySelector('.navbar');
+            
+            // Scroll efekti için event listener
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 70) { // 100px'den sonra daralma başlasın
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+            
+            // Dropdown menüler için hover efekti (isteğe bağlı)
+            const dropdowns = document.querySelectorAll('.dropdown');
+            dropdowns.forEach(dropdown => {
+                dropdown.addEventListener('mouseenter', function() {
+                    this.querySelector('.dropdown-toggle').click();
+                });
+                
+                dropdown.addEventListener('mouseleave', function() {
+                    this.querySelector('.dropdown-toggle').click();
+                });
+            });
+        });
 
 
 

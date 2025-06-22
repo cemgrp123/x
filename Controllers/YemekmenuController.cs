@@ -76,7 +76,7 @@ public class YemekMenuleriController : ControllerBase
             UrunAdi = dto.UrunAdi,
             MiktarGram = dto.MiktarGram,
             BirimFiyat = dto.BirimFiyat,
-             MenuId = menuId  
+            MenuId = menuId
         };
 
         _context.YemekMenusuUrunler.Add(newProduct);
@@ -102,4 +102,14 @@ public class YemekMenuleriController : ControllerBase
 
         return Ok();
     }
+    [HttpGet("menuler")]
+    public async Task<IActionResult> GetMenuAdlari()
+    {
+        var menuler = await _context.YemekMenuleri
+            .Select(m => m.MenuAdi)
+            .ToListAsync();
+
+        return Ok(menuler);
+    }
+
 }

@@ -1,0 +1,159 @@
+        /* Mobil için ek ayarlar */
+    @media (max-width: 576px) {
+        .btn {
+            font-size: 0.85rem;
+            padding: 0.4rem 0.5rem;
+        }
+        .bi {
+            font-size: 1rem;
+        }
+    }
+    /* Mobil Optimizasyon */
+  @media (max-width: 576px) {
+    .modal-dialog {
+      margin: 0.5rem auto;
+    }
+    .modal-content {
+      border-radius: 0.5rem !important;
+    }
+    .modal-body {
+      padding: 1rem;
+    }
+    .input-group-text {
+      padding: 0.5rem;
+    }
+    .btn {
+      padding: 0.5rem;
+      font-size: 0.9rem;
+    }
+  }
+  
+  /* Input Focus Efekti */
+  .form-control:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.1);
+  }
+  /* Mobil Optimizasyon */
+  @media (max-width: 576px) {
+    #kgCalcModal .modal-dialog {
+      margin: 0.5rem auto;
+      max-width: 95%;
+    }
+    #kgCalcModal .input-group-text {
+      padding: 0.5rem 0.75rem;
+    }
+    #kgCalcModal .btn {
+      font-size: 0.9rem;
+    }
+    #kgCalcModal .modal-body {
+      padding: 1.25rem;
+    }
+  }
+
+  /* Özel Stiller */
+  #kgCalcModal .alert-info {
+    background-color: #f0f9ff;
+    border-color: #b6e0fe;
+    color: #055160;
+  }
+  #kgCalcModal .btn-info {
+    background-color: #0dcaf0;
+    border-color: #0dcaf0;
+  }
+  #kgCalcModal .btn-info:hover {
+    background-color: #0da5d0;
+    border-color: #0da5d0;
+  }
+  /* Mobile Optimization */
+  @media (max-width: 576px) {
+    #kgPriceModal .modal-dialog {
+      margin: 0.5rem auto;
+      max-width: 95%;
+    }
+    #kgPriceModal .input-group-text {
+      padding: 0.5rem 0.75rem;
+    }
+    #kgPriceModal .btn {
+      font-size: 0.9rem;
+    }
+    #kgPriceModal .modal-body {
+      padding: 1.25rem;
+    }
+  }
+
+  /* Enhanced Styles */
+  #kgPriceModal .alert-primary {
+    background-color: #f0f7ff;
+    border-color: #c6e0ff;
+    color: #084298;
+  }
+  #kgPriceModal .form-control:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.1);
+  }
+  /* Mobile Optimization */
+  @media (max-width: 768px) {
+    #calcModal .modal-dialog {
+      margin: 0.5rem auto;
+    }
+    #calcModal .modal-content {
+      border-radius: 0.5rem;
+    }
+    #calcModal .modal-body {
+      padding: 1rem;
+    }
+    #calcModal .input-group-text {
+      padding: 0.5rem;
+    }
+  }
+
+  /* Custom Styles */
+  #perPersonList .list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+  }
+  #perPersonList .list-group-item span:last-child {
+    font-weight: 600;
+    color: #198754;
+  }
+  #productInputsContainer .product-input-row {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
+  }
+  /* Özel Stiller */
+    .accordion-button:not(.collapsed) {
+        background-color: rgba(25, 135, 84, 0.1);
+        color: #198754;
+    }
+    .accordion-button:focus {
+        box-shadow: none;
+        border-color: rgba(25, 135, 84, 0.25);
+    }
+    .accordion-item {
+        border-left: 0;
+        border-right: 0;
+    }
+    .accordion-item:first-child {
+        border-top: 0;
+    }
+    .accordion-item:last-child {
+        border-bottom: 0;
+    }
+    
+    /* Mobil Uyumluluk */
+    @media (max-width: 768px) {
+        .input-group-lg > .form-control {
+            padding: 0.75rem 1rem;
+        }
+        #addMenuBtn {
+            padding: 0.75rem;
+            font-size: 0.9rem;
+        }
+        .card-body {
+            padding: 1rem !important;
+        }
+    }
