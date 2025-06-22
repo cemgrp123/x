@@ -336,27 +336,182 @@ function updateMenu(menu) {
     })
     .catch(err => alert(err.message));
 }
-  document.addEventListener('DOMContentLoaded', function() {
-            const navbar = document.querySelector('.navbar');
-            
-            // Scroll efekti için event listener
-            window.addEventListener('scroll', function() {
-                if (window.scrollY > 70) { // 100px'den sonra daralma başlasın
-                    navbar.classList.add('scrolled');
-                } else {
-                    navbar.classList.remove('scrolled');
-                }
-            });
-            
-            // Dropdown menüler için hover efekti (isteğe bağlı)
-            const dropdowns = document.querySelectorAll('.dropdown');
-            dropdowns.forEach(dropdown => {
-                dropdown.addEventListener('mouseenter', function() {
-                    this.querySelector('.dropdown-toggle').click();
-                });
-                
-                dropdown.addEventListener('mouseleave', function() {
-                    this.querySelector('.dropdown-toggle').click();
-                });
-            });
-        });
+
+
+
+    /////////////////////////////////// modalllar
+ 
+  const calcBtn = document.getElementById('calcBtn');
+  const calcModal = new bootstrap.Modal(document.getElementById('calcModal'));
+  const modalPersonCountInput = document.getElementById('modalPersonCount');
+  const productInputsContainer = document.getElementById('productInputsContainer');
+  const perPersonList = document.getElementById('perPersonList');
+  const addProductBtn = document.getElementById('addProductBtn');
+
+  // Modal Açıldığında
+  calcBtn.addEventListener('click', () => {
+    modalPersonCountInput.value = 50;
+    productInputsContainer.innerHTML = '';
+    perPersonList.innerHTML = '';
+    addProductInput(); // En az 1 satır göster
+    calcModal.show();
+  });
+
+  // Kişi sayısı değiştiğinde
+  modalPersonCountInput.addEventListener('input', updatePerPersonAmounts);
+
+  // Yeni ürün ekle
+  addProductBtn.addEventListener('click', () => {
+    addProductInput();
+  });
+
+  // Ürün girişi satırı oluştur
+  function addProductInput(name = '', amount = '') {
+    const div = document.createElement('div');
+    div.className = 'input-group mb-2';
+
+    div.innerHTML = `
+      <input type="text" class="form-control product-name" placeholder="Ürün Adı" value="${name}" />
+      <input type="number" min="0" step="1" class="form-control product-amount" placeholder="Miktar (gram)" value="${amount}" />
+      <button type="button" class="btn btn-danger btn-sm remove-product-btn">X</button>
+    `;
+
+    productInputsContainer.appendChild(div);
+
+    div.querySelector('.remove-product-btn').addEventListener('click', () => {
+      div.remove();
+      updatePerPersonAmounts();
+    });
+
+    div.querySelector('.product-name').addEventListener('input', updatePerPersonAmounts);
+    div.querySelector('.product-amount').addEventListener('input', updatePerPersonAmounts);
+  }
+
+  // Hesaplama ve liste güncelleme
+  function updatePerPersonAmounts() {
+    const personCount = parseInt(modalPersonCountInput.value);
+    if (isNaN(personCount) || personCount < 1) return;
+
+    perPersonList.innerHTML = '';
+
+    const products = [...productInputsContainer.querySelectorAll('.input-group')].map(div => {
+      const name = div.querySelector('.product-name').value.trim();
+      const amount = parseFloat(div.querySelector('.product-amount').value);
+      return { name, amount };
+    }).filter(p => p.name !== '' && !isNaN(p.amount) && p.amount > 0);
+
+    products.forEach(p => {
+      const perPersonAmount = p.amount / personCount;
+      const li = document.createElement('li');
+      li.className = 'list-group-item d-flex justify-content-between align-items-center';
+      li.innerHTML = `
+        <span>${p.name}</span>
+        <span>${perPersonAmount.toLocaleString('tr-TR')} g / kişi</span>
+      `;
+      perPersonList.appendChild(li);
+    });
+  }
+
+
+/////////////////////////////////////////
+const kgPriceBtn = document.getElementById("kgPriceBtn");
+  const kgPriceModal = new bootstrap.Modal(document.getElementById("kgPriceModal"));
+  const totalGramInput = document.getElementById("totalGramInput");
+  const totalPriceInput = document.getElementById("totalPriceInput");
+  const kgPriceResult = document.getElementById("kgPriceResult");
+  const calculateKgPriceBtn = document.getElementById("calculateKgPriceBtn");
+
+  kgPriceBtn.addEventListener("click", () => {
+    totalGramInput.value = "";
+    totalPriceInput.value = "";
+    kgPriceResult.classList.add("d-none");
+    kgPriceModal.show();
+  });
+
+  calculateKgPriceBtn.addEventListener("click", () => {
+    const gram = parseFloat(totalGramInput.value);
+    const price = parseFloat(totalPriceInput.value);
+
+    if (isNaN(gram) || gram <= 0 || isNaN(price) || price < 0) {
+      kgPriceResult.classList.remove("alert-info");
+      kgPriceResult.classList.add("alert-danger");
+      kgPriceResult.textContent = "Lütfen geçerli bir gram ve fiyat girin!";
+      kgPriceResult.classList.remove("d-none");
+      return;
+    }
+
+    const kgPrice = (price / gram) * 1000;
+    kgPriceResult.classList.remove("alert-danger");
+    kgPriceResult.classList.add("alert-info");
+    kgPriceResult.innerHTML = `<strong>1 kg Fiyatı:</strong> ${kgPrice.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL`;
+    kgPriceResult.classList.remove("d-none");
+  });
+  ////////////////////////////////////////////////////////////
+  
+  const kgModal = new bootstrap.Modal(document.getElementById('kgCalcModal'));
+  const btnOpenKgCalcModal = document.getElementById('btnOpenKgCalcModal');
+  const btnCalculateKgPrice = document.getElementById('btnCalculateKgPrice');
+  const kgGramInput = document.getElementById('kgGramInput');
+  const kgPriceInput = document.getElementById('kgPriceInput');
+  const kgCalcResult = document.getElementById('kgCalcResult');
+
+  btnOpenKgCalcModal.addEventListener('click', () => {
+    kgGramInput.value = '';
+    kgPriceInput.value = '';
+    kgCalcResult.classList.add('d-none');
+    kgModal.show();
+  });
+
+  btnCalculateKgPrice.addEventListener('click', () => {
+    const gram = parseFloat(kgGramInput.value);
+    const totalPrice = parseFloat(kgPriceInput.value);
+
+    if (isNaN(gram) || gram <= 0 || isNaN(totalPrice) || totalPrice < 0) {
+      kgCalcResult.textContent = 'Lütfen geçerli bir miktar ve tutar giriniz!';
+      kgCalcResult.classList.remove('d-none', 'alert-info');
+      kgCalcResult.classList.add('alert-danger');
+      return;
+    }
+
+    const perKgPrice = (totalPrice / gram) * 1000;
+    kgCalcResult.innerHTML = `<strong>1 KG Fiyatı:</strong> ${perKgPrice.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL`;
+    kgCalcResult.classList.remove('d-none', 'alert-danger');
+    kgCalcResult.classList.add('alert-info');
+  });
+
+  const productModal = new bootstrap.Modal(document.getElementById('productModal'));
+  const btnOpenProductModal = document.getElementById('btnOpenProductModal');
+  const btnSaveProduct = document.getElementById('btnSaveProduct');
+
+  const productNameInput = document.getElementById('productNameInput');
+  const productKgPriceInput = document.getElementById('productKgPriceInput');
+  const productSuccessMsg = document.getElementById('productSuccessMsg');
+
+  btnOpenProductModal.addEventListener('click', () => {
+    productNameInput.value = '';
+    productKgPriceInput.value = '';
+    productSuccessMsg.classList.add('d-none');
+    productModal.show();
+  });
+
+  btnSaveProduct.addEventListener('click', () => {
+    const name = productNameInput.value.trim();
+    const kgPrice = parseFloat(productKgPriceInput.value);
+
+    if (!name || isNaN(kgPrice) || kgPrice <= 0) {
+      productSuccessMsg.textContent = "Geçerli bir ürün adı ve fiyat girin!";
+      productSuccessMsg.className = "alert alert-danger";
+      productSuccessMsg.classList.remove('d-none');
+      return;
+    }
+
+    // Şimdilik konsola yaz, sonra API ile SQL'e gönderilecek
+    console.log("Ürün adı:", name, "KG fiyatı:", kgPrice);
+
+    // Başarı mesajı
+    productSuccessMsg.textContent = `"${name}" başarıyla eklendi!`;
+    productSuccessMsg.className = "alert alert-success";
+    productSuccessMsg.classList.remove('d-none');
+  });
+///////////////////////////////////////////////////////////////////////////////////// VeriTabanı Kodları Başlıyor... -->
+

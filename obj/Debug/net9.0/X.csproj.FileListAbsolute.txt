@@ -70,7 +70,6 @@ C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\m13kq2orhn-xpnn
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\6p96ka3x37-j6nxqheey3.gz
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\jmsvsp0kr6-g125yl00oa.gz
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\7k7v181e3r-2c2z0hk1cg.gz
-C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\mn5ce5igof-jtluqya22t.gz
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\z9ydjq88gp-rwv6juf6ww.gz
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\l75pcochdy-hkcgsylq6s.gz
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\s767hxdkb2-buqktu9y62.gz
@@ -82,14 +81,11 @@ C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\d0na3m8uxp-yb3x
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\xoua02sgog-o3u2weh10l.gz
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\8vw3om0tim-5y4escy7gt.gz
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\ur17r9yj1y-mmga4j59z2.gz
-C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\woc4j200in-b8w0vzqy7h.gz
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\hw05z428xs-gjjerxh29e.gz
-C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\0qrschjrkk-j1ym6x82yc.gz
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\18poyrl45s-fn4edtcwd1.gz
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\tx4ofse6o5-nah0gerxgr.gz
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\xgcb6h70e7-9gtywb0hqm.gz
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\82c9h02436-fwt7hw3124.gz
-C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\2ie40xnjzp-4yn3eqvj0g.gz
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\676l6wuubs-9p6qjivxvm.gz
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\d8t0qnf08w-7jxn005o0w.gz
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\owbfg4zcnw-cxoudn4bpi.gz
@@ -111,5 +107,10 @@ C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\refint\X.dll
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\X.pdb
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\X.genruntimeconfig.cache
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\ref\X.dll
-C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\maeu063mjl-cwtsrwxlnk.gz
-C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\bgpt9jzuq0-fqsqfnn9r8.gz
+C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\mn5ce5igof-29x5tww7r9.gz
+C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\76qiiqqz45-8940xkjr5j.gz
+C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\maeu063mjl-cac92q4vcd.gz
+C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\woc4j200in-v2if5j5820.gz
+C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\0qrschjrkk-j5wy1e35k4.gz
+C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\2ie40xnjzp-7bssv526rr.gz
+C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net9.0\compressed\bgpt9jzuq0-hyqgn9owuq.gz
