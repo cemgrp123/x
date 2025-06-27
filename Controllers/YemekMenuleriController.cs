@@ -4,6 +4,10 @@ using System;
 using System.Threading.Tasks;
 using X.Data;   // DbContext’in olduğu namespace
 using X.Models;   // Model sınıflarının olduğu namespace
+using System.Linq;
+using System.Collections.Generic;
+
+
 
 [ApiController]
 [Route("api/[controller]")]
@@ -223,8 +227,7 @@ public class YemekMenusuController : ControllerBase
             return StatusCode(500, ex.Message);
         }
     }
-    
-
+ 
 }
 
 public class YemekMenusuPostModel
@@ -234,3 +237,4 @@ public class YemekMenusuPostModel
     public string Yemek2 { get; set; }
     public string Yemek3 { get; set; }
 }
+

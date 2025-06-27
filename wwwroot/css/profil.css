@@ -1011,4 +1011,192 @@ body {
 }
 
 }
+:root {
+      --primary-color: #4361ee;
+      --secondary-color: #3a0ca3;
+      --success-color: #2ec4b6;
+      --info-color: #4895ef;
+      --warning-color: #f77f00;
+      --light-bg: #f8f9ff;
+    }
 
+    body {
+      background-color: var(--light-bg);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      padding-top: 2rem;
+    }
+
+    .dashboard-title {
+      position: relative;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .dashboard-title h4 {
+      display: inline-block;
+      font-weight: 700;
+      color: var(--primary-color);
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .dashboard-title h4::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      border-radius: 2px;
+    }
+
+
+    .stat-card {
+      border: none;
+      border-radius: 15px;
+      padding: 1.75rem;
+      color: white;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      right: -20px;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      z-index: -1;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+    }
+
+    .stat-icon {
+      font-size: 2.5rem;
+      margin-right: 1.5rem;
+      opacity: 0.9;
+    }
+
+    .stat-content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-title {
+      font-size: 0.95rem;
+      font-weight: 500;
+      opacity: 0.9;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.5px;
+    }
+
+    .stat-desc {
+      font-size: 0.8rem;
+      opacity: 0.85;
+      line-height: 1.4;
+    }
+
+    .bg-gradient-primary {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    }
+
+    .bg-gradient-success {
+      background: linear-gradient(135deg, var(--success-color), #1b9aaa);
+    }
+
+    .bg-gradient-warning {
+      background: linear-gradient(135deg, var(--warning-color), #e63946);
+    }
+
+    @media (max-width: 768px) {
+      .stat-card {
+        margin-bottom: 1.5rem;
+      }
+
+      .stat-icon {
+        margin-right: 1rem;
+        font-size: 2rem;
+      }
+
+      .stat-value {
+        font-size: 1.75rem;
+      }
+    }
+
+    /* Yemekhane kartlarını saran row'lar arasına mesafe */
+    #yemekhaneListesi,
+    #yemekhaneListesiRapor {
+      margin-bottom: 1rem;
+    }
+
+    /* Kartlar daha modern görünsün */
+    .card.card-entry {
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 1rem;
+      transition: transform 0.2s ease;
+      background-color: #fff;
+    }
+
+    /* Hover efekt verelim */
+    .card.card-entry:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Icon kutusu yuvarlak ve boyut ayarı */
+    .icon-container {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-right: 1rem;
+    }
+
+    /* Yazılar için biraz daha boşluk */
+    .card-entry>.d-flex>div:last-child {
+      flex-grow: 1;
+    }
+
+    @media (max-width: 576px) {
+
+      #yemekhaneListesi,
+      #yemekhaneListesiRapor {
+        margin-bottom: 3rem;
+      }
+    }
+
+    .btn-check:checked+.btn {
+      background-color: #0d6efd;
+      color: white;
+      border-color: #0d6efd;
+    }
+     .disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }

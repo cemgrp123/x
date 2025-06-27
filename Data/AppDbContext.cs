@@ -20,6 +20,7 @@ namespace X.Data
         public DbSet<AylikTutarlar> AylikTutarlar { get; set; }
 
 
+        public DbSet<Vw_OgrenciOdemeleriAtlamali> Vw_OgrenciOdemeleriAtlamali { get; set; }
 
 
         public DbSet<YemekMenusu_Ocak> YemekMenusu_Ocak { get; set; }
@@ -68,6 +69,25 @@ namespace X.Data
 
                 entity.Property(e => e.SonOdemeTarihi).HasColumnName("SonOdemeTarihi");
             });
+
+            modelBuilder.Entity<Vw_OgrenciOdemeleriAtlamali>(entity =>
+ {
+   entity.HasNoKey();
+    entity.ToView("Vw_OgrenciOdemeleriAtlamali");
+
+    entity.Property(e => e.SchoolNo);
+    entity.Property(e => e.FullName);
+    entity.Property(e => e.StudentClass);
+    entity.Property(e => e.Section);
+    entity.Property(e => e.Yil);
+    entity.Property(e => e.Ay);
+    entity.Property(e => e.OncekiAyKantinHarcamasi);
+    entity.Property(e => e.OncekiAyRaporHakkiTutari);
+
+    entity.Property(e => e.AylikUcret);
+    entity.Property(e => e.HesaplananGenelOdeme);
+ });
+
 
             // KantinHarcamasi ilişkisi
             modelBuilder.Entity<KantinHarcamasi>()

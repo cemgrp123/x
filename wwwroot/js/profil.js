@@ -798,6 +798,149 @@ window.addEventListener("DOMContentLoaded", () => {
   loadRaporlar();
 });
 
+////////////////////////////////////////menü
+const menuDate = document.getElementById("menuDate");
+const menuContent = document.getElementById("menuContent");
+const prevDay = document.getElementById("prevDay");
+const nextDay = document.getElementById("nextDay");
+
+// Başlangıç tarihi (bugün)
+let currentDate = new Date();
+
+// Tarihi "25 HAZİRAN 2025" formatında gösteren fonksiyon
+function formatFullTurkishDate(date) {
+  const day = date.getDate();
+  const month = date.toLocaleString('tr-TR', { month: 'long' }).toUpperCase();
+  const year = date.getFullYear();
+  return `${day} ${month} ${year}`;
+}
+
+// Türüne göre emoji döndüren fonksiyon
+function getEmojiForType(type) {
+  return "🍽️";
+}
+
+
+// Backend'den verilen tarihe ait menüyü çek ve göster
+async function fetchMenuByDate(date) {
+  try {
+    const isoDate = date.toISOString().slice(0, 10);
+    const res = await fetch(`/api/yemekmenusu/gun?date=${isoDate}`);
+    if (!res.ok) throw new Error("Menü bulunamadı");
+    const data = await res.json();
+
+    menuDate.textContent = formatFullTurkishDate(new Date(data.date));
+    menuContent.innerHTML = `
+      <ul class="list-group list-group-flush w-100 text-center">
+        ${data.items.map(item => `
+          <li class="list-group-item fs-5 py-3">
+            ${getEmojiForType(item.type)} ${item.name}
+          </li>`).join('')}
+      </ul>`;
+  } catch (error) {
+    menuDate.textContent = formatFullTurkishDate(date);
+    menuContent.innerHTML = `<p class="text-danger">Menü bulunamadı.</p>`;
+  }
+}
+
+// Hafta sonu mu kontrolü (0=Pazar, 6=Cumartesi)
+function isWeekend(date) {
+  const day = date.getDay();
+  return day === 0 || day === 6;
+}
+
+// Haftasonunu atlayarak önceki aktif güne git
+function moveToPreviousActiveDay() {
+  do {
+    currentDate.setDate(currentDate.getDate() - 1);
+  } while (isWeekend(currentDate));
+  fetchMenuByDate(currentDate);
+}
+
+// Haftasonunu atlayarak sonraki aktif güne git
+function moveToNextActiveDay() {
+  do {
+    currentDate.setDate(currentDate.getDate() + 1);
+  } while (isWeekend(currentDate));
+  fetchMenuByDate(currentDate);
+}
+
+prevDay.addEventListener("click", moveToPreviousActiveDay);
+nextDay.addEventListener("click", moveToNextActiveDay);
+
+// Modal açılınca bugünün menüsünü getir
+document.getElementById("menuModal").addEventListener("shown.bs.modal", () => {
+  // Eğer bugün hafta sonuysa, ilk aktif günü (Pazartesi) göster
+  while (isWeekend(currentDate)) {
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+  fetchMenuByDate(currentDate);
+});
+//////////////////////////////////////////////////////////BURAYI UNUTMA ÖDEME DETAYI BURADAAA
+// Başlangıç sabitleri
+let yil = 2025;
+let ay = 9;
+
+// Fonksiyon: Veri çek ve güncelle
+function updatePaymentModalData(schoolNo, yil, ay) {
+  fetch(`/api/OgrenciOzet?schoolNo=${schoolNo}&yil=${yil}&ay=${ay}`)
+    .then(res => {
+      if (!res.ok) throw new Error("Veri alınamadı");
+      return res.json();
+    })
+    .then(data => {
+      // Nullable değerler için kontrol yapıyoruz
+      const aylikUcret = data.aylikUcret ?? 0;
+      const oncekiAyKantinHarcamasi = data.oncekiAyKantinHarcamasi ?? 0;
+      const hesaplananGenelOdeme = data.hesaplananGenelOdeme ?? 0;
+     const oncekiAyRaporHakkiTutari = data.oncekiAyRaporHakkiTutari ?? 0;
+
+
+      document.getElementById('ayOdemesi').innerText = `₺${aylikUcret.toFixed(2)}`;
+      document.getElementById('kantinHarcama').innerText = `₺${oncekiAyKantinHarcamasi.toFixed(2)}`;
+      document.getElementById('genelOdeme').innerText = `₺${hesaplananGenelOdeme.toFixed(2)}`;
+  document.getElementById('raporTutari').innerText = `₺${oncekiAyRaporHakkiTutari.toFixed(2)}`;
+    })
+    .catch(err => {
+      alert(err.message);
+      console.error(err);
+    });
+}
+
+// Başlangıç verisi çekme
+if (typeof schoolNo !== 'undefined' && schoolNo) {
+  updatePaymentModalData(schoolNo, yil, ay);
+} else {
+  console.warn("schoolNo değişkeni bulunamadı");
+}
+
+// Önceki ay butonu
+document.querySelector('.nav-prev').addEventListener('click', () => {
+  ay--;
+  if (ay < 1) {
+    ay = 12;
+    yil--;
+  }
+  updatePaymentModalData(schoolNo, yil, ay);
+});
+
+// Sonraki ay butonu
+document.querySelector('.nav-next').addEventListener('click', () => {
+  ay++;
+  if (ay > 12) {
+    ay = 1;
+    yil++;
+  }
+  updatePaymentModalData(schoolNo, yil, ay);
+});
+
+
+
+// Modal açılmadan önce veya modal açıldıktan hemen sonra çağır
+
+/////////////////////////////////////////////////////////////////
+
+
 
 
 

@@ -515,3 +515,6 @@ const kgPriceBtn = document.getElementById("kgPriceBtn");
   });
 ///////////////////////////////////////////////////////////////////////////////////// VeriTabanı Kodları Başlıyor... -->
 
+
+  
+
