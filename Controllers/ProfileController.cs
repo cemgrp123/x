@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -8,14 +7,12 @@ using X.Models; // Student modeli buradan geliyor
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Threading.Tasks;
-
-
-
-
-
+using System.Security.Cryptography;
+using System.Text;
+using System.Collections.Generic;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/profile")]  // Controller route prefix'i net ve sabit
 public class ProfileController : ControllerBase
 {
     private readonly AppDbContext _dbContext;
@@ -26,6 +23,8 @@ public class ProfileController : ControllerBase
         _dbContext = dbContext;
         _env = env;
     }
+
+    // Aşağıdaki parametreli routelar en sona alındı
 
     // Öğrenci profilini getir
     [HttpGet("{schoolNo:int}")]
@@ -121,6 +120,7 @@ public class ProfileController : ControllerBase
 
         return Ok(new { Path = student.ProfilePhotoPath });
     }
+
     // Kantin durumu getir (Aylık Hak, Kullanılan Hak, Rapor Hakkı)
     [HttpGet("{schoolNo:int}/durum")]
     public IActionResult GetKantinDurumu(int schoolNo)
@@ -138,13 +138,9 @@ public class ProfileController : ControllerBase
         });
     }
 
-
-
-
-
-
-
-
-
-
+    public class OdemeRequest
+    {
+        public string Email { get; set; }
+        public decimal Amount { get; set; }
+    }
 }

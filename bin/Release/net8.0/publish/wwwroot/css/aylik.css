@@ -1,0 +1,154 @@
+ :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4cc9f0;
+            --light-bg: #f8f9fa;
+            --dark-text: #212529;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-text);
+        }
+        
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: none;
+            margin-bottom: 2rem;
+        }
+        
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+            padding: 1.25rem 1.5rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .form-select {
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            border: 1px solid #ced4da;
+        }
+        
+        .table {
+            margin-bottom: 0;
+        }
+        
+        .table thead th {
+            background-color: var(--primary-color);
+            color: white;
+            border-bottom: none;
+            padding: 1rem;
+        }
+        
+        .table tbody tr:last-child {
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .total-row {
+            background-color: rgba(67, 97, 238, 0.1) !important;
+            font-weight: 600;
+        }
+        
+        .control-panel {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+        }
+        
+        .loading-spinner {
+            display: none;
+            color: var(--primary-color);
+        }
+        
+        .table-hover tbody tr:hover {
+            background-color: rgba(76, 201, 240, 0.1);
+        }
+        
+        /* Yazdırma stilleri */
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+                font-size: 12pt;
+            }
+            
+            .container {
+                width: 100%;
+                max-width: 100%;
+                padding: 0;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+            
+            .card {
+                box-shadow: none;
+                border-radius: 0;
+                margin: 0;
+                page-break-after: avoid;
+            }
+            
+            .card-header {
+                border-radius: 0 !important;
+                padding: 0.75rem;
+            }
+            
+            .table {
+                font-size: 10pt;
+            }
+            
+            .table thead th {
+                padding: 0.5rem;
+            }
+            
+            .card-footer {
+                display: none;
+            }
+            
+            @page {
+                size: A4;
+                margin: 1cm;
+            }
+        }
+        
+        .print-header {
+            display: none;
+        }
+        
+        @media print {
+            .print-header {
+                display: block;
+                text-align: center;
+                margin-bottom: 1rem;
+                border-bottom: 2px solid #eee;
+                padding-bottom: 0.5rem;
+            }
+            
+            .print-title {
+                font-size: 16pt;
+                font-weight: bold;
+            }
+            
+            .print-date {
+                font-size: 11pt;
+                color: #666;
+            }
+        }

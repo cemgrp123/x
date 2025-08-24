@@ -1,70 +1,55 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;    // FirstOrDefaultAsync için
+using System.Threading.Tasks;
 using System;
-using System.Linq;
-using X.Data;
-using System.Collections.Generic;
-
+using X.Data;                           // AppDbContext'in olduğu namespace
+using X.Models;                         // Odeme ve alt sınıfların olduğu namespace (varsa)
 
 namespace X.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class PaymentController : ControllerBase
+    public class OdemelerController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public PaymentController(AppDbContext context)
+        public OdemelerController(AppDbContext context)
         {
             _context = context;
         }
 
-        [HttpGet("ayliktutarlar")]
-        public IActionResult GetAylikTutarlar(string ay)
+        [HttpGet("{schoolNo}/{ay}")]
+        public async Task<IActionResult> GetOdeme(string schoolNo, string ay)
         {
-            if (string.IsNullOrEmpty(ay))
-                return BadRequest("Ay parametresi gereklidir.");
+            if (string.IsNullOrEmpty(schoolNo) || string.IsNullOrEmpty(ay))
+                return BadRequest("Okul numarası ve ay parametreleri gereklidir.");
 
-            if (ay.Length != 7) // "yyyy-MM"
-                return BadRequest("Ay parametresi geçersiz formatta.");
+            Odeme odeme = ay.ToLower() switch
+            {
+                "eylul" => await _context.Odemeler_Eylul.FirstOrDefaultAsync(o => o.SchoolNo == schoolNo),
+                "ekim" => await _context.Odemeler_Ekim.FirstOrDefaultAsync(o => o.SchoolNo == schoolNo),
+                "kasim" => await _context.Odemeler_Kasim.FirstOrDefaultAsync(o => o.SchoolNo == schoolNo),
+                "aralik" => await _context.Odemeler_Aralik.FirstOrDefaultAsync(o => o.SchoolNo == schoolNo),
+                "ocak" => await _context.Odemeler_Ocak.FirstOrDefaultAsync(o => o.SchoolNo == schoolNo),
+                "subat" => await _context.Odemeler_Subat.FirstOrDefaultAsync(o => o.SchoolNo == schoolNo),
+                "mart" => await _context.Odemeler_Mart.FirstOrDefaultAsync(o => o.SchoolNo == schoolNo),
+                "nisan" => await _context.Odemeler_Nisan.FirstOrDefaultAsync(o => o.SchoolNo == schoolNo),
+                "mayis" => await _context.Odemeler_Mayis.FirstOrDefaultAsync(o => o.SchoolNo == schoolNo),
+                _ => null
+            };
 
-            string ayNumarasi = ay.Substring(5, 2);
-
-            var aylar = new Dictionary<string, string> {
-        { "09", "Eylül" }, { "10", "Ekim" }, { "11", "Kasım" }, { "12", "Aralık" },
-        { "01", "Ocak" }, { "02", "Şubat" }, { "03", "Mart" }, { "04", "Nisan" },
-        { "05", "Mayıs" }
-    };
-
-            if (!aylar.ContainsKey(ayNumarasi))
-                return BadRequest("Ay numarası geçersiz.");
-
-            string ayAdi = aylar[ayNumarasi];
-
-            var data = _context.AylikTutarlar
-                .Where(x => x.Ay.Trim().ToLower() == ayAdi.ToLower())
-                .Select(x => new
-                {
-                    x.Ay,
-                    x.ToplamUcret,
-                    x.SonOdemeTarihi
-                })
-                .FirstOrDefault();
-
-            if (data == null)
-                return NotFound("Veri bulunamadı.");
-
-            string durum = data.SonOdemeTarihi < DateTime.Today ? "Geçti" : "Beklemede";
+            if (odeme == null)
+                return NotFound("Ödeme kaydı bulunamadı.");
 
             return Ok(new
             {
-                nextPaymentMonth = data.Ay,
-                paymentAmount = $"{data.ToplamUcret} TL",
-                paymentStatus = durum,
-                paymentDate = data.SonOdemeTarihi.ToString("yyyy-MM-dd")
+                odeme.Tutar,
+                OdendiMi = odeme.OdemeDurumu == "Ödendi",
+                SonOdemeTarihi = odeme.SonTarih,
+                odeme.FullName,
+                odeme.StudentClass,
+                odeme.Section
             });
         }
-
-
-
     }
 }

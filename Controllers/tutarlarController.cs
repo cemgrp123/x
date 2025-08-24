@@ -89,6 +89,27 @@ namespace YourNamespace.Controllers
             _context.SaveChanges();
             return Ok(new { message = "Tüm veriler güncellendi" });
         }
+        [HttpGet("by-ay/{ay}")]
+        public IActionResult GetByAy(string ay)
+        {
+            var result = _context.AylikTutarlar
+                .Where(a => a.Ay.ToLower() == ay.ToLower())
+                .Select(a => new
+                {
+                    a.GunSayisi,
+                    a.GunlukUcret,
+                    a.ToplamUcret,
+                    a.SonOdemeTarihi
+                })
+                .FirstOrDefault();
+
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+
 
     }
 

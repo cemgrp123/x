@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayıt Başarılı</title>
+    <style>
+        :root {
+            --primary-color: #4cc9f0;
+            --secondary-color: #4895ef;
+            --success-color: #38b000;
+            --text-color: #333;
+            --light-color: #f8f9fa;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7ff;
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .success-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .icon {
+            font-size: 72px;
+            color: var(--success-color);
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: var(--success-color);
+            margin-bottom: 15px;
+            font-size: 28px;
+        }
+        
+        p {
+            margin-bottom: 25px;
+            font-size: 16px;
+            color: #555;
+        }
+        
+        .details {
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin: 25px 0;
+            text-align: left;
+        }
+        
+        .details p {
+            margin-bottom: 10px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background-color: #e9ecef;
+            border-radius: 3px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            width: 70%;
+            background-color: var(--success-color);
+            border-radius: 3px;
+            animation: progress-animation 2s ease-in-out;
+        }
+        
+        @keyframes progress-animation {
+            0% { width: 0%; }
+            100% { width: 70%; }
+        }
+        
+        @media (max-width: 600px) {
+            .success-container {
+                padding: 30px 20px;
+            }
+            
+            .btn-container {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="success-container">
+        <div class="icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+        </div>
+        <h1>Kaydınız Başarı İle Alınmıştır</h1>
+        <p>Ödeme kontrolü sonrası giriş sayfasından profilinize ulaşabilirsiniz.</p>
+        
+        <div class="progress-bar">
+            <div class="progress"></div>
+        </div>
+        
+        <div class="details">
+            <p><strong>İşlem süreci:</strong></p>
+            <p>✓ Kayıt bilgileriniz alındı</p>
+            <p>✓ Ödeme bilgileriniz kontrol ediliyor</p>
+            <p>• Profil oluşturma aşaması (ödeme onayı sonrası)</p>
+        </div>
+        
+        <p>Ödeme onayı genellikle 5-15 dakika içinde tamamlanır. Onaylandığında Whatsapp Üzerinden ile bilgilendirileceksiniz.</p>
+        
+        <div class="btn-container">
+            <a href="http://localhost:5128/login.html" class="btn">Giriş Sayfasına Git</a>
+        </div>
+    </div>
+</body>
+</html>

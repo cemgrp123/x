@@ -194,7 +194,60 @@ namespace X.Controllers
             await _context.SaveChangesAsync();
             return Ok(new { message = "Tüm kullanılan haklar sıfırlandı." });
         }
-        
+      [HttpGet("payment-info/{ay}")]
+public async Task<IActionResult> GetPaymentInfo(string ay)
+{
+    // Ay adını case-insensitive olarak sorgula
+    var ayBilgisi = await _context.AylikTutarlar
+        .Where(a => a.Ay.ToLower() == ay.ToLower())
+        .Select(a => new
+        {
+            a.GunSayisi,
+            a.GunlukUcret,
+            a.ToplamUcret,
+            SonOdemeTarihi = a.SonOdemeTarihi.ToString("yyyy-MM-dd")
+        })
+        .FirstOrDefaultAsync();
+
+    if (ayBilgisi == null)
+        return NotFound();
+
+    return Ok(ayBilgisi);
+}
+
+
+        [HttpPut("activate/{schoolNo}")]
+        public async Task<IActionResult> ToggleAktifDurum(string schoolNo)
+        {
+            if (!int.TryParse(schoolNo, out int parsedSchoolNo))
+                return BadRequest("Okul numarası geçersiz.");
+
+            var ogrenci = await _context.Students.FirstOrDefaultAsync(s => s.SchoolNo == parsedSchoolNo);
+            if (ogrenci == null)
+                return NotFound();
+
+            ogrenci.IsActive = !ogrenci.IsActive;
+            await _context.SaveChangesAsync();
+
+            return Ok(new { ogrenci.SchoolNo, ogrenci.IsActive });
+        }
+
+
+        public class IsActiveDto
+        {
+            public bool IsActive { get; set; }
+        }
+
+
+
+        public class ActivateDto
+        {
+            public bool IsActive { get; set; }
+        }
+
+
+
+
     }
 
 }

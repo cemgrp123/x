@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Yemekhane Girişi - Modern Avatarlı</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+<link rel="stylesheet" href="css/login.css">
+
+</head>
+<body>
+
+  <div class="mobile-top-logo">
+    <i class="fa fa-utensils"></i>
+    <span>YemekHane</span>
+  </div>
+
+ <div class="card">
+  <div class="profile-icon"><i class="fa fa-utensils"></i></div>
+  <h2>Yemekhane Giriş</h2>
+
+  <button id="loginBtn">Giriş Yap</button>
+
+  <div id="passwordContainer">
+    <!-- Okul No Girişi -->
+    <label for="schoolIdInput" class="form-label fw-semibold text-start mb-2">
+      4 Haneli Okul Numarası
+    </label>
+    <div class="position-relative">
+      <input
+        type="text"
+        id="schoolIdInput"
+        maxlength="4"
+        inputmode="numeric"
+        pattern="[0-9]*"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+        placeholder="Okul numaranızı giriniz"
+      />
+    </div>
+
+    <!-- Şifre Girişi -->
+    <label for="passwordInput" class="form-label fw-semibold text-start mb-2">
+      6 Haneli Şifre
+    </label>
+    <div class="position-relative">
+      <input
+        type="tel"
+        id="passwordInput"
+        maxlength="6"
+        inputmode="numeric"
+        pattern="[0-9]*"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+        placeholder="Şifrenizi giriniz"
+      />
+      <div class="dots" id="dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+
+    <button id="submitBtn">Giriş Yap</button>
+    
+  </div>
+</div>
+
+
+  
+<!-- Toast Container -->
+<div id="toast-container" 
+     class="toast-container position-fixed top-0 start-50 translate-middle-x pt-3" 
+     style="z-index: 9999; pointer-events: none; width: auto; max-width: 350px;">
+</div>
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    crossorigin="anonymous"
+  ></script>
+  <script src="js/login.js"></script>
+
+</body>
+</html>

@@ -4,7 +4,7 @@ using System;
 
 public class Gecis
 {
-    [Key]
+   
     public int OkulNo { get; set; }
 
     public string AdSoyad { get; set; }

@@ -1,0 +1,233 @@
+:root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color: #4cc9f0;
+            --danger-color: #f72585;
+            --warning-color: #f8961e;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .food-list {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            height: 100%;
+        }
+
+        .food-item {
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            border: 1px solid #e9ecef;
+        }
+
+        .food-item:hover {
+            background-color: #f1f9ff;
+            transform: translateX(5px);
+            border-color: var(--primary-color);
+        }
+
+        .food-item i {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+
+        .calendar {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .day-cell {
+            min-height: 120px;
+            border: 1px solid #e9ecef;
+            padding: 10px;
+            border-radius: 10px;
+            background: white;
+            position: relative;
+            transition: all 0.2s;
+            margin-bottom: 15px;
+        }
+
+        .day-cell:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .day-cell.active {
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed #dee2e6;
+        }
+
+        .day-number {
+            font-weight: bold;
+            color: var(--dark-color);
+            font-size: 1.1rem;
+        }
+
+        .day-name {
+            color: var(--primary-color);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+
+        .meal-item {
+            background: #f8f9fa;
+            padding: 6px 10px;
+            border-radius: 6px;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .meal-item:hover {
+            background: #e9ecef;
+        }
+
+        .delete-meal {
+            cursor: pointer;
+            color: var(--danger-color);
+            margin-left: 8px;
+            font-size: 1rem;
+            opacity: 0.7;
+            transition: all 0.2s;
+        }
+
+        .delete-meal:hover {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        .add-food-form {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px dashed #dee2e6;
+        }
+
+        .empty-state {
+            color: #6c757d;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .week-separator {
+            text-align: center;
+            margin: 15px 0;
+            color: #6c757d;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .week-separator:before,
+        .week-separator:after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px dashed #dee2e6;
+            margin: auto;
+        }
+
+        .week-separator:before {
+            margin-right: 10px;
+        }
+
+        .week-separator:after {
+            margin-left: 10px;
+        }
+
+        .meal-count {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 20px;
+            font-size: 0.7rem;
+            margin-left: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .day-cell {
+                min-height: 100px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .meal-item {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #b8c2cc;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a0aec0;
+        }
+      
+       
+   

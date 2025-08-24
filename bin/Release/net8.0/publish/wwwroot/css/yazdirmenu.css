@@ -1,0 +1,185 @@
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 20px auto;
+    max-width: 1200px;
+    background: #f5f5f5;
+    color: #333;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 20px;
+    user-select: none;
+  }
+  .header h1 {
+    margin: 0;
+    font-size: 36px;
+    font-weight: 700;
+    color: #e74c3c;
+    letter-spacing: 1.5px;
+    line-height: 1.2;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  }
+  .header h2 {
+    margin: 8px 0 0;
+    font-weight: 500;
+    font-size: 20px;
+    color: #444;
+    letter-spacing: 1px;
+    font-style: italic;
+  }
+  .controls {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    user-select: none;
+  }
+  thead tr {
+    background-color: #e74c3c;
+    color: white;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px 6px;
+    vertical-align: top;
+    font-size: 13px;
+    font-weight: 400;
+    color: #2c3e50;
+    text-align: center;
+  }
+  th {
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+  td.date {
+    font-weight: 700;
+    color: white;
+    background-color: #e74c3c;
+    border-bottom: 1px dashed #ccc;
+    padding-bottom: 6px;
+    font-size: 12px;
+    line-height: 1.3;
+    user-select: none;
+  }
+  td.menu-item {
+    margin: 2px 0;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #2c3e50;
+    font-weight: 600;
+  }
+  .week-label {
+    background-color: #fafafa;
+    font-weight: 700;
+    text-align: center;
+    border: 1px solid #ddd;
+    width: 70px;
+    color: #444;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    user-select: none;
+  }
+  .print-button {
+    display: block;
+    margin: 20px auto 0 auto;
+    padding: 10px 20px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+  }
+  .print-button:hover {
+    background-color: #c0392b;
+  }
+  @media print {
+  @page {
+    size: A4 landscape;
+    margin: 10mm;
+  }
+  body {
+    margin: 5mm;
+    background: white;
+    color: black;
+    font-size: 10pt;
+    max-width: 100%;
+  }
+  /* Header görünür, controls ve print button gizli */
+  .header {
+    display: block !important;
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  .controls, .print-button {
+    display: none !important;
+  }
+  table {
+    box-shadow: none !important;
+    width: 100% !important;
+    border: 1px solid #ddd !important;
+  }
+  th, td {
+    border: 1px solid #ddd !important;
+    padding: 6px 4px !important;
+    font-size: 8pt !important;
+  }
+  thead tr {
+    background-color: #e74c3c !important;
+    color: white !important;
+  }
+  td.date {
+    font-weight: 700 !important;
+    color: white !important;
+    background-color: #e74c3c !important;
+    border-bottom: 1px dashed #ccc !important;
+    padding-bottom: 3px !important;
+  }
+  .week-label {
+    font-weight: 700 !important;
+    background-color: #fafafa !important;
+    border: 1px solid #ddd !important;
+    font-size: 9pt !important;
+    width: 60px !important;
+    text-align: center !important;
+  }
+  
+}
+
+.date {
+  background-color: #e74c3c;
+  color: white;
+  text-align: center;
+  font-weight: 700;
+  padding: 6px 8px;
+  border-radius: 4px;
+  line-height: 1.2;
+  user-select: none;
+  margin-bottom: 6px;
+  font-size: 13px;
+  display: block; /* tam genişlik için block */
+  width: 100%;   /* kutu genişliğini tamamen kullan */
+  box-sizing: border-box; /* padding dahil genişlik hesapla */
+}
+
+.date span {
+  display: block;
+  padding: 0;
+  margin: 0;
+}
+
+/* Tarih ve gün arasındaki kesikli çizgi */
+.date span + span {
+  border-top: 1.5px dashed white;
+  margin-top: 4px;  /* çizgi ile üst metin arasında boşluk */
+  padding-top: 4px; /* çizgi ile alt metin arasında boşluk */
+}
+
+

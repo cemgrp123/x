@@ -41,6 +41,7 @@ namespace X.Controllers
                                       s.Section,
                                       s.ParentName,
                                       s.ParentContact,
+                                      s.IsActive, // buraya ekle,
                                       AylikHak = kantin != null ? kantin.AylikHak : 0,
                                       KullanilanHak = kantin != null ? kantin.KullanilanHak : 0,
                                       RaporHak = kantin != null ? kantin.RaporHak : 0,
@@ -119,25 +120,27 @@ namespace X.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
-        [HttpGet("{schoolNo}")]
-        public IActionResult GetStudentBySchoolNo(int schoolNo)
+       [HttpGet("{schoolNo:int}")]
+public IActionResult GetStudentBySchoolNo(int schoolNo)
+{
+    var student = _context.Students
+        .Where(s => s.SchoolNo == schoolNo)
+        .Select(s => new
         {
-            var student = _context.Students
-                .Where(s => s.SchoolNo == schoolNo)  // Artık tipler uyuyor
-                .Select(s => new
-                {
-                    okulNo = s.SchoolNo,
-                    adSoyad = s.FullName,
-                    sinif = s.StudentClass,
-                    sube = s.Section
-                })
-                .FirstOrDefault();
+            okulNo = s.SchoolNo,
+            adSoyad = s.FullName,
+            sinif = s.StudentClass,
+            sube = s.Section,
+            isActive = s.IsActive
+        })
+        .FirstOrDefault();
 
-            if (student == null)
-                return NotFound();
+    if (student == null)
+        return NotFound();
 
-            return Ok(student);
-        }
+    return Ok(student);
+}
+
         [HttpGet("raporlu")]
         public async Task<IActionResult> GetRaporluOgrenciler(string? date)
         {

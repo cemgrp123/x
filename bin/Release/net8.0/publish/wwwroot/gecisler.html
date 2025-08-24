@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Öğrenci Geçiş Kayıtları - Gültepe Yemekhane</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #1a73e8;
+            --secondary-color: #0d47a1;
+            --text-color: #f8fafc;
+            --hover-color: #4285f4;
+            --bg-color: linear-gradient(135deg, #0d47a1 0%, #1a73e8 100%);
+            --dropdown-bg: #ffffff;
+            --dropdown-text: #333333;
+            --dropdown-hover: #e8f0fe;
+            --mobile-breakpoint: 768px;
+            --danger-color: #e74c3c;
+            --danger-hover: #c0392b;
+            --success-color: #2ecc71;
+            --success-hover: #27ae60;
+            --secondary-btn: #95a5a6;
+            --secondary-hover: #7f8c8d;
+            --warning-color: #f39c12;
+            --warning-hover: #e67e22;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f1f5f9;
+            margin: 0;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background: var(--bg-color);
+            color: var(--text-color);
+            width: 100%;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: transform 0.3s ease;
+            padding: 0.3rem 0;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 0.8rem;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover {
+            color: #bbdefb;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0.8rem;
+            background-color: #bbdefb;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: calc(100% - 1.6rem);
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-btn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 1rem;
+            padding: 0.5rem 0.8rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .dropdown-btn:hover {
+            color: #bbdefb;
+        }
+
+        .dropdown-content {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--dropdown-bg);
+            min-width: 220px;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .dropdown:hover .dropdown-content {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-content a {
+            color: var(--dropdown-text);
+            padding: 0.8rem 1.5rem;
+            display: block;
+            border-bottom: 1px solid #e2e8f0;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+        }
+
+        .dropdown-content a:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-content a:hover {
+            background-color: var(--dropdown-hover);
+            color: var(--primary-color);
+            padding-left: 1.8rem;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            padding: 0.3rem;
+        }
+
+        .mobile-menu-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Main Content Styles */
+        .main-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .top-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-section {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            min-width: 200px;
+        }
+
+        label {
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input,
+        select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        button:hover {
+            background-color: var(--hover-color);
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+        }
+
+        .btn-danger:hover {
+            background-color: var(--danger-hover);
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+        }
+
+        .btn-success:hover {
+            background-color: var(--success-hover);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-btn);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary-hover);
+        }
+
+        .btn-warning {
+            background-color: var(--warning-color);
+        }
+
+        .btn-warning:hover {
+            background-color: var(--warning-hover);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+
+        tr:hover {
+            background-color: #f1f9ff;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 5px;
+            width: 400px;
+            max-width: 90%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .checkbox-cell {
+            width: 40px;
+            text-align: center;
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            .navbar .container {
+                padding: 0.7rem 1.2rem;
+                flex-wrap: wrap;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+                order: 1;
+            }
+
+            .logo {
+                order: 0;
+                flex-grow: 1;
+                font-size: 1.3rem;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background: var(--bg-color);
+                flex-direction: column;
+                gap: 0;
+                padding: 0;
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+                transition: clip-path 0.4s ease;
+                z-index: 999;
+            }
+
+            .nav-links.active {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+
+            .nav-links a,
+            .dropdown-btn {
+                width: 100%;
+                padding: 1rem 1.5rem;
+                border-top: 1px solid rgba(255, 255, 255, 0.15);
+                display: flex;
+                align-items: center;
+                box-sizing: border-box;
+            }
+
+            .dropdown-btn {
+                justify-content: space-between;
+            }
+
+            .dropdown-btn i {
+                transition: transform 0.3s ease;
+            }
+
+            .dropdown.active .dropdown-btn i {
+                transform: rotate(180deg);
+            }
+
+            .dropdown-content {
+                position: static;
+                display: none;
+                width: 100%;
+                background-color: rgba(0, 0, 0, 0.15);
+                box-shadow: none;
+                border-radius: 0;
+                padding: 0;
+            }
+
+            .dropdown.active .dropdown-content {
+                display: block;
+            }
+
+            .dropdown-content a {
+                padding: 0.9rem 2.2rem;
+                color: #e2e8f0;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                font-size: 0.92rem;
+                position: relative;
+            }
+
+            .dropdown-content a::before {
+                content: "→";
+                position: absolute;
+                left: 1.8rem;
+                opacity: 0;
+                transition: all 0.3s ease;
+            }
+
+            .dropdown-content a:hover {
+                background-color: rgba(255, 255, 255, 0.1);
+                padding-left: 2.5rem;
+            }
+
+            .dropdown-content a:hover::before {
+                opacity: 1;
+                left: 1.5rem;
+            }
+
+            .nav-links a::after {
+                display: none;
+            }
+
+            .filter-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-group {
+                min-width: 100%;
+            }
+
+            .top-controls {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            h1 {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .button-group {
+                width: 100%;
+                justify-content: flex-start;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo">Gültepe Yemekhane Yönetimi</a>
+
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <div class="nav-links" id="navLinks">
+                <a href="admin.html#">Ana Sayfa</a>
+                <a href="ogrenciler.html#">Öğrenciler</a>
+                <a href="muhasebe.html">Muhasebe</a>
+
+                <!-- Birinci Dropdown Menü -->
+                <div class="dropdown">
+                    <button class="dropdown-btn">
+                        Menü <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="menuolustur.html#">Menü Yap</a>
+                        <a href="menu.html">Menü Gramaj</a>
+                        <a href="yazdırmenu.html#">Menü Yazdır</a>
+                        <a href="aylikgidmik.html#">Menü Maliyet</a>
+                    </div>
+                </div>
+
+                <!-- İkinci Dropdown Menü -->
+                <div class="dropdown">
+                    <button class="dropdown-btn">
+                        Veri Tabanı <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="raporlar.html#">Raporlar</a>
+                        <a href="tutarlar.html#">Yıllık Tutarlar</a>
+                        <a href="gecisler.html">Geçişler</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <h1>
+            Öğrenci Geçiş Kayıtları
+            <div class="button-group">
+                <button id="pdfIndir" class="btn-warning">
+                    <i class="fas fa-file-pdf"></i> PDF İndir
+                </button>
+                <button id="topluSil" class="btn-danger" disabled>
+                    <i class="fas fa-trash"></i> Toplu Sil
+                </button>
+            </div>
+        </h1>
+        
+        <div class="filter-section">
+            <div class="filter-group">
+                <label for="okulNo">Okul No</label>
+                <input type="text" id="okulNo" placeholder="Okul no giriniz">
+            </div>
+            <div class="filter-group">
+                <label for="adSoyad">Ad Soyad</label>
+                <input type="text" id="adSoyad" placeholder="Ad soyad giriniz">
+            </div>
+            <div class="filter-group">
+                <label for="tarih">Tarih</label>
+                <input type="date" id="tarih">
+            </div>
+            <button id="filtrele" class="btn-success">
+                <i class="fas fa-filter"></i> Filtrele
+            </button>
+            <button id="sifirla" class="btn-secondary">
+                <i class="fas fa-undo"></i> Sıfırla
+            </button>
+        </div>
+
+        <table id="gecislerTablosu">
+            <thead>
+                <tr>
+                    <th class="checkbox-cell">
+                        <input type="checkbox" id="selectAll">
+                    </th>
+                    <th>Okul No</th>
+                    <th>Ad Soyad</th>
+                    <th>Sınıf</th>
+                    <th>Şube</th>
+                    <th>Zaman</th>
+                    <th>Tarih</th>
+                    <th>İşlem</th>
+                </tr>
+            </thead>
+            <tbody id="tabloBody"></tbody>
+        </table>
+    </div>
+
+    <!-- Silme Modal -->
+    <div id="silModal" class="modal">
+        <div class="modal-content">
+            <h3>Kaydı Sil</h3>
+            <p id="silMesaj">Bu kaydı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.</p>
+            <div class="modal-buttons">
+                <button type="button" onclick="kapatModal()">Vazgeç</button>
+                <button type="button" id="silBtn" class="btn-danger">Sil</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toplu Silme Modal -->
+    <div id="topluSilModal" class="modal">
+        <div class="modal-content">
+            <h3>Toplu Silme İşlemi</h3>
+            <p id="topluSilMesaj">Seçilen tüm kayıtları silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.</p>
+            <div class="modal-buttons">
+                <button type="button" onclick="kapatTopluSilModal()">Vazgeç</button>
+                <button type="button" id="topluSilBtn" class="btn-danger">Tümünü Sil</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // jsPDF kütüphanesini kullanılabilir hale getirme
+        window.jsPDF = window.jspdf.jsPDF;
+
+        // Navbar Mobile Toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', function () {
+            document.getElementById('navLinks').classList.toggle('active');
+        });
+
+        // Dropdown Mobile Toggle
+        document.querySelectorAll('.dropdown-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                if (window.innerWidth <= 768) {
+                    const dropdown = this.parentElement;
+                    dropdown.classList.toggle('active');
+                }
+            });
+        });
+
+        // Geçişler dizisi
+        let gecisler = [];
+        let filtrelenmisGecisler = [];
+
+        // Silinecek kayıt bilgisi
+        let silinecekKayit = null;
+
+        // Seçili kayıtlar
+        let seciliKayitlar = new Set();
+
+        // Sayfa yüklendiğinde
+        document.addEventListener('DOMContentLoaded', () => {
+            // API'den verileri çek
+            verileriYukle();
+
+            // Filtreleme butonları
+            document.getElementById('filtrele').addEventListener('click', filtrele);
+            document.getElementById('sifirla').addEventListener('click', sifirla);
+
+            // Enter ile filtreleme
+            ['okulNo', 'adSoyad', 'tarih'].forEach(id => {
+                document.getElementById(id).addEventListener('keypress', e => {
+                    if (e.key === 'Enter') filtrele();
+                });
+            });
+
+            // Sil butonuna event listener
+            document.getElementById('silBtn').addEventListener('click', silOnaylandi);
+
+            // Toplu sil butonuna event listener
+            document.getElementById('topluSilBtn').addEventListener('click', topluSilOnaylandi);
+
+            // Tümünü seç checkbox'ı
+            document.getElementById('selectAll').addEventListener('change', function() {
+                const checkboxes = document.querySelectorAll('.kayit-checkbox');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = this.checked;
+                    kayitSec(checkbox);
+                });
+            });
+
+            // PDF indirme butonu
+            document.getElementById('pdfIndir').addEventListener('click', pdfIndir);
+
+            // Toplu silme butonu
+            document.getElementById('topluSil').addEventListener('click', topluSilModalAc);
+
+            // Modal dışına tıklayınca kapatma
+            window.onclick = function (event) {
+                if (event.target === document.getElementById('silModal')) {
+                    kapatModal();
+                }
+                if (event.target === document.getElementById('topluSilModal')) {
+                    kapatTopluSilModal();
+                }
+            };
+        });
+
+        // API'den verileri yükle
+        function verileriYukle() {
+            fetch('/api/gecisler')
+                .then(async res => {
+                    if (!res.ok) {
+                        const errorData = await res.text();
+                        throw new Error(errorData || 'API hatası');
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    gecisler = data;
+                    filtrelenmisGecisler = [...gecisler];
+                    tabloyuDoldur(gecisler);
+                })
+                .catch(err => {
+                    console.error('Geçişler yüklenemedi:', err);
+                    alert('Veriler yüklenirken hata oluştu: ' + err.message);
+                });
+        }
+
+        // Tabloyu doldurma
+        function tabloyuDoldur(data) {
+            const tabloBody = document.getElementById('tabloBody');
+            tabloBody.innerHTML = '';
+            seciliKayitlar.clear();
+            document.getElementById('selectAll').checked = false;
+            topluSilButonGuncelle();
+
+            if (data.length === 0) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td colspan="8" class="no-results">Filtre kriterlerine uygun kayıt bulunamadı</td>`;
+                tabloBody.appendChild(tr);
+                return;
+            }
+
+            data.forEach((gecis, index) => {
+                const tr = document.createElement('tr');
+                const kayitId = `${gecis.okulNo}-${gecis.tarih}-${gecis.zaman}-${index}`;
+
+                tr.innerHTML = `
+                    <td class="checkbox-cell">
+                        <input type="checkbox" class="kayit-checkbox" data-id="${kayitId}">
+                    </td>
+                    <td>${gecis.okulNo}</td>
+                    <td>${gecis.adSoyad}</td>
+                    <td>${gecis.sinif}</td>
+                    <td>${gecis.sube}</td>
+                    <td>${gecis.zaman}</td>
+                    <td>${gecis.tarih}</td>
+                    <td>
+                        <button class="btn-danger sil-btn" data-okulno="${gecis.okulNo}" 
+                                data-tarih="${gecis.tarih}" 
+                                data-zaman="${gecis.zaman}">
+                            <i class="fas fa-trash"></i> Sil
+                        </button>
+                    </td>
+                `;
+
+                // Checkbox event listener ekle
+                const checkbox = tr.querySelector('.kayit-checkbox');
+                checkbox.addEventListener('change', function() {
+                    kayitSec(this);
+                });
+
+                // Sil butonuna event listener ekle
+                const silBtn = tr.querySelector('.sil-btn');
+                silBtn.addEventListener('click', function() {
+                    const okulNo = this.getAttribute('data-okulno');
+                    const tarih = this.getAttribute('data-tarih');
+                    const zaman = this.getAttribute('data-zaman');
+                    silKayit(okulNo, tarih, zaman);
+                });
+
+                tabloBody.appendChild(tr);
+            });
+        }
+
+        // Kayıt seçme
+        function kayitSec(checkbox) {
+            const kayitId = checkbox.getAttribute('data-id');
+            
+            if (checkbox.checked) {
+                seciliKayitlar.add(kayitId);
+            } else {
+                seciliKayitlar.delete(kayitId);
+                document.getElementById('selectAll').checked = false;
+            }
+            
+            topluSilButonGuncelle();
+        }
+
+        // Toplu sil butonunu güncelle
+        function topluSilButonGuncelle() {
+            const topluSilBtn = document.getElementById('topluSil');
+            topluSilBtn.disabled = seciliKayitlar.size === 0;
+        }
+
+        // Filtreleme
+        function filtrele() {
+            const okulNo = document.getElementById('okulNo').value.trim();
+            const adSoyad = document.getElementById('adSoyad').value.trim().toLowerCase();
+            const tarih = document.getElementById('tarih').value;
+
+            filtrelenmisGecisler = gecisler.filter(gecis => {
+                const currentOkulNo = String(gecis.okulNo);
+                const currentAdSoyad = gecis.adSoyad.toLowerCase();
+                const currentTarih = gecis.tarih;
+                
+                const okulNoMatch = !okulNo || currentOkulNo.includes(okulNo);
+                const adSoyadMatch = !adSoyad || currentAdSoyad.includes(adSoyad);
+                
+                // Tarih filtresi
+                let tarihMatch = true;
+                if (tarih) {
+                    // Tarih formatını dönüştür (dd.mm.yyyy -> yyyy-mm-dd)
+                    const [gun, ay, yil] = currentTarih.split('.');
+                    const dbTarihFormat = `${yil}-${ay.padStart(2, '0')}-${gun.padStart(2, '0')}`;
+                    tarihMatch = dbTarihFormat === tarih;
+                }
+                
+                return okulNoMatch && adSoyadMatch && tarihMatch;
+            });
+
+            tabloyuDoldur(filtrelenmisGecisler);
+        }
+
+        // Sıfırlama
+        function sifirla() {
+            document.getElementById('okulNo').value = '';
+            document.getElementById('adSoyad').value = '';
+            document.getElementById('tarih').value = '';
+            filtrelenmisGecisler = [...gecisler];
+            tabloyuDoldur(filtrelenmisGecisler);
+        }
+
+        // Silme işlemi başlat
+        function silKayit(okulNo, tarih, zaman) {
+            silinecekKayit = { okulNo, tarih, zaman };
+            document.getElementById('silMesaj').textContent =
+                `${okulNo} numaralı öğrencinin ${tarih} tarihli, ${zaman} zamanlı kaydını silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.`;
+            document.getElementById('silModal').style.display = 'block';
+        }
+
+        // Toplu silme modal aç
+        function topluSilModalAc() {
+            if (seciliKayitlar.size === 0) return;
+            
+            document.getElementById('topluSilMesaj').textContent =
+                `${seciliKayitlar.size} adet kaydı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.`;
+            document.getElementById('topluSilModal').style.display = 'block';
+        }
+
+        // Silme onayı
+        function silOnaylandi() {
+            if (!silinecekKayit) return;
+
+            const { okulNo, tarih, zaman } = silinecekKayit;
+
+            // API endpoint'ine silme isteği gönder
+            fetch(`/api/gecisler?okulNo=${okulNo}&tarih=${encodeURIComponent(tarih)}&zaman=${encodeURIComponent(zaman)}`, {
+                method: 'DELETE'
+            })
+                .then(async res => {
+                    if (res.ok) {
+                        // Başarılı yanıt - sayfayı yenile
+                        window.location.reload();
+                        return;
+                    }
+                    
+                    // Hata durumunda response'u text olarak oku
+                    const errorText = await res.text();
+                    throw new Error(errorText || 'Silme işlemi başarısız');
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('Silme işlemi başarısız oldu: ' + err.message);
+                });
+
+            silinecekKayit = null;
+        }
+
+        // Toplu silme onayı
+        function topluSilOnaylandi() {
+            if (seciliKayitlar.size === 0) return;
+            
+            // Seçili kayıtları bul ve sil
+            const checkboxes = document.querySelectorAll('.kayit-checkbox:checked');
+            const silinecekler = [];
+            
+            checkboxes.forEach(checkbox => {
+                const row = checkbox.closest('tr');
+                const okulNo = row.cells[1].textContent;
+                const tarih = row.cells[6].textContent;
+                const zaman = row.cells[5].textContent;
+                
+                silinecekler.push({ okulNo, tarih, zaman });
+            });
+            
+            // API'ye toplu silme isteği gönder
+            // Not: API'nizde toplu silme endpoint'i yoksa, tek tek silme işlemi yapılmalı
+            const silmeIstekleri = silinecekler.map(kayit => 
+                fetch(`/api/gecisler?okulNo=${kayit.okulNo}&tarih=${encodeURIComponent(kayit.tarih)}&zaman=${encodeURIComponent(kayit.zaman)}`, {
+                    method: 'DELETE'
+                })
+            );
+            
+            // Tüm silme isteklerini bekle
+            Promise.all(silmeIstekleri)
+                .then(responses => {
+                    // Tüm isteklerin başarılı olup olmadığını kontrol et
+                    const tumuBasariMi = responses.every(res => res.ok);
+                    if (tumuBasariMi) {
+                        // Başarılı yanıt - sayfayı yenile
+                        window.location.reload();
+                    } else {
+                        throw new Error('Bazı kayıtlar silinemedi');
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('Toplu silme işlemi başarısız oldu: ' + err.message);
+                });
+        }
+
+        // PDF indirme
+        function pdfIndir() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Başlık
+            doc.setFontSize(18);
+            doc.setTextColor(40, 40, 40);
+            doc.setFont("helvetica", "bold");
+            doc.text('ÖĞRENCİ GEÇİŞ KAYITLARI', 105, 20, { align: 'center' });
+            
+            // Kurum bilgisi
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "normal");
+            doc.text('Gültepe Yemekhane Yönetimi', 105, 30, { align: 'center' });
+            
+            // Tarih
+            doc.text(`Rapor Tarihi: ${new Date().toLocaleDateString('tr-TR')}`, 105, 40, { align: 'center' });
+            
+            // Toplam kayıt
+            doc.text(`Toplam Kayıt: ${filtrelenmisGecisler.length}`, 105, 50, { align: 'center' });
+            
+            // Tablo verileri
+            const tableColumn = ["Okul No", "Ad Soyad", "Sınıf", "Şube", "Zaman", "Tarih"];
+            const tableRows = [];
+            
+            filtrelenmisGecisler.forEach(gecis => {
+                const gecisData = [
+                    gecis.okulNo,
+                    gecis.adSoyad,
+                    gecis.sinif,
+                    gecis.sube,
+                    gecis.zaman,
+                    gecis.tarih
+                ];
+                tableRows.push(gecisData);
+            });
+            
+            // Tablo oluşturma
+            doc.autoTable({
+                head: [tableColumn],
+                body: tableRows,
+                startY: 60,
+                theme: 'grid',
+                styles: { 
+                    fontSize: 10,
+                    cellPadding: 3,
+                    overflow: 'linebreak'
+                },
+                headStyles: { 
+                    fillColor: [26, 115, 232],
+                    textColor: 255,
+                    fontStyle: 'bold'
+                },
+                alternateRowStyles: {
+                    fillColor: [240, 240, 240]
+                },
+                margin: { top: 60 }
+            });
+            
+            // Sayfa numaraları
+            const pageCount = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                doc.setFontSize(10);
+                doc.text(`Sayfa ${i} / ${pageCount}`, doc.internal.pageSize.width / 2, doc.internal.pageSize.height - 10, { align: 'center' });
+            }
+            
+            // PDF'i indirme
+            doc.save(`ogrenci_gecis_kayitlari_${new Date().toISOString().slice(0, 10)}.pdf`);
+        }
+
+        // Modal kapatma
+        function kapatModal() {
+            document.getElementById('silModal').style.display = 'none';
+            silinecekKayit = null;
+        }
+
+        // Toplu silme modal kapatma
+        function kapatTopluSilModal() {
+            document.getElementById('topluSilModal').style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>
