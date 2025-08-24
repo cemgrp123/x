@@ -6,12 +6,19 @@ using Microsoft.Extensions.Configuration;
 using System.Text.Json.Serialization;
 using X.Data;
 using X.Models;
+using Microsoft.ApplicationInsights.Extensibility;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Veritabanı bağlantısı
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Modern Application Insights ekleme
+builder.Services.AddApplicationInsightsTelemetry(options =>
+{
+    options.ConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"];
+});
 
 // CORS yapılandırması
 builder.Services.AddCors(options =>
@@ -28,9 +35,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        // ReferenceHandler.Preserve kaldırıldı, böylece JSON sade dizi olarak döner
         options.JsonSerializerOptions.ReferenceHandler = null;
-        options.JsonSerializerOptions.WriteIndented = true; // isteğe bağlı, okunabilir JSON için
+        options.JsonSerializerOptions.WriteIndented = true;
     });
 
 builder.Services.AddEndpointsApiExplorer();
