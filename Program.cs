@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using System.Text.Json.Serialization;
 using X.Data;
 using X.Models;
-using Microsoft.ApplicationInsights.Extensibility;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,20 +13,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Modern Application Insights ekleme
-builder.Services.AddApplicationInsightsTelemetry(options =>
-{
-    options.ConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"];
-});
-
 // CORS yapılandırması
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAllOrigins", policy =>
+   options.AddPolicy("AllowAllOrigins", policy =>
     {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
+        policy
+            .WithOrigins(
+                "https://yemekhanegltp.com",
+                "https://www.yemekhanegltp.com"
+            )
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
     });
 });
 
@@ -44,17 +42,26 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Swagger aktif (Prod dahil)
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-// CORS'u etkinleştir
-app.UseCors("AllowAllOrigins");
-app.UseStaticFiles();
+else
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseCors("AllowAllOrigins");
+
+app.UseAuthorization();
 
 app.MapControllers();
 

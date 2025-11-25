@@ -93,3 +93,15 @@ C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net8.0\refint\X.dll
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net8.0\X.pdb
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net8.0\X.genruntimeconfig.cache
 C:\Users\cemga\OneDrive\Masaüstü\X\obj\Debug\net8.0\ref\X.dll
+C:\Users\cemga\OneDrive\Masaüstü\X\bin\Debug\net8.0\Microsoft.Extensions.Caching.Abstractions.dll
+C:\Users\cemga\OneDrive\Masaüstü\X\bin\Debug\net8.0\Microsoft.Extensions.Caching.Memory.dll
+C:\Users\cemga\OneDrive\Masaüstü\X\bin\Debug\net8.0\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\Users\cemga\OneDrive\Masaüstü\X\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\cemga\OneDrive\Masaüstü\X\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\cemga\OneDrive\Masaüstü\X\bin\Debug\net8.0\Microsoft.Extensions.Logging.dll
+C:\Users\cemga\OneDrive\Masaüstü\X\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\cemga\OneDrive\Masaüstü\X\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
+C:\Users\cemga\OneDrive\Masaüstü\X\bin\Debug\net8.0\Microsoft.Extensions.Primitives.dll
+C:\Users\cemga\OneDrive\Masaüstü\X\bin\Debug\net8.0\MySqlConnector.dll
+C:\Users\cemga\OneDrive\Masaüstü\X\bin\Debug\net8.0\Pomelo.EntityFrameworkCore.MySql.dll
+C:\Users\cemga\OneDrive\Masaüstü\X\bin\Debug\net8.0\System.Diagnostics.DiagnosticSource.dll

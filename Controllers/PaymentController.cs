@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 using System;
 using X.Data;                           // AppDbContext'in olduğu namespace
 using X.Models;                         // Odeme ve alt sınıfların olduğu namespace (varsa)
+using Microsoft.Data.SqlClient;
+using System.Linq;                   
+
 
 namespace X.Controllers
 {
@@ -51,5 +54,61 @@ namespace X.Controllers
                 odeme.Section
             });
         }
-    }
+        [HttpGet("detay/{schoolNo}/{ay}")]
+public IActionResult GetOdemeDetay(int schoolNo, string ay)
+{
+    // Ayı normalize et (Türkçe karakterler)
+    ay = ay.Replace("ü","u").Replace("Ü","U")
+           .Replace("ş","s").Replace("Ş","S")
+           .Replace("ı","i").Replace("İ","I")
+           .Replace("ç","c").Replace("Ç","C")
+           .Replace("ö","o").Replace("Ö","O")
+           .Replace("ğ","g").Replace("Ğ","G");
+
+    string tabloAdi = ay switch
+    {
+        "Eylul" => "Eylul_Hesapla",
+        "Ekim" => "Ekim_Hesapla",
+        "Kasim" => "Kasim_Hesapla",
+        "Aralik" => "Aralik_Hesapla",
+        "Ocak" => "Ocak_Hesapla",
+        "Subat" => "Subat_Hesapla",
+        "Mart" => "Mart_Hesapla",
+        "Nisan" => "Nisan_Hesapla",
+        "Mayis" => "Mayis_Hesapla",
+        _ => null
+    };
+
+    if (tabloAdi == null)
+        return BadRequest("Geçersiz ay adı.");
+
+    // Dinamik SQL ile DbSet üzerinden veri çek
+    string sql = $@"
+        SELECT TOP 1 
+            AyingGercekTutari, 
+            KantinHarcamasi, 
+            RaporTutari, 
+            GenelOdeme
+        FROM dbo.[{tabloAdi}]
+        WHERE SchoolNo = @schoolNo";
+
+    var detay = _context.Database.SqlQueryRaw<OdemeDetayDto>(sql, 
+                    new Microsoft.Data.SqlClient.SqlParameter("@schoolNo", schoolNo))
+                    .FirstOrDefault();
+
+    if (detay == null)
+        return NotFound();
+
+    return Ok(detay);
+}
+
+public class OdemeDetayDto
+{
+    public decimal? AyingGercekTutari { get; set; }
+    public decimal? KantinHarcamasi { get; set; }
+    public decimal? RaporTutari { get; set; }
+    public decimal? GenelOdeme { get; set; }
+}
+
+}
 }

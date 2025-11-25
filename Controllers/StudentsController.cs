@@ -194,26 +194,26 @@ namespace X.Controllers
             await _context.SaveChangesAsync();
             return Ok(new { message = "Tüm kullanılan haklar sıfırlandı." });
         }
-      [HttpGet("payment-info/{ay}")]
-public async Task<IActionResult> GetPaymentInfo(string ay)
-{
-    // Ay adını case-insensitive olarak sorgula
-    var ayBilgisi = await _context.AylikTutarlar
-        .Where(a => a.Ay.ToLower() == ay.ToLower())
-        .Select(a => new
+        [HttpGet("payment-info/{ay}")]
+        public async Task<IActionResult> GetPaymentInfo(string ay)
         {
-            a.GunSayisi,
-            a.GunlukUcret,
-            a.ToplamUcret,
-            SonOdemeTarihi = a.SonOdemeTarihi.ToString("yyyy-MM-dd")
-        })
-        .FirstOrDefaultAsync();
+            // Ay adını case-insensitive olarak sorgula
+            var ayBilgisi = await _context.AylikTutarlar
+                .Where(a => a.Ay.ToLower() == ay.ToLower())
+                .Select(a => new
+                {
+                    a.GunSayisi,
+                    a.GunlukUcret,
+                    a.ToplamUcret,
+                    SonOdemeTarihi = a.SonOdemeTarihi.ToString("yyyy-MM-dd")
+                })
+                .FirstOrDefaultAsync();
 
-    if (ayBilgisi == null)
-        return NotFound();
+            if (ayBilgisi == null)
+                return NotFound();
 
-    return Ok(ayBilgisi);
-}
+            return Ok(ayBilgisi);
+        }
 
 
         [HttpPut("activate/{schoolNo}")]

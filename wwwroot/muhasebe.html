@@ -370,6 +370,22 @@
             }
 
         </script>
+		<script>
+    // JS ay isimlerini senin option value'larıyla eşleştiriyoruz
+    const aylar = [
+        "ocak", "subat", "mart", "nisan", "mayis", "haziran",
+        "temmuz", "agustos", "eylul", "ekim", "kasim", "aralik"
+    ];
+
+    const simdi = new Date();
+    const ayIndex = simdi.getMonth(); // 0 = Ocak, 8 = Eylül ...
+    const aktifAy = aylar[ayIndex];
+
+    const selectAy = document.getElementById("selectAy");
+    if (selectAy) {
+        selectAy.value = aktifAy; // ilgili ayı seçili yapar
+    }
+</script>
 
 </body>
 

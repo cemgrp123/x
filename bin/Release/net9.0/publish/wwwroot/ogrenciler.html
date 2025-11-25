@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Öğrenci Kayıt Sistemi</title>
+  <link rel="stylesheet" href="css/navbar.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap 5 CSS -->
+       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link rel="stylesheet" href="css/ogrenciler.css">
+
+</head>
+
+<body>
+ <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo">Gültepe Yemekhane Yönetimi</a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="nav-links" id="navLinks">
+                <a href="admin.html#">Ana Sayfa</a>
+                <a href="ogrenciler.html#">Öğrenciler</a>
+                <a href="muhasebe.html">Muhasebe</a>
+                
+                <!-- Birinci Dropdown Menü -->
+                <div class="dropdown">
+                    <button class="dropdown-btn">
+                        Menü <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="menuolustur.html#">Menü Yap</a>
+                        <a href="menu.html">Menü Gramaj</a>
+                        <a href="yazdırmenu.html#">Menü Yazdır</a>
+                        <a href="aylikgidmik.html#">Menü Maliyet</a>
+                    </div>
+                </div>
+                
+                <!-- İkinci Dropdown Menü -->
+                <div class="dropdown">
+                    <button class="dropdown-btn">
+                        Veri Tabanı <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="raporlar.html#">Raporlar</a>
+                        <a href="tutarlar.html#">Yıllık Tutarlar</a>
+                         <a href="gecisler.html">Geçişler</a>
+                        
+                       
+                    </div>
+                </div>
+                
+                
+            </div>
+        </div>
+    </nav>
+  <!-- ÖĞRENCİ TABLOSU ÜST KONTROLLER -->
+  <div class="container my-4">
+    <div class="card shadow-sm border-0 rounded-3 p-4 mb-4 bg-light">
+      <div class="row g-4 align-items-end">
+        <!-- Öğrenci Ara -->
+        <div class="col-lg-6">
+          <div class="form-floating">
+            <input type="text" id="aramaKutusu" class="form-control border-primary border-2" placeholder=" " />
+            <label for="aramaKutusu" class="text-muted">
+              <i class="fas fa-search me-2"></i>Öğrenci ara (Okul No, Ad Soyad, vb.)
+            </label>
+          </div>
+        </div>
+
+        <!-- Aylık Hak Tümüne Uygula -->
+        <div class="col-lg-6">
+          <form id="aylikHakForm" class="row g-2">
+            <div class="col-md-8">
+              <div class="form-floating">
+                <input type="number" class="form-control border-warning border-2" placeholder=" " id="aylikHakInput"
+                  required>
+                <label for="aylikHakInput" class="text-muted">
+                  <i class="fas fa-calendar-alt me-2"></i>Aylık Hak Değeri
+                </label>
+              </div>
+            </div>
+            <div class="col-md-4 d-grid">
+              <button type="button" onclick="aylikHakGuncelle()" class="btn btn-warning btn-hover-effect py-3">
+                <i class="fas fa-bolt me-2"></i>Uygula
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUTON GRUBU -->
+    <div class="d-flex flex-wrap justify-content-between gap-3 mt-3">
+      <button id="modalSifirlaBtn" class="btn btn-danger btn-lg px-4 rounded-pill">
+        <i class="fas fa-trash-alt me-2"></i>Tüm Kantin Listelerini Sıfırla
+      </button>
+
+      <button id="resetHakButton" class="btn btn-outline-danger btn-lg px-4 rounded-pill">
+        <i class="fas fa-arrows-rotate me-2"></i>Kullanılan Hakları Sıfırla
+      </button>
+    </div>
+  </div>
+
+
+
+
+  <div class="container my-5">
+    <div class="card shadow-lg rounded-4 overflow-hidden border-0">
+      <div class="card-header bg-primary-gradient py-3">
+        <h5 class="card-title text-white mb-0 fw-bold">
+          <i class="fas fa-users me-2"></i> Kayıtlı Öğrenciler
+        </h5>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th class="text-center py-3 text-nowrap">Okul No</th>
+                <th class="text-center py-3">Ad Soyad</th>
+                <th class="text-center py-3">Sınıf</th>
+                <th class="text-center py-3">Şube</th>
+                <th class="text-center py-3">Veli</th>
+                <th class="text-center py-3">Veli İletişim</th>
+                <th class="text-center py-3 bg-light-warning">Aylık Hak</th>
+                <th class="text-center py-3 bg-light-danger">Kullanılan Hak</th>
+                <th class="text-center py-3 bg-light-info">Rapor Hakkı</th>
+                <th class="text-center py-3 bg-light-success">Kalan Hak</th>
+                <th class="text-center py-3">İşlem</th>
+                <th class="text-center py-3">Kantin</th>
+                <th class="text-center py-3">Düzenle</th>
+                <th class="text-center py-3">Durum</th>
+                
+              </tr>
+            </thead>
+            <tbody id="ogrenciListesi" class="border-top-0">
+              <!-- Dinamik içerik burada -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="modal fade" id="duzenleModal" tabindex="-1" aria-labelledby="duzenleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header bg-primary text-white rounded-top-3">
+        <h5 class="modal-title fs-4 fw-bold" id="duzenleModalLabel">
+          <i class="fas fa-user-edit me-2"></i>Öğrenci Bilgilerini Düzenle
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <p id="duzenleModalBody" class="text-muted mb-4"></p>
+        <form id="duzenleForm">
+          <input type="hidden" id="duzenleOkulNo">
+          
+          <div class="row g-3">
+            <!-- 1. Sütun -->
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control border-start-3 border-primary" id="duzenleAdSoyad" placeholder=" ">
+                <label for="duzenleAdSoyad" class="text-muted">Ad Soyad</label>
+              </div>
+              
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control border-start-3 border-info" id="duzenleSinif" placeholder=" ">
+                <label for="duzenleSinif" class="text-muted">Sınıf</label>
+              </div>
+              
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control border-start-3 border-info" id="duzenleSube" placeholder=" ">
+                <label for="duzenleSube" class="text-muted">Şube</label>
+              </div>
+            </div>
+            
+            <!-- 2. Sütun -->
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control border-start-3 border-warning" id="duzenleVeli" placeholder=" ">
+                <label for="duzenleVeli" class="text-muted">Veli</label>
+              </div>
+              
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control border-start-3 border-warning" id="duzenleVeliTel" placeholder=" ">
+                <label for="duzenleVeliTel" class="text-muted">Veli İletişim</label>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Hak Bilgileri -->
+          <div class="row g-3 mt-2">
+            <div class="col-md-4">
+              <div class="form-floating mb-3">
+                <input type="number" class="form-control border-start-3 border-success" id="duzenleAylikHak" min="0" placeholder=" ">
+                <label for="duzenleAylikHak" class="text-muted">Aylık Hak</label>
+              </div>
+            </div>
+            
+            <div class="col-md-4">
+              <div class="form-floating mb-3">
+                <input type="number" class="form-control border-start-3 border-danger" id="duzenleKullanilanHak" min="0" placeholder=" ">
+                <label for="duzenleKullanilanHak" class="text-muted">Kullanılan Hak</label>
+              </div>
+            </div>
+            
+            <div class="col-md-4">
+              <div class="form-floating mb-3">
+                <input type="number" class="form-control border-start-3 border-info" id="duzenleRaporHak" min="0" placeholder=" ">
+                <label for="duzenleRaporHak" class="text-muted">Rapor Hakkı</label>
+              </div>
+            </div>
+          </div>
+          
+          <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-success btn-lg py-3 fw-bold">
+              <i class="fas fa-save me-2"></i>Değişiklikleri Kaydet
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Kantin Modal -->
+<div class="modal fade" id="kantinModal" tabindex="-1" aria-labelledby="kantinModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header bg-warning text-white rounded-top-3">
+        <h5 class="modal-title fs-4 fw-bold" id="kantinModalLabel">
+          <i class="fas fa-cash-register me-2"></i>Kantin İşlemleri
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <form id="kantinForm" class="mb-4">
+          <div class="row g-3">
+            <!-- Tarih -->
+            <div class="col-md-6">
+              <div class="form-floating">
+                <input type="date" class="form-control border-start-3 border-primary" id="tarih" value="">
+                <label for="tarih" class="text-muted"><i class="far fa-calendar-alt me-2"></i>Tarih</label>
+              </div>
+            </div>
+            
+            <!-- Ürün -->
+            <div class="col-md-6">
+              <div class="form-floating">
+                <input type="text" class="form-control border-start-3 border-success" id="urun" placeholder=" ">
+                <label for="urun" class="text-muted"><i class="fas fa-utensils me-2"></i>Ürün</label>
+              </div>
+            </div>
+            
+            <!-- Tutar -->
+            <div class="col-12">
+              <div class="form-floating">
+                <input type="number" step="0.01" class="form-control border-start-3 border-danger" id="tutar" placeholder=" ">
+                <label for="tutar" class="text-muted"><i class="fas fa-lira-sign me-2"></i>Tutar</label>
+              </div>
+            </div>
+            
+            <!-- Ekle Butonu -->
+            <div class="col-12 mt-2">
+              <button type="submit" class="btn btn-success w-100 py-3 fw-bold">
+                <i class="fas fa-plus-circle me-2"></i>Ürün Ekle
+              </button>
+            </div>
+          </div>
+        </form>
+        
+        <!-- Kantin Listesi -->
+        <div class="card border-0 shadow-sm mb-3">
+          <div class="card-header bg-light fw-bold">
+            <i class="fas fa-receipt me-2"></i>Alışveriş Listesi
+          </div>
+          <ul class="list-group list-group-flush" id="kantinList">
+            <!-- Dinamik içerik burada -->
+          </ul>
+        </div>
+        
+        <!-- Toplam Tutar -->
+        <div class="alert alert-success d-flex justify-content-between align-items-center mb-0">
+          <span class="fw-bold"><i class="fas fa-coins me-2"></i>Toplam Tutar:</span>
+          <span class="badge bg-white text-success fs-5 p-2" id="toplamTutar">0.00 ₺</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Modal: Kaydetme Onayı -->
+  <div class="modal fade" id="kaydetModal" tabindex="-1" aria-labelledby="kaydetModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="kaydetModalLabel">Aylık Hak Kaydedilsin mi?</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+        </div>
+        <div class="modal-body">
+          Aylık hak değeri tüm öğrencilere uygulandı. Bu değeri kalıcı olarak saklamak ister misiniz?
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="modalHayirBtn" class="btn btn-secondary" data-bs-dismiss="modal">Hayır</button>
+          <button type="button" id="modalEvetBtn" class="btn btn-primary">Evet, Kaydet</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Toast Container -->
+<div id="toast-container" 
+     class="toast-container position-fixed top-0 start-50 translate-middle-x pt-3" 
+     style="z-index: 9999; pointer-events: none; width: auto; max-width: 350px;">
+</div>
+<script src="js/navbar.js"></script>
+  <script src="js/ogrenciler.js"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Modal sıfırlama scripti -->
+
+
+</body>
+
+</html>

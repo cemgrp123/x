@@ -120,26 +120,26 @@ namespace X.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
-       [HttpGet("{schoolNo:int}")]
-public IActionResult GetStudentBySchoolNo(int schoolNo)
-{
-    var student = _context.Students
-        .Where(s => s.SchoolNo == schoolNo)
-        .Select(s => new
+        [HttpGet("{schoolNo:int}")]
+        public IActionResult GetStudentBySchoolNo(int schoolNo)
         {
-            okulNo = s.SchoolNo,
-            adSoyad = s.FullName,
-            sinif = s.StudentClass,
-            sube = s.Section,
-            isActive = s.IsActive
-        })
-        .FirstOrDefault();
+            var student = _context.Students
+                .Where(s => s.SchoolNo == schoolNo)
+                .Select(s => new
+                {
+                    okulNo = s.SchoolNo,
+                    adSoyad = s.FullName,
+                    sinif = s.StudentClass,
+                    sube = s.Section,
+                    isActive = s.IsActive
+                })
+                .FirstOrDefault();
 
-    if (student == null)
-        return NotFound();
+            if (student == null)
+                return NotFound();
 
-    return Ok(student);
-}
+            return Ok(student);
+        }
 
         [HttpGet("raporlu")]
         public async Task<IActionResult> GetRaporluOgrenciler(string? date)

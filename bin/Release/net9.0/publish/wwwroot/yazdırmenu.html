@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Aylık Yemek Menüsü - Tek Tablo</title>
+<link rel="stylesheet" href="css/yazdirmenu.css">
+</head>
+<body>
+
+<div class="header">
+  <h1>GÜLTEPE İLKOKULU YEMEKHANE</h1>
+  <h2>AYLIK YEMEK MENÜSÜ</h2>
+</div>
+
+<div class="controls">
+  <label>
+    Yıl:
+    <input type="number" id="yearInput" value="2025" min="2020" max="2100" />
+  </label>
+  <label style="margin-left: 10px;">
+    Ay:
+    <select id="monthInput">
+      <option value="0">Ocak</option>
+      <option value="1">Şubat</option>
+      <option value="2">Mart</option>
+      <option value="3">Nisan</option>
+      <option value="4" selected>Mayıs</option>
+      <option value="5">Haziran</option>
+      <option value="6">Temmuz</option>
+      <option value="7">Ağustos</option>
+      <option value="8">Eylül</option>
+      <option value="9">Ekim</option>
+      <option value="10">Kasım</option>
+      <option value="11">Aralık</option>
+    </select>
+  </label>
+  <button onclick="generateMenus()">Menüyü Oluştur</button>
+</div>
+
+<table id="menuTable">
+  <tbody id="menuBody">
+  </tbody>
+</table>
+
+<button class="print-button" onclick="window.print()">Yazdır</button>
+
+  <script src="js/yazdirmenu.js"></script>
+
+</body>
+</html>

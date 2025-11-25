@@ -1,0 +1,146 @@
+body {
+      background-color: white;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    /* Logo */
+    .top-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #28a745;
+      font-weight: 700;
+      font-size: 1.8rem;
+      margin-bottom: 30px;
+      user-select: none;
+    }
+    .top-logo i {
+      margin-right: 10px;
+      font-size: 2rem;
+    }
+
+    /* Card */
+    .card {
+      max-width: 480px;
+      width: 100%;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-weight: 700;
+      color: #333;
+    }
+
+    label {
+      font-weight: 600;
+      color: #555;
+    }
+
+    .form-control,
+    .form-select {
+      border-radius: 12px;
+      padding: 10px 15px;
+      font-size: 1rem;
+      transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+      border-color: #28a745;
+      box-shadow: 0 0 8px #28a745;
+      outline: none;
+    }
+
+    button.btn-primary {
+      background-color: #28a745;
+      border: none;
+      font-weight: 700;
+      padding: 14px;
+      border-radius: 14px;
+      width: 100%;
+      font-size: 1.2rem;
+      transition: background-color 0.3s ease;
+    }
+    button.btn-primary:hover {
+      background-color: #218838;
+    }
+
+    /* Modern profil foto */
+    .profile-photo-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .profile-photo-label {
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+
+    .avatar-preview {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background-color: #e9ecef;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      box-shadow: 0 0 10px rgba(40, 167, 69, 0.4);
+      cursor: pointer;
+      position: relative;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .avatar-preview:hover {
+      box-shadow: 0 0 15px rgba(40, 167, 69, 0.7);
+    }
+
+    #profilePhotoInput {
+      display: none;
+    }
+
+    .upload-btn {
+      margin-top: 12px;
+      padding: 8px 18px;
+      font-weight: 600;
+      border-radius: 20px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .upload-btn:hover {
+      background-color: #218838;
+    }
+
+    /* Responsive spacing */
+    @media (max-width: 576px) {
+      .card {
+        padding: 20px;
+      }
+      .top-logo {
+        font-size: 1.5rem;
+      }
+      .top-logo i {
+        font-size: 1.8rem;
+        margin-right: 8px;
+      }
+      .avatar-preview {
+        width: 100px;
+        height: 100px;
+      }
+    }

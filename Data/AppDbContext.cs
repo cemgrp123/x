@@ -20,7 +20,7 @@ namespace X.Data
         public DbSet<AylikTutarlar> AylikTutarlar { get; set; }
 
 
-        public DbSet<Vw_OgrenciOdemeleriAtlamali> Vw_OgrenciOdemeleriAtlamali { get; set; }
+
 
 
         public DbSet<YemekMenusu_Ocak> YemekMenusu_Ocak { get; set; }
@@ -45,6 +45,16 @@ namespace X.Data
         public DbSet<OdemeMart> Odemeler_Mart { get; set; }
         public DbSet<OdemeNisan> Odemeler_Nisan { get; set; }
         public DbSet<OdemeMayis> Odemeler_Mayis { get; set; }
+        public DbSet<OdemeEylul1> Eylul_Hesapla { get; set; }
+        public DbSet<OdemeEkim1> Ekim_Hesapla { get; set; }
+        public DbSet<OdemeKasim1> Kasim_Hesapla { get; set; }
+        public DbSet<OdemeAralik1> Aralik_Hesapla { get; set; }
+        public DbSet<OdemeOcak1> Ocak_Hesapla { get; set; }
+        public DbSet<OdemeSubat1> Subat_Hesapla { get; set; }
+        public DbSet<OdemeMart1> Mart_Hesapla { get; set; }
+        public DbSet<OdemeNisan1> Nisan_Hesapla { get; set; }
+        public DbSet<OdemeMayis1> Mayis_Hesapla { get; set; }
+
 
 
 
@@ -64,12 +74,23 @@ namespace X.Data
             modelBuilder.Entity<OdemeEylul>().ToTable("Odemeler_Eylül");
             modelBuilder.Entity<OdemeEkim>().ToTable("Odemeler_Ekim");
             modelBuilder.Entity<OdemeKasim>().ToTable("Odemeler_Kasım");
-            modelBuilder.Entity<OdemeAralik>().ToTable("Odemeler_Aralık");
+            modelBuilder.Entity<OdemeAralik>().ToTable("Odemeler_Aralik");
             modelBuilder.Entity<OdemeOcak>().ToTable("Odemeler_Ocak");
             modelBuilder.Entity<OdemeSubat>().ToTable("Odemeler_Şubat");
             modelBuilder.Entity<OdemeMart>().ToTable("Odemeler_Mart");
             modelBuilder.Entity<OdemeNisan>().ToTable("Odemeler_Nisan");
             modelBuilder.Entity<OdemeMayis>().ToTable("Odemeler_Mayıs");
+            modelBuilder.Entity<OdemeEylul1>().ToTable("Eylul_Hesapla");
+            modelBuilder.Entity<OdemeEkim1>().ToTable("Ekim_Hesapla");
+            modelBuilder.Entity<OdemeKasim1>().ToTable("Kasim_Hesapla");
+            modelBuilder.Entity<OdemeAralik1>().ToTable("Aralik_Hesapla");
+            modelBuilder.Entity<OdemeOcak1>().ToTable("Ocak_Hesapla");
+            modelBuilder.Entity<OdemeSubat1>().ToTable("Subat_Hesapla");
+            modelBuilder.Entity<OdemeMart1>().ToTable("Mart_Hesapla");
+            modelBuilder.Entity<OdemeNisan1>().ToTable("Nisan_Hesapla");
+            modelBuilder.Entity<OdemeMayis1>().ToTable("Mayis_Hesapla");
+
+
 
             // GunlukGider tablosu adı
             modelBuilder.Entity<GunlukGider>().ToTable("GunlukGider");
@@ -96,24 +117,7 @@ namespace X.Data
                 entity.Property(e => e.SonOdemeTarihi).HasColumnName("SonOdemeTarihi");
             });
 
-            modelBuilder.Entity<Vw_OgrenciOdemeleriAtlamali>(entity =>
- {
-     entity.HasNoKey();
-     entity.ToView("Vw_OgrenciOdemeleriAtlamali");
-
-     entity.Property(e => e.SchoolNo);
-     entity.Property(e => e.FullName);
-     entity.Property(e => e.StudentClass);
-     entity.Property(e => e.Section);
-     entity.Property(e => e.Yil);
-     entity.Property(e => e.Ay);
-     entity.Property(e => e.OncekiAyKantinHarcamasi);
-     entity.Property(e => e.OncekiAyRaporHakkiTutari);
-
-     entity.Property(e => e.AylikUcret);
-     entity.Property(e => e.HesaplananGenelOdeme);
- });
-
+ 
 
             // KantinHarcamasi ilişkisi
             modelBuilder.Entity<KantinHarcamasi>()

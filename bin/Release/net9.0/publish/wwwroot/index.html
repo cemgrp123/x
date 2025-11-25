@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gültepe İlkokulu Yemekhane Sistemi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            font-size: 16px; /* Temel font boyutunu sabitliyoruz */
+        }
+        
+        body {
+            background: linear-gradient(to bottom right, #f8f9fa, #e9ecef);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            zoom: 1; /* Yakınlaştırmayı sıfırlıyoruz */
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1;
+        }
+        
+        /* Header */
+        header {
+            background-color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            border-radius: 0 0 15px 15px;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            font-size: 2rem; /* Sabit ölçü birimi */
+            color: #4e73df;
+            background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo-text h1 {
+            font-size: 1.5rem; /* Sabit ölçü birimi */
+            color: #4e73df;
+            line-height: 1.2;
+        }
+        
+        .logo-text .school-name {
+            font-size: 1.125rem; /* Sabit ölçü birimi */
+            color: #6e707e;
+            font-weight: 500;
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem; /* Sabit ölçü birimi */
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(78, 115, 223, 0.3);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #1cc88a 0%, #13855c 100%);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(28, 200, 138, 0.3);
+        }
+        
+        .btn-tertiary {
+            background: linear-gradient(135deg, #f6c23e 0%, #dda20a 100%);
+            color: white;
+        }
+        
+        .btn-tertiary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(246, 194, 62, 0.3);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), 
+                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="%23f8f9fa" width="100" height="100"/><path fill="%23e9ecef" d="M0 0L100 100M100 0L0 100"/></svg>');
+            background-size: cover;
+            padding: 3.75rem 2.5rem; /* Sabit ölçü birimi */
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 2.5rem; /* Sabit ölçü birimi */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        .hero h2 {
+            font-size: 2.25rem; /* Sabit ölçü birimi */
+            color: #4e73df;
+            margin-bottom: 1.25rem; /* Sabit ölçü birimi */
+            font-weight: 700;
+        }
+        
+        .hero p {
+            font-size: 1.125rem; /* Sabit ölçü birimi */
+            color: #6e707e;
+            max-width: 800px;
+            margin: 0 auto 1.875rem; /* Sabit ölçü birimi */
+            line-height: 1.8;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.25rem; /* Sabit ölçü birimi */
+            margin-top: 1.875rem; /* Sabit ölçü birimi */
+            flex-wrap: wrap;
+        }
+        
+        /* Menu Section */
+        .menu-section {
+            background-color: white;
+            border-radius: 15px;
+            padding: 1.875rem; /* Sabit ölçü birimi */
+            margin-bottom: 2.5rem; /* Sabit ölçü birimi */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5625rem; /* Sabit ölçü birimi */
+            flex-wrap: wrap;
+            gap: 0.9375rem; /* Sabit ölçü birimi */
+        }
+        
+        .menu-title {
+            font-size: 1.75rem; /* Sabit ölçü birimi */
+            color: #4e73df;
+            font-weight: 700;
+        }
+        
+        .menu-actions {
+            display: flex;
+            gap: 0.9375rem; /* Sabit ölçü birimi */
+        }
+        
+        .menu-container {
+            overflow-x: auto;
+        }
+        
+        .menu-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+        
+        .menu-table th {
+            background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+            color: white;
+            padding: 0.9375rem; /* Sabit ölçü birimi */
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .menu-table td {
+            padding: 0.9375rem; /* Sabit ölçü birimi */
+            border: 1px solid #e3e6f0;
+            text-align: center;
+            vertical-align: top;
+        }
+        
+        .menu-table tr:nth-child(even) {
+            background-color: #f8f9fc;
+        }
+        
+        .menu-table tr:hover {
+            background-color: #eaecf4;
+        }
+        
+        .day-header {
+            font-weight: 600;
+            color: #4e73df;
+        }
+        
+        .menu-items {
+            text-align: left;
+            padding-left: 0.625rem; /* Sabit ölçü birimi */
+        }
+        
+        .menu-items div {
+            margin-bottom: 0.5rem; /* Sabit ölçü birimi */
+            padding-left: 0.3125rem; /* Sabit ölçü birimi */
+            border-left: 3px solid #4e73df;
+        }
+        
+        /* Features Section */
+        .features-section {
+            margin-bottom: 2.5rem; /* Sabit ölçü birimi */
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2rem; /* Sabit ölçü birimi */
+            color: #4e73df;
+            margin-bottom: 2.5rem; /* Sabit ölçü birimi */
+            font-weight: 700;
+            position: relative;
+            padding-bottom: 0.9375rem; /* Sabit ölçü birimi */
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 5rem; /* Sabit ölçü birimi */
+            height: 0.25rem; /* Sabit ölçü birimi */
+            background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+            border-radius: 2px;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5625rem; /* Sabit ölçü birimi */
+            margin-bottom: 2.5rem; /* Sabit ölçü birimi */
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 1.875rem; /* Sabit ölçü birimi */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            text-align: center;
+            border: 1px solid rgba(78, 115, 223, 0.1);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            font-size: 3.125rem; /* Sabit ölçü birimi */
+            margin-bottom: 1.25rem; /* Sabit ölçü birimi */
+            background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.375rem; /* Sabit ölçü birimi */
+            color: #4e73df;
+            margin-bottom: 0.9375rem; /* Sabit ölçü birimi */
+        }
+        
+        .feature-card p {
+            color: #6e707e;
+            line-height: 1.6;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: white;
+            padding: 1.5625rem; /* Sabit ölçü birimi */
+            text-align: center;
+            box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.05);
+            margin-top: auto;
+            border-radius: 15px 15px 0 0;
+        }
+        
+        footer p {
+            color: #6e707e;
+            font-size: 1rem; /* Sabit ölçü birimi */
+        }
+        
+        /* WhatsApp Button */
+        .whatsapp-button {
+            position: fixed;
+            bottom: 1.5625rem; /* Sabit ölçü birimi */
+            right: 1.5625rem; /* Sabit ölçü birimi */
+            width: 3.75rem; /* Sabit ölçü birimi */
+            height: 3.75rem; /* Sabit ölçü birimi */
+            background-color: #25D366;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.5);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+        
+        .whatsapp-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(37, 211, 102, 0.7);
+        }
+        
+        .whatsapp-button i {
+            color: white;
+            font-size: 2rem; /* Sabit ölçü birimi */
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+            }
+        }
+        
+        /* Responsive Tasarım */
+        @media (max-width: 992px) {
+            .menu-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .menu-actions {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1.25rem; /* Sabit ölçü birimi */
+            }
+            
+            .logo {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.625rem; /* Sabit ölçü birimi */
+            }
+            
+            .auth-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .hero h2 {
+                font-size: 1.75rem; /* Sabit ölçü birimi */
+            }
+            
+            .hero p {
+                font-size: 1rem; /* Sabit ölçü birimi */
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 250px;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .whatsapp-button {
+                bottom: 1.25rem; /* Sabit ölçü birimi */
+                right: 1.25rem; /* Sabit ölçü birimi */
+                width: 3.4375rem; /* Sabit ölçü birimi */
+                height: 3.4375rem; /* Sabit ölçü birimi */
+            }
+            
+            .whatsapp-button i {
+                font-size: 1.75rem; /* Sabit ölçü birimi */
+            }
+            
+            .menu-section {
+                padding: 1.25rem 0.9375rem; /* Sabit ölçü birimi */
+            }
+            
+            .menu-table th, .menu-table td {
+                padding: 0.625rem; /* Sabit ölçü birimi */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-utensils logo-icon"></i>
+                    <div class="logo-text">
+                        <h1>Gültepe İlkokulu</h1>
+                        <div class="school-name">Yemekhane Sistemi</div>
+                    </div>
+                </div>
+                
+                <div class="auth-buttons">
+                    <a href="register.html" class="btn btn-secondary">Kayıt Ol</a>
+                    <a href="login.html" class="btn btn-primary">Giriş Yap</a>
+                </div>
+            </div>
+        </header>
+        
+        <section class="hero">
+            <h2>Öğrenci Yemekhane Yönetim Sistemi</h2>
+            <p>Gültepe İlkokulu öğrencileri için modern, kullanışlı ve güvenli yemekhane çözümü. Yemekhane takibinden ödemelere kadar tüm ihtiyaçlarınız için tek platform.</p>
+            
+            <div class="hero-buttons">
+                <a href="#menu" class="btn btn-tertiary">Yemek Menüsü</a>
+                <a href="#features" class="btn btn-primary">Sistem Özellikleri</a>
+                <a href="https://wa.me/905536938178?text=Yemekhane%20hakkında%20bilgi%20almak%20istiyorum" class="btn btn-secondary" target="_blank">WhatsApp ile İletişim</a>
+            </div>
+        </section>
+        
+        <section id="menu" class="menu-section">
+            <div class="menu-header">
+                <h2 class="menu-title">EYLÜL 2025 Yemek Menüsü</h2>
+                <div class="menu-actions">
+                    <a href="#" class="btn btn-primary" onclick="downloadMenu()">
+                        <i class="fas fa-download"></i> Menüyü İndir
+                    </a>
+                    <a href="#" class="btn btn-secondary" onclick="printMenu()">
+                        <i class="fas fa-print"></i> Yazdır
+                    </a>
+                </div>
+            </div>
+            
+            <div class="menu-container">
+                <table class="menu-table">
+                    <thead>
+                        <tr>
+                            <th>Hafta</th>
+                            <th>Pazartesi</th>
+                            <th>Salı</th>
+                            <th>Çarşamba</th>
+                            <th>Perşembe</th>
+                            <th>Cuma</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="day-header">1. Hafta</td>
+                            <td>01.09.2025<br><div class="menu-items"><div>B</div><div>O</div><div>$</div></div></td>
+                            <td>02.09.2025<br><div class="menu-items"><div>B</div><div>O</div><div>$</div></div></td>
+                            <td>03.09.2025<br><div class="menu-items"><div>B</div><div>O</div><div>$</div></div></td>
+                            <td>04.09.2025<br><div class="menu-items"><div>B</div><div>O</div><div>$</div></div></td>
+                            <td>05.09.2025<br><div class="menu-items"><div>B</div><div>O</div><div>$</div></div></td>
+                        </tr>
+                        <tr>
+                            <td class="day-header">2. Hafta</td>
+                            <td>08.09.2025<br><div class="menu-items"><div>Pirinç Pilavı</div><div>Tavuk Sote</div><div>Bisküvi Pastası</div></div></td>
+                            <td>09.09.2025<br><div class="menu-items"><div>Pizza</div><div>Mercimek Çorbası</div><div>Tarator</div></div></td>
+                            <td>10.09.2025<br><div class="menu-items"><div>Sulu Patates</div><div>Kuskus</div><div>Islak Kek</div></div></td>
+                            <td>11.09.2025<br><div class="menu-items"><div>Bulgur Pilavı</div><div>Nohut Yemeği</div><div>Cacık</div></div></td>
+                            <td>12.09.2025<br><div class="menu-items"><div>Biber Dolması</div><div>Domates Çorbası</div><div>Yoğurt</div></div></td>
+                        </tr>
+                        <tr>
+                            <td class="day-header">3. Hafta</td>
+                            <td>15.09.2025<br><div class="menu-items"><div>Bezelye Yemeği</div><div>Makarna</div><div>Salata</div></div></td>
+                            <td>16.09.2025<br><div class="menu-items"><div>Pirinç Pilavı</div><div>İzmir Köfte</div><div>Turşu</div></div></td>
+                            <td>17.09.2025<br><div class="menu-items"><div>Mantı</div><div>Mercimek Çorbası</div><div>Kurabiye</div></div></td>
+                            <td>18.09.2025<br><div class="menu-items"><div>Bulgur Pilavı</div><div>Fırında Sebzeli Tavuk</div><div>Şekerpare</div></div></td>
+                            <td>19.09.2025<br><div class="menu-items"><div>Köfte</div><div>Ekmek</div><div>Şehriye Çorbası</div><div>Ayran</div></div></td>
+                        </tr>
+                        <tr>
+                            <td class="day-header">4. Hafta</td>
+                            <td>22.09.2025<br><div class="menu-items"><div>Pirinç Pilavı</div><div>Kuru Fasulye</div><div>Cacık</div></div></td>
+                            <td>23.09.2025<br><div class="menu-items"><div>Kuskus</div><div>Domates Çorbası</div><div>Salata</div></div></td>
+                            <td>24.09.2025<br><div class="menu-items"><div>Bulgur Pilavı</div><div>Sulu Köfte</div><div>Tarator</div></div></td>
+                            <td>25.09.2025<br><div class="menu-items"><div>Sulu Patates</div><div>Makarna</div><div>Sütlaç</div></div></td>
+                            <td>26.09.2025<br><div class="menu-items"><div>Gözleme</div><div>Mercimek Çorbası</div><div>Ayran</div></div></td>
+                        </tr>
+                        <tr>
+                            <td class="day-header">5. Hafta</td>
+                            <td>29.09.2025<br><div class="menu-items"><div>Pizza</div><div>Yayla Çorbası</div><div>Kurabiye</div></div></td>
+                            <td>30.09.2025<br><div class="menu-items"><div>Mantı</div><div>Şehriye Çorbası</div><div>Yoğurt</div></div></td>
+                            <td colspan="3" style="text-align: center; background-color: #f8f9fc;">Eylül ayı menüsü sona erdi</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <section id="features" class="features-section">
+            <h2 class="section-title">Sistem Özellikleri</h2>
+            
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3>Yemekhane Giriş Takibi</h3>
+                    <p>Öğrencilerin yemekhane girişlerini anlık takip edin. Günlük ve aylık durumu görüntüleyin.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Gün ve Saat Kontrolü</h3>
+                    <p>Yemekhane kullanım saatlerini görüntüleyin hangi gün kaçta giriş yapmış bilgi sagibi olun.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Rapor Talep</h3>
+                    <p>Öğrencileri rahatsızlıkları sebebi ile katılım sağlayamadığı durumlarda günlük hakkını aktarın.</p>
+                </div>
+            </div>
+            
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <h3>Aylık Ödeme Takibi</h3>
+                    <p>Aylık ödemelerinizi takip edin ve ödeme durumlarınız hakkında bilgi sahibi olun.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <h3>Kantin Harcamaları Takibi</h3>
+                    <p>Öğrencilerin kantin harcamalarını takip edin günlük ne yediiğini ve harcadığını bilin.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Mobil Uyumluluk</h3>
+                    <p>Mobil cihazlardan erişim imkanı ile öğrenci ve veliler istedikleri zaman sisteme erişebilir, takip yapabilir.</p>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <p>&copy; 2025 Gültepe İlkokulu Yemekhane Sistemi - Cem Garip - Tüm Hakları Saklıdır</p>
+        </footer>
+    </div>
+
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/905536938178?text=Yemekhane%20hakkında%20bilgi%20almak%20istiyorum" class="whatsapp-button" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+        // Sayfa yüklendikten sonra animasyonları başlat
+        document.addEventListener('DOMContentLoaded', function() {
+            // Özellik kartlarına animasyon ekle
+            const featureCards = document.querySelectorAll('.feature-card');
+            featureCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100 + (index * 100));
+            });
+            
+            // Menü tablosuna animasyon ekle
+            const menuRows = document.querySelectorAll('.menu-table tr');
+            menuRows.forEach((row, index) => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateX(-20px)';
+                row.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                
+                setTimeout(() => {
+                    row.style.opacity = '1';
+                    row.style.transform = 'translateX(0)';
+                }, 200 + (index * 100));
+            });
+            
+            // Sayfa yakınlaştırmasını sıfırla
+            document.body.style.zoom = "1";
+        });
+        
+        // Menü indirme fonksiyonu
+        function downloadMenu() {
+            alert("Eylül 2025 Yemek Menüsü indiriliyor...");
+            // Burada gerçek bir indirme işlemi yapılabilir
+            // window.location.href = 'Aylık_Yemek_Menüsü_-_EYLÜL.pdf';
+        }
+        
+        // Menü yazdırma fonksiyonu
+        function printMenu() {
+            const printContent = document.querySelector('.menu-section').innerHTML;
+            const originalContent = document.body.innerHTML;
+            
+            document.body.innerHTML = printContent;
+            window.print();
+            document.body.innerHTML = originalContent;
+            location.reload();
+        }
+        
+        // Sayfa yakınlaştırmasını düzeltmek için
+        function resetZoom() {
+            document.body.style.zoom = "1";
+        }
+        
+        // Sayfa yüklendiğinde ve boyut değiştiğinde yakınlaştırmayı sıfırla
+        window.addEventListener('load', resetZoom);
+        window.addEventListener('resize', resetZoom);
+    </script>
+</body>
+</html>

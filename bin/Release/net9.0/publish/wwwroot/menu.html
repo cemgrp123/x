@@ -1,0 +1,408 @@
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Yemek Menü ve Maliyet Takip</title>
+  <link rel="stylesheet" href="css/navbar.css">
+  <!-- Bootstrap CSS (tek seferde) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" />
+
+  <!-- Özel CSS -->
+  <link rel="stylesheet" href="css/menu.css" />
+</head>
+
+
+
+
+<body class="bg-light">
+
+  <nav class="navbar">
+    <div class="container">
+      <a href="#" class="logo">Gültepe Yemekhane Yönetimi</a>
+
+      <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <div class="nav-links" id="navLinks">
+        <a href="admin.html#">Ana Sayfa</a>
+        <a href="ogrenciler.html#">Öğrenciler</a>
+        <a href="muhasebe.html">Muhasebe</a>
+
+        <!-- Birinci Dropdown Menü -->
+        <div class="dropdown">
+          <button class="dropdown-btn">
+            Menü <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="dropdown-content">
+            <a href="menuolustur.html#">Menü Yap</a>
+            <a href="menu.html">Menü Gramaj</a>
+            <a href="yazdırmenu.html#">Menü Yazdır</a>
+            <a href="aylikgidmik.html#">Menü Maliyet</a>
+          </div>
+        </div>
+
+        <!-- İkinci Dropdown Menü -->
+        <div class="dropdown">
+          <button class="dropdown-btn">
+            Veri Tabanı <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="dropdown-content">
+            <a href="raporlar.html#">Raporlar</a>
+            <a href="tutarlar.html#">Yıllık Tutarlar</a>
+             <a href="gecisler.html">Geçişler</a>
+
+
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </nav>
+  <div class="container py-4">
+    <h1 class="mb-4 text-center text-primary fw-bold fs-3 fs-md-2">Yemek Menü ve Maliyet Takip</h1>
+
+    <!-- Buton Grubu - Mobil Uyumlu -->
+    <div class="row g-2 g-sm-3 justify-content-center mb-4">
+      <div class="col-6 col-sm-auto">
+        <button id="calcBtn" class="btn btn-primary w-100 py-2 shadow-sm">
+          <i class="bi bi-calculator me-1 me-md-2"></i>
+          <span class="d-none d-md-inline">Yemek Miktarları</span>
+          <span class="d-md-none">Miktar Hesapla</span>
+        </button>
+      </div>
+      <div class="col-6 col-sm-auto">
+        <button class="btn btn-warning w-100 py-2 shadow-sm" id="kgPriceBtn">
+          <i class="bi bi-currency-dollar me-1 me-md-2"></i>
+          <span class="d-none d-md-inline">KG Fiyatı</span>
+          <span class="d-md-none">Fiyat Hesapla</span>
+        </button>
+      </div>
+      <div class="col-6 col-sm-auto">
+        <button class="btn btn-outline-info w-100 py-2 shadow-sm" id="btnOpenKgCalcModal">
+          <i class="bi bi-scales me-1 me-md-2"></i>
+          <span class="d-none d-md-inline">Gram-Kg Hesapla</span>
+          <span class="d-md-none">Gram-Kg</span>
+        </button>
+      </div>
+      <div class="col-6 col-sm-auto">
+        <button class="btn btn-success w-100 py-2 shadow-sm" id="btnOpenProductModal">
+          <i class="bi bi-plus-circle me-1 me-md-2"></i>
+          <span class="d-none d-md-inline">Ürün Ekle</span>
+          <span class="d-md-none">Ekle</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- Modal - Ürün Ekle Modal -->
+  <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg">
+
+        <!-- Header -->
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title fs-5 fw-bold" id="productModalLabel">
+            <i class="bi bi-plus-circle me-2"></i>Yeni Ürün Ekle
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+        </div>
+
+        <!-- Body -->
+        <div class="modal-body p-4">
+          <div class="mb-4">
+            <label for="productNameInput" class="form-label fw-semibold">Ürün Adı</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light">
+                <i class="bi bi-box-seam text-primary"></i>
+              </span>
+              <input type="text" class="form-control py-2" id="productNameInput"
+                placeholder="Örn: Pirinç, Zeytinyağı..." />
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label for="productKgPriceInput" class="form-label fw-semibold">KG Fiyatı (TL)</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light">
+                <i class="bi bi-currency-dollar text-primary"></i>
+              </span>
+              <input type="number" class="form-control py-2" id="productKgPriceInput" placeholder="Örn: 62.50" min="0"
+                step="0.01" />
+              <span class="input-group-text bg-light">TL/kg</span>
+            </div>
+          </div>
+
+          <div class="alert alert-success d-none align-items-center" id="productSuccessMsg" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <span></span>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer bg-light px-4 py-3">
+          <button type="button" class="btn btn-outline-secondary flex-grow-1 py-2" data-bs-dismiss="modal">
+            <i class="bi bi-x-lg me-1"></i>İptal
+          </button>
+          <button type="button" id="btnSaveProduct" class="btn btn-primary flex-grow-1 py-2">
+            <i class="bi bi-save me-1"></i>Kaydet
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Gram-Kg Fiyat Hesaplama Modal - Mobil Uyumlu -->
+  <div class="modal fade" id="kgCalcModal" tabindex="-1" aria-labelledby="kgCalcModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg">
+
+        <!-- Header -->
+        <div class="modal-header bg-info text-white">
+          <h5 class="modal-title fs-5 fw-bold" id="kgCalcModalLabel">
+            <i class="bi bi-calculator me-2"></i>Gram-Kg Fiyat Hesaplama
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+        </div>
+
+        <!-- Body -->
+        <div class="modal-body p-4">
+          <div class="mb-4">
+            <label for="kgGramInput" class="form-label fw-semibold">Toplam Miktar</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light">
+                <i class="bi bi-box text-info"></i>
+              </span>
+              <input type="number" class="form-control py-2" id="kgGramInput" placeholder="Örn: 800" min="1">
+              <span class="input-group-text bg-light">gram</span>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label for="kgPriceInput" class="form-label fw-semibold">Toplam Tutar</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light">
+                <i class="bi bi-cash-stack text-info"></i>
+              </span>
+              <input type="number" class="form-control py-2" id="kgPriceInput" placeholder="Örn: 50" min="0">
+              <span class="input-group-text bg-light">TL</span>
+            </div>
+          </div>
+
+          <div class="alert alert-info d-none align-items-center py-3" id="kgCalcResult" role="alert">
+            <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+            <div>
+              <h6 class="alert-heading mb-1">Sonuç</h6>
+              <span class="result-text"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer bg-light px-4 py-3 d-flex flex-nowrap">
+          <button type="button" class="btn btn-outline-secondary flex-grow-1 py-2" data-bs-dismiss="modal">
+            <i class="bi bi-x-lg me-1"></i>Kapat
+          </button>
+          <button type="button" id="btnCalculateKgPrice" class="btn btn-info text-white flex-grow-1 py-2">
+            <i class="bi bi-calculator me-1"></i>Hesapla
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- KG Fiyatı Hesapla Modal - Modern & Mobile Friendly -->
+  <div class="modal fade" id="kgPriceModal" tabindex="-1" aria-labelledby="kgPriceModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg">
+
+        <!-- Header -->
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title fs-5 fw-bold" id="kgPriceModalLabel">
+            <i class="bi bi-cash-stack me-2"></i>Kilogram Fiyatı Hesaplama
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+        </div>
+
+        <!-- Body -->
+        <div class="modal-body p-4">
+          <div class="mb-4">
+            <label for="totalGramInput" class="form-label fw-semibold">Toplam Miktar</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light">
+                <i class="bi bi-box-seam text-primary"></i>
+              </span>
+              <input type="number" id="totalGramInput" class="form-control py-2" placeholder="Örn: 8500" min="1">
+              <span class="input-group-text bg-light">gram</span>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label for="totalPriceInput" class="form-label fw-semibold">Toplam Tutar</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light">
+                <i class="bi bi-currency-dollar text-primary"></i>
+              </span>
+              <input type="number" id="totalPriceInput" class="form-control py-2" placeholder="Örn: 1000" min="0"
+                step="0.01">
+              <span class="input-group-text bg-light">TL</span>
+            </div>
+          </div>
+
+          <div class="alert alert-primary d-none align-items-center py-3" id="kgPriceResult" role="alert">
+            <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+            <div>
+              <h6 class="alert-heading mb-1">Hesaplanan Kg Fiyatı</h6>
+              <span class="result-text fs-6"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer bg-light px-4 py-3 d-flex flex-nowrap gap-2">
+          <button type="button" class="btn btn-outline-secondary flex-grow-1 py-2" data-bs-dismiss="modal">
+            <i class="bi bi-x-lg me-1"></i>Kapat
+          </button>
+          <button id="calculateKgPriceBtn" class="btn btn-primary flex-grow-1 py-2">
+            <i class="bi bi-calculator me-1"></i>Hesapla
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Yemek Miktar Modal - Modern & Responsive -->
+  <div class="modal fade" id="calcModal" tabindex="-1" aria-labelledby="calcModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content border-0 shadow-lg">
+
+        <!-- Header -->
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title fs-5 fw-bold" id="calcModalLabel">
+            <i class="bi bi-calculator-fill me-2"></i>Yemek Miktarları Hesaplama
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+        </div>
+
+        <div>
+
+          <!-- Kişi Sayısı -->
+          <div class="mb-4 p-3 bg-light rounded">
+            <div class="row align-items-center g-3">
+              <div class="col-md-4">
+                <label for="modalPersonCount" class="form-label fw-semibold mb-md-0">
+                  <i class="bi bi-people-fill me-2 text-success"></i>Kişi Sayısı
+                </label>
+              </div>
+              <div class="col-md-8">
+                <div class="input-group">
+                  <input type="number" id="modalPersonCount" class="form-control py-2" min="1" value="50">
+                  <span class="input-group-text bg-white">kişi</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ürün Girişleri -->
+          <div class="mb-3">
+            <h6 class="fw-semibold text-success mb-3">
+              <i class="bi bi-list-ul me-2"></i>Ürün Listesi
+            </h6>
+            <div id="productInputsContainer" class="row g-3"></div>
+          </div>
+
+          <button id="addProductBtn" class="btn btn-success w-100 py-2 mb-4">
+            <i class="bi bi-plus-circle me-2"></i>Yeni Ürün Ekle
+          </button>
+
+          <hr class="my-3">
+
+          <!-- Sonuçlar -->
+          <div class="mt-4">
+            <h6 class="fw-semibold text-success d-flex align-items-center">
+              <i class="bi bi-clipboard-data me-2"></i>Kişi Başına Düşen Miktarlar
+            </h6>
+            <ul id="perPersonList" class="list-group mt-3"></ul>
+          </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer bg-light px-4 py-3">
+          <button type="button" class="btn btn-outline-secondary py-2" data-bs-dismiss="modal">
+            <i class="bi bi-x-lg me-1"></i>Kapat
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container py-4">
+    <!-- Arama Kutusu - Modern Tasarım -->
+    <div class="mb-4 shadow-sm rounded-3">
+      <div class="input-group input-group-lg bg-white p-1 rounded-3">
+        <span class="input-group-text bg-transparent border-0">
+          <i class="bi bi-search text-muted"></i>
+        </span>
+        <input type="text" id="searchInput" class="form-control border-0 py-3" placeholder="Yemek Ara..."
+          aria-label="Arama">
+        <button class="btn btn-outline-secondary border-0" type="button">
+          <i class="bi bi-funnel"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Menü Ekleme - Kart Tasarımı -->
+    <div class="card mb-4 border-0 shadow-sm">
+      <div class="card-body p-4">
+        <h5 class="card-title text-primary mb-3">
+          <i class="bi bi-plus-square-fill me-2"></i>Yeni Yemek Ekle
+        </h5>
+        <div class="row g-2 align-items-center">
+          <div class="col-md-8">
+            <div class="form-floating">
+              <input type="text" id="menuName" class="form-control" placeholder="Menü adı"
+                style="height: calc(3.5rem + 2px)">
+              <label for="menuName">Yemek Ad...</label>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <button id="addMenuBtn" class="btn btn-primary w-100 py-3">
+              <i class="bi bi-plus-lg me-2"></i>Yemek Ekle
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Menü Listesi - Modern Accordion -->
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white">
+        <h5 class="mb-0 d-flex align-items-center">
+          <i class="bi bi-list-ul text-primary me-2"></i>Yemekler
+        </h5>
+      </div>
+      <div class="card-body p-0">
+        <div id="menuList" class="accordion accordion-flush"></div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script src="js/navbar.js"></script>
+  <!-- Bootstrap JS Bundle (Popper dahil) en sona eklenmeli -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/menu.js"></script>
+</body>
+
+</html>

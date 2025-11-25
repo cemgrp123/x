@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ücret Takip Sistemi</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/tutarlar.css">
+    <link rel="stylesheet" href="css/navbar.css">
+
+</head>
+
+<body class="bg-light">
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo">Gültepe Yemekhane Yönetimi</a>
+
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <div class="nav-links" id="navLinks">
+                <a href="admin.html#">Ana Sayfa</a>
+                <a href="ogrenciler.html#">Öğrenciler</a>
+                <a href="muhasebe.html">Muhasebe</a>
+
+                <!-- Birinci Dropdown Menü -->
+                <div class="dropdown">
+                    <button class="dropdown-btn">
+                        Menü <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="menuolustur.html#">Menü Yap</a>
+                        <a href="menu.html">Menü Gramaj</a>
+                        <a href="yazdırmenu.html#">Menü Yazdır</a>
+                        <a href="aylikgidmik.html#">Menü Maliyet</a>
+                    </div>
+                </div>
+
+                <!-- İkinci Dropdown Menü -->
+                <div class="dropdown">
+                    <button class="dropdown-btn">
+                        Veri Tabanı <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="raporlar.html#">Raporlar</a>
+                        <a href="tutarlar.html#">Yıllık Tutarlar</a>
+                         <a href="gecisler.html">Geçişler</a>
+
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container py-5">
+        <header class="text-center mb-5">
+            <h1 class="display-4 fw-bold text-primary">Yıllık Ücret Planlaması</h1>
+            <p class="lead text-muted">Günlük ücretlerinizi kolayca takip edin</p>
+        </header>
+
+        <div class="card shadow-sm mb-5">
+            <div class="card-body p-4">
+                <form id="paymentForm" class="row g-3">
+                    <div class="col-md-3">
+                        <label for="month" class="form-label">Ay</label>
+                        <select class="form-select" id="month" required>
+                            <option value="" disabled selected>Ay seçiniz</option>
+                            <option value="Eylül">Eylül</option>
+                            <option value="Ekim">Ekim</option>
+                            <option value="Kasım">Kasım</option>
+                            <option value="Aralık">Aralık</option>
+                            <option value="Ocak">Ocak</option>
+                            <option value="Şubat">Şubat</option>
+                            <option value="Mart">Mart</option>
+                            <option value="Nisan">Nisan</option>
+                            <option value="Mayıs">Mayıs</option>
+                            <option value="Haziran">Haziran</option>
+                            <option value="Temmuz">Temmuz</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="dayCount" class="form-label">Gün Sayısı</label>
+                        <input type="number" class="form-control" id="dayCount" placeholder="Gün Sayısı" required>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="dailyPayment" class="form-label">Günlük Ücret</label>
+                        <input type="number" class="form-control" id="dailyPayment" placeholder="Günlük Ücret" step="0.01" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="paymentDate" class="form-label">Son Ödeme Tarihi</label>
+                        <input type="date" class="form-control" id="paymentDate" required>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-plus me-2"></i>Ekle
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-nowrap">Ay</th>
+                                <th class="text-nowrap">Gün</th>
+                                <th class="text-nowrap">Günlük Ücret</th>
+                                <th class="text-nowrap">Toplam</th>
+                                <th class="text-nowrap">Son Ödeme Tarihi</th>
+                                <th class="text-nowrap">İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody id="paymentTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-grid gap-2 mt-4">
+            <button id="savePaymentsBtn" class="btn btn-success">
+                <i class="fas fa-save me-2"></i>Kaydet
+            </button>
+        </div>
+    </div>
+<!-- Toast Container -->
+<div id="toast-container" 
+     class="toast-container position-fixed top-0 start-50 translate-middle-x pt-3" 
+     style="z-index: 9999; pointer-events: none; width: auto; max-width: 350px;">
+</div>
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/tutarlar.js"></script>
+    <script src="js/navbar.js"></script>
+</body>
+
+</html>
